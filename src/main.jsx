@@ -38,7 +38,7 @@ const projects = [
     tags: ['React Native', 'Expo', 'Firebase'],
     tone: 'emerald',
     image: '/darzi-app-logo.jpg',
-    link: 'https://expo.dev/accounts/farmanadil/projects/Tailor-App/builds/4ef3a2d7-3b5e-4019-8165-c94e2026806e',
+    link: 'https://drive.google.com/file/d/1KVcTGQ_HJF63UAN0eZfC2b-U4Z2XIZ4V/view',
     linkText: 'Download App',
     icon: Smartphone,
   },
