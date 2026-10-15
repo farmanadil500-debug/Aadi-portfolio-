@@ -559,7 +559,7 @@ function Hero() {
           Based in Pakistan <span className="hero-trust-dot">·</span> Working Worldwide
         </p>
         <div className="hero-actions">
-          <a className="button primary" href="#contact">Get started <ArrowRight size={17} /></a>
+          <a className="button primary" href="#contact">Get started <ArrowRight size={16} /></a>
           <a className="button ghost" href="#portfolio">View portfolio <ArrowUpRight size={16} /></a>
           <a
             className="button ghost button-cv"
@@ -571,7 +571,7 @@ function Hero() {
               e.currentTarget.href = freshUrl;
             }}
           >
-            Download CV <Download size={12} />
+            Download CV <Download size={16} />
           </a>
         </div>
       </div>
