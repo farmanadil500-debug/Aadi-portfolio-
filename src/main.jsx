@@ -19,6 +19,11 @@ if (typeof window !== 'undefined') {
 
 const GithubIcon = (props) => <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17" {...props}><path d="M12 .5A11.5 11.5 0 0 0 .5 12 11.5 11.5 0 0 0 8.4 23c.6.1.8-.2.8-.6v-2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.3-.5-1.5.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.8 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z" /></svg>;
 const LinkedinIcon = (props) => <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17" {...props}><path d="M20.45 20.45h-3.55v-5.57c0-1.33 0-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.66H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.74v20.51C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.74C24 .78 23.2 0 22.22 0Z" /></svg>;
+const WhatsappIcon = (props) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17" {...props}>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+  </svg>
+);
 
 const services = [
   { icon: Globe2, title: 'Web Development', text: 'Modern, fast and responsive websites built to make your business stand out.' },
@@ -38,7 +43,7 @@ const projects = [
     tags: ['React Native', 'Expo', 'Firebase'],
     tone: 'emerald',
     image: '/darzi-app-logo.jpg',
-    link: 'https://drive.google.com/file/d/1KVcTGQ_HJF63UAN0eZfC2b-U4Z2XIZ4V/view',
+    link: 'https://drive.google.com/uc?export=download&id=1KVcTGQ_HJF63UAN0eZfC2b-U4Z2XIZ4V',
     linkText: 'Download App',
     icon: Smartphone,
   },
@@ -188,9 +193,18 @@ function ProfilePopup({ isOpen, onClose, onNavigate }) {
           <div className="profile-popup-icon"><Mail size={14} /></div>
           <span>farmanadil500@gmail.com</span>
         </a>
+        <a
+          href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="profile-popup-contact-item"
+        >
+          <div className="profile-popup-icon whatsapp"><WhatsappIcon width={13} height={13} /></div>
+          <span>WhatsApp: +92 3496506743</span>
+        </a>
         <a href="tel:+923496506743" className="profile-popup-contact-item">
           <div className="profile-popup-icon"><Phone size={14} /></div>
-          <span>+92 3496506743</span>
+          <span>Call: +92 3496506743</span>
         </a>
       </div>
 
@@ -1200,6 +1214,14 @@ function Contact() {
           />
           <div className="contact-details">
             <a href="mailto:farmanadil500@gmail.com"><Mail size={17} /> farmanadil500@gmail.com</a>
+            <a
+              href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contact-whatsapp-link"
+            >
+              <WhatsappIcon width={17} height={17} /> Chat on WhatsApp (+92 3496506743)
+            </a>
             <a href="tel:+923496506743"><Phone size={17} /> +92 3496506743</a>
             <span><Globe2 size={17} /> Pakistan / Worldwide</span>
           </div>
@@ -1221,76 +1243,6 @@ function Contact() {
   );
 }
 
-const AUTO_SCROLL_SECTIONS = ['home', 'services', 'portfolio', 'about', 'contact'];
-const AUTO_SCROLL_INTERVAL = 5000;
-
-function useAutoScroll() {
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    let currentIndex = 0;
-    let timerId = null;
-    let isCancelled = false;
-
-    const stopAutoScroll = () => {
-      if (isCancelled) return;
-      isCancelled = true;
-      if (timerId) {
-        clearTimeout(timerId);
-        timerId = null;
-      }
-      removeListeners();
-    };
-
-    const scrollToNext = () => {
-      if (isCancelled) return;
-
-      currentIndex += 1;
-      if (currentIndex >= AUTO_SCROLL_SECTIONS.length) {
-        stopAutoScroll();
-        return;
-      }
-
-      const targetId = AUTO_SCROLL_SECTIONS[currentIndex];
-      if (targetId === 'home') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        const element = document.getElementById(targetId);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }
-
-      // If we just scrolled to the last section (Contact), permanently stop auto-scroll
-      if (currentIndex >= AUTO_SCROLL_SECTIONS.length - 1) {
-        stopAutoScroll();
-        return;
-      }
-
-      timerId = setTimeout(scrollToNext, AUTO_SCROLL_INTERVAL);
-    };
-
-    // User interaction events: mouse wheel, touch gestures, clicks, key presses
-    const interactionEvents = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
-
-    const removeListeners = () => {
-      interactionEvents.forEach((event) => {
-        window.removeEventListener(event, stopAutoScroll, { capture: true });
-      });
-    };
-
-    interactionEvents.forEach((event) => {
-      window.addEventListener(event, stopAutoScroll, { capture: true, passive: true });
-    });
-
-    // Start auto-scrolling sequence after initial 5 seconds
-    timerId = setTimeout(scrollToNext, AUTO_SCROLL_INTERVAL);
-
-    return () => {
-      stopAutoScroll();
-    };
-  }, []);
-}
 
 function Footer() {
   return (
@@ -1308,6 +1260,15 @@ function Footer() {
           <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
             <LinkedinIcon />
           </a>
+          <a
+            href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="WhatsApp"
+            className="social-whatsapp"
+          >
+            <WhatsappIcon width={17} height={17} />
+          </a>
           <a href="mailto:farmanadil500@gmail.com" aria-label="Email">
             <Mail size={17} />
           </a>
@@ -1319,15 +1280,31 @@ function Footer() {
             </a>
           ))}
         </div>
-        <small>© 2026 Farman Adil. All rights reserved.</small>
+        <small>© {new Date().getFullYear()} Farman Adil. All rights reserved.</small>
       </div>
     </footer>
   );
 }
 
-function App() {
-  useAutoScroll();
+function FloatingWhatsApp() {
+  return (
+    <aside className="floating-whatsapp-container" aria-label="WhatsApp quick contact">
+      <a
+        href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="floating-whatsapp-btn"
+        aria-label="Chat on WhatsApp (+92 3496506743)"
+      >
+        <span className="floating-whatsapp-pulse" aria-hidden="true" />
+        <WhatsappIcon width={28} height={28} />
+        <span className="floating-whatsapp-tooltip">Chat with Farman</span>
+      </a>
+    </aside>
+  );
+}
 
+function App() {
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => entries.forEach(entry => {
@@ -1356,6 +1333,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <FloatingWhatsApp />
     </>
   );
 }
