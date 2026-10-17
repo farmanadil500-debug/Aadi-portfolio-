@@ -2280,6 +2280,251 @@ svg {
 }
 
 /* ==========================================================================
+   8B. EXPERIENCE / CAREER JOURNEY
+   ========================================================================== */
+.experience-section {
+  padding-top: clamp(60px, 8vw, 90px);
+  padding-bottom: clamp(60px, 8vw, 100px);
+  position: relative;
+}
+
+.experience-timeline {
+  max-width: 860px;
+  margin: 48px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.experience-card {
+  display: flex;
+  gap: 24px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.experience-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.experience-node {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(10, 26, 54, 0.9);
+  border: 1px solid rgba(0, 102, 255, 0.3);
+  color: var(--cyan);
+  transition: all 0.3s ease;
+  z-index: 2;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.experience-node.current {
+  border-color: var(--cyan);
+  background: rgba(0, 102, 255, 0.22);
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0, 200, 255, 0.45);
+}
+
+.experience-line {
+  width: 2px;
+  flex: 1;
+  background: linear-gradient(180deg, rgba(0, 102, 255, 0.4), rgba(0, 102, 255, 0.08));
+  margin-top: 10px;
+}
+
+.experience-content {
+  flex: 1;
+  padding: 24px 28px;
+  background: linear-gradient(145deg, rgba(10, 26, 54, 0.8), rgba(3, 12, 30, 0.92));
+  border: 1px solid rgba(0, 102, 255, 0.16);
+  border-radius: 12px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.3s ease;
+}
+
+.experience-card:hover .experience-content {
+  transform: translateY(-2px);
+  border-color: rgba(0, 200, 255, 0.38);
+  box-shadow: 0 12px 35px rgba(0, 102, 255, 0.16);
+}
+
+.experience-card:hover .experience-node {
+  transform: scale(1.08);
+  border-color: var(--cyan);
+  box-shadow: 0 0 18px rgba(0, 200, 255, 0.4);
+}
+
+.experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.experience-title-group h3 {
+  font-size: 17.5px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 4px;
+}
+
+.experience-company-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.experience-company {
+  color: var(--cyan);
+  font-weight: 600;
+}
+
+.experience-dot {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.experience-type {
+  color: var(--text-secondary);
+}
+
+.experience-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.experience-current-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #38ef7d;
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.25);
+}
+
+.experience-current-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #25d366;
+  box-shadow: 0 0 8px #25d366;
+}
+
+.experience-period {
+  font-size: 12px;
+  font-weight: 600;
+  color: #c0d1e8;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: rgba(0, 102, 255, 0.08);
+  border: 1px solid rgba(0, 102, 255, 0.16);
+}
+
+.experience-desc {
+  font-size: 13.5px;
+  color: #d1dced;
+  line-height: 1.6;
+  margin: 0 0 14px;
+}
+
+.experience-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.experience-highlights li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.experience-highlights li::before {
+  content: "▹";
+  position: absolute;
+  left: 0;
+  color: var(--cyan);
+}
+
+.experience-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.experience-tag {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: #9ab4db;
+  background: rgba(0, 102, 255, 0.08);
+  border: 1px solid rgba(0, 102, 255, 0.15);
+  padding: 3px 10px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.experience-tag:hover {
+  border-color: rgba(0, 200, 255, 0.4);
+  color: #fff;
+  background: rgba(0, 102, 255, 0.16);
+}
+
+@media (max-width: 640px) {
+  .experience-card {
+    gap: 12px;
+  }
+
+  .experience-rail {
+    width: 28px;
+  }
+
+  .experience-node {
+    width: 28px;
+    height: 28px;
+  }
+
+  .experience-node svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .experience-content {
+    padding: 16px 14px;
+  }
+
+  .experience-title-group h3 {
+    font-size: 15.5px;
+  }
+
+  .experience-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* ==========================================================================
    9. TECHNOLOGIES / TOOLKIT
    ========================================================================== */
 .tech-section {

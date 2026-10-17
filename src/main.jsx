@@ -234,11 +234,12 @@ function Navbar() {
     ['Services', 'services'],
     ['Portfolio', 'portfolio'],
     ['About', 'about'],
+    ['Experience', 'experience'],
     ['Contact', 'contact'],
   ];
 
   useEffect(() => {
-    const sectionIds = ['home', 'services', 'portfolio', 'about', 'contact'];
+    const sectionIds = ['home', 'services', 'portfolio', 'about', 'experience', 'contact'];
 
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80) {
@@ -765,6 +766,107 @@ function About() {
   );
 }
 
+const experiences = [
+  {
+    role: 'Frontend & Mobile App Developer',
+    company: 'Software House',
+    period: '2026 — Present',
+    current: true,
+    type: 'Full-time · Team Environment',
+    description: 'Working in an agile software house engineering cross-platform mobile apps and dynamic web applications with production-grade architecture.',
+    highlights: [
+      'Architecting and implementing scalable UI components with React Native, Expo, and React.js',
+      'Integrating RESTful APIs, cloud database synchronization, and authentication with Firebase',
+      'Collaborating in agile sprints with designers and backend teams to deliver high-quality client deliverables',
+    ],
+    skills: ['React Native', 'Expo', 'React.js', 'Firebase', 'REST APIs', 'Git'],
+  },
+  {
+    role: 'Independent App Developer',
+    company: 'Mobile Solutions & Client Projects',
+    period: '2025 — 2026',
+    current: false,
+    type: 'Production Apps',
+    description: 'Built end-to-end mobile applications, including the Darzi App for tailor shop order automation and client management.',
+    highlights: [
+      'Developed complete customer measurement tracking, order status, and automated record-keeping',
+      'Configured cloud Firestore security rules, live syncing, and real-time state management',
+      'Packaged and distributed standalone Android APK builds with optimized bundle performance',
+    ],
+    skills: ['React Native', 'Firebase Firestore', 'Expo EAS', 'Mobile UI/UX', 'JavaScript'],
+  },
+  {
+    role: 'Frontend & Web Developer',
+    company: 'Web Solutions & Projects',
+    period: '2025',
+    current: false,
+    type: 'Projects & Freelance',
+    description: 'Built responsive web platforms, landing pages, and interactive client dashboards using modern web technologies.',
+    highlights: [
+      'Crafted mobile-first, responsive user interfaces using React, JavaScript (ES6+), HTML5, and CSS3',
+      'Ensured 100% cross-browser responsiveness and optimal page load speeds',
+      'Maintained version-controlled, clean codebases following modern web standards',
+    ],
+    skills: ['JavaScript', 'React', 'HTML5/CSS3', 'Responsive Design', 'Git'],
+  },
+];
+
+function Experience() {
+  return (
+    <section className="section-pad experience-section" id="experience">
+      <SectionHeading
+        eyebrow="Career Journey"
+        title={<>PROFESSIONAL <span>EXPERIENCE</span></>}
+        copy="My experience working in a software house environment and delivering production-ready mobile and web applications."
+      />
+      <div className="experience-timeline">
+        {experiences.map((exp, index) => (
+          <article className="experience-card reveal" key={exp.role + index}>
+            <div className="experience-rail" aria-hidden="true">
+              <div className={`experience-node ${exp.current ? 'current' : ''}`}>
+                <Briefcase size={15} />
+              </div>
+              {index < experiences.length - 1 && <div className="experience-line" />}
+            </div>
+            <div className="experience-content">
+              <div className="experience-header">
+                <div className="experience-title-group">
+                  <h3>{exp.role}</h3>
+                  <div className="experience-company-wrap">
+                    <span className="experience-company">{exp.company}</span>
+                    <span className="experience-dot">·</span>
+                    <span className="experience-type">{exp.type}</span>
+                  </div>
+                </div>
+                <div className="experience-badge-wrap">
+                  {exp.current && (
+                    <span className="experience-current-badge">
+                      <span className="experience-current-pulse" aria-hidden="true" />
+                      Active Role
+                    </span>
+                  )}
+                  <span className="experience-period">{exp.period}</span>
+                </div>
+              </div>
+              <p className="experience-desc">{exp.description}</p>
+              <ul className="experience-highlights">
+                {exp.highlights.map((h, i) => (
+                  <li key={i}>{h}</li>
+                ))}
+              </ul>
+              <div className="experience-tags">
+                {exp.skills.map(skill => (
+                  <span key={skill} className="experience-tag">{skill}</span>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function GlowingBottomLines() {
   const path1Ref = useRef(null);
   const path2Ref = useRef(null);
@@ -1274,8 +1376,8 @@ function Footer() {
           </a>
         </div>
         <div className="footer-nav">
-          {['Home', 'Services', 'Portfolio', 'About', 'Contact'].map(item => (
-            <a href={`#${item === 'About' ? 'about' : item.toLowerCase()}`} key={item}>
+          {['Home', 'Services', 'Portfolio', 'About', 'Experience', 'Contact'].map(item => (
+            <a href={`#${item.toLowerCase()}`} key={item}>
               {item}
             </a>
           ))}
@@ -1312,7 +1414,7 @@ function App() {
       }),
       { threshold: 0.12 }
     );
-    document.querySelectorAll('section, .service-card, .project-card, .why-grid article, .about-heading, .about-profile-visual, .about-skill-badge').forEach(element => {
+    document.querySelectorAll('section, .service-card, .project-card, .why-grid article, .about-heading, .about-profile-visual, .about-skill-badge, .experience-card').forEach(element => {
       element.classList.add('reveal');
       observer.observe(element);
     });
@@ -1327,6 +1429,7 @@ function App() {
         <Services />
         <Portfolio />
         <About />
+        <Experience />
         <Technologies />
         <WhyChooseMe />
         <GlowingBottomLines />
