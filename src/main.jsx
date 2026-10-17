@@ -1,10 +1,9 @@
 import { StrictMode, useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-  ArrowRight, ArrowUpRight, Braces, Check, Code2, Download, Flame, Globe2, GitBranch, Layers3,
-  Mail, Menu, MessageCircle, Monitor, Palette, Phone, Rocket, Send, Server, Smartphone, Sparkles,
-  Users, Briefcase, FolderKanban,
-  X, Zap
+  ArrowRight, ArrowUpRight, Braces, Check, Code2, Download, ExternalLink, Eye, FileText,
+  Flame, Globe2, GitBranch, Layers3, Loader2, Mail, Menu, MessageCircle, Monitor, Palette, Phone,
+  Rocket, Send, Server, Smartphone, Sparkles, Users, Briefcase, FolderKanban, X, Zap, ZoomIn, ZoomOut
 } from 'lucide-react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
@@ -15,6 +14,8 @@ const profilePhoto = '/farman-profile.jpg';
 if (typeof window !== 'undefined') {
   const profilePreload = new Image();
   profilePreload.src = profilePhoto;
+  const cvPreload = new Image();
+  cvPreload.src = '/Farman_Adil_CV_HD.jpg';
 }
 
 const GithubIcon = (props) => <svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17" {...props}><path d="M12 .5A11.5 11.5 0 0 0 .5 12 11.5 11.5 0 0 0 8.4 23c.6.1.8-.2.8-.6v-2c-3.3.7-4-1.4-4-1.4-.5-1.4-1.3-1.8-1.3-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.3-.5-1.5.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.8 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z" /></svg>;
@@ -109,7 +110,7 @@ function Logo({ onNavigate, interactive = false, onAvatarClick, isProfileOpen = 
   );
 }
 
-function ProfilePopup({ isOpen, onClose, onNavigate }) {
+function ProfilePopup({ isOpen, onClose, onNavigate, onOpenCv }) {
   const popupRef = useRef(null);
 
   useEffect(() => {
@@ -217,12 +218,25 @@ function ProfilePopup({ isOpen, onClose, onNavigate }) {
           <span>View Full Profile</span>
           <ArrowRight size={14} />
         </button>
+        {onOpenCv && (
+          <button
+            type="button"
+            className="profile-popup-btn secondary"
+            onClick={() => {
+              onClose();
+              onOpenCv();
+            }}
+          >
+            <span>View CV</span>
+            <Eye size={14} />
+          </button>
+        )}
       </div>
     </div>
   );
 }
 
-function Navbar() {
+function Navbar({ onOpenCv }) {
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
@@ -345,6 +359,7 @@ function Navbar() {
             isOpen={profileOpen}
             onClose={() => setProfileOpen(false)}
             onNavigate={scrollToSection}
+            onOpenCv={onOpenCv}
           />
         </div>
         {open && (
@@ -530,39 +545,224 @@ function CodeVisual() {
 
 function SectionHeading({ eyebrow, title, copy, align = '' }) { return <div className={`section-heading ${align}`}><span className="eyebrow">{eyebrow}</span><h2>{title}</h2>{copy && <p>{copy}</p>}</div>; }
 
-const getCvUrl = () => {
-  if (typeof window === 'undefined') return '/Farman_Adil_CV_Clickable.pdf';
-
-  const ua = navigator.userAgent || navigator.vendor || window.opera || '';
-  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-  const isTouchMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && window.innerWidth <= 840;
-
-  if (isMobileUA || isTouchMobile) {
-    const isLocal = window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1' ||
-      window.location.hostname.endsWith('.local');
-    const pdfAbsoluteUrl = isLocal
-      ? 'https://farman-6fdb2.web.app/Farman_Adil_CV_Clickable.pdf'
-      : `${window.location.origin}/Farman_Adil_CV_Clickable.pdf`;
-    return `https://docs.google.com/viewer?url=${encodeURIComponent(pdfAbsoluteUrl)}&embedded=true`;
-  }
-
-  return '/Farman_Adil_CV_Clickable.pdf';
-};
-
-function Hero() {
-  const [cvUrl, setCvUrl] = useState(getCvUrl);
+function CvModal({ isOpen, onClose }) {
+  const pdfPath = '/Farman_Adil_CV_HD.pdf';
+  const imgPath = '/Farman_Adil_CV_HD.jpg';
+  const [isLoading, setIsLoading] = useState(true);
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   useEffect(() => {
-    const updateCvUrl = () => setCvUrl(getCvUrl());
-    updateCvUrl();
-    window.addEventListener('resize', updateCvUrl);
-    window.addEventListener('orientationchange', updateCvUrl);
-    return () => {
-      window.removeEventListener('resize', updateCvUrl);
-      window.removeEventListener('orientationchange', updateCvUrl);
+    if (!isOpen) {
+      setZoomLevel(1);
+      return;
+    }
+
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
     };
-  }, []);
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  const handleImageLoaded = () => {
+    setIsLoading(false);
+  };
+
+  const zoomIn = () => setZoomLevel((prev) => Math.min(Number((prev + 0.2).toFixed(1)), 2.2));
+  const zoomOut = () => setZoomLevel((prev) => Math.max(Number((prev - 0.2).toFixed(1)), 0.8));
+  const resetZoom = () => setZoomLevel(1);
+
+  if (!isOpen) return null;
+
+  return (
+    <div
+      className="cv-modal-backdrop"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Farman Adil Curriculum Vitae"
+    >
+      <div
+        className="cv-modal-container"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="cv-modal-header">
+          <div className="cv-modal-title-group">
+            <div className="cv-modal-icon-badge">
+              <FileText size={18} />
+            </div>
+            <div>
+              <div className="cv-modal-title">
+                Farman Adil — CV <span className="cv-modal-badge">Full HD</span>
+              </div>
+              <div className="cv-modal-subtitle">Direct Preview · React Native &amp; Frontend Developer</div>
+            </div>
+          </div>
+
+          <div className="cv-modal-actions">
+            <div className="cv-zoom-controls">
+              <button
+                type="button"
+                className="cv-zoom-btn"
+                onClick={zoomOut}
+                disabled={zoomLevel <= 0.8}
+                title="Zoom Out"
+              >
+                <ZoomOut size={14} />
+              </button>
+              <button
+                type="button"
+                className="cv-zoom-btn cv-zoom-reset"
+                onClick={resetZoom}
+                title="Reset Zoom"
+              >
+                {Math.round(zoomLevel * 100)}%
+              </button>
+              <button
+                type="button"
+                className="cv-zoom-btn"
+                onClick={zoomIn}
+                disabled={zoomLevel >= 2.2}
+                title="Zoom In"
+              >
+                <ZoomIn size={14} />
+              </button>
+            </div>
+
+            <a
+              href={pdfPath}
+              download="Farman_Adil_CV_HD.pdf"
+              className="cv-action-btn cv-action-download"
+              title="Download CV PDF to your device"
+            >
+              <Download size={15} />
+              <span>Download PDF</span>
+            </a>
+
+            <a
+              href={pdfPath}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cv-action-btn cv-action-tab"
+              title="Open full PDF in a new tab"
+            >
+              <ExternalLink size={15} />
+              <span>Fullscreen Tab</span>
+            </a>
+
+            <button
+              type="button"
+              className="cv-action-btn cv-action-close"
+              onClick={onClose}
+              aria-label="Close CV preview"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        </div>
+
+        <div className="cv-modal-body">
+          {isLoading && (
+            <div className="cv-modal-loader" aria-live="polite">
+              <div className="cv-loader-spinner-wrapper">
+                <div className="cv-loader-ring" />
+                <div className="cv-loader-glow" />
+                <Loader2 size={34} className="cv-loader-spinner" />
+              </div>
+              <h3 className="cv-loader-title">Loading Curriculum Vitae...</h3>
+              <p className="cv-loader-desc">Preparing High-Definition Document (HD) · Please wait</p>
+              <div className="cv-loader-progress-track">
+                <div className="cv-loader-progress-bar" />
+              </div>
+            </div>
+          )}
+
+          <div className={`cv-image-scroll-wrapper ${isLoading ? 'is-loading' : 'is-loaded'}`}>
+            <div
+              className="cv-image-container"
+              style={{ transform: `scale(${zoomLevel})` }}
+            >
+              <img
+                src={imgPath}
+                alt="Farman Adil — Curriculum Vitae HD"
+                className="cv-preview-img"
+                onLoad={handleImageLoaded}
+                width="2048"
+                height="3072"
+              />
+
+              {/* Interactive clickable link hotspots */}
+              <div className="cv-interactive-links">
+                <a
+                  href="tel:+923498506743"
+                  className="cv-link-hotspot cv-link-phone"
+                  title="Call Farman Adil (+92 349 8506743)"
+                />
+                <a
+                  href="mailto:farmanadil500@gmail.com"
+                  className="cv-link-hotspot cv-link-email"
+                  title="Email Farman Adil (farmanadil500@gmail.com)"
+                />
+                <a
+                  href="https://www.linkedin.com/in/farman-adil-17b0903a4/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cv-link-hotspot cv-link-linkedin"
+                  title="LinkedIn: Farman Adil"
+                />
+                <a
+                  href="https://github.com/farmanadil500-debug"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cv-link-hotspot cv-link-github"
+                  title="GitHub: farmanadil500-debug"
+                />
+                <a
+                  href="https://farman-6fdb2.web.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cv-link-hotspot cv-link-web"
+                  title="Portfolio: Farman Adil"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="cv-modal-footer">
+          <span className="cv-modal-footer-note">
+            Viewing CV in Crystal HD. Click <strong>Download PDF</strong> to save a local copy.
+          </span>
+          <div className="cv-modal-footer-links">
+            <a href={pdfPath} download="Farman_Adil_CV_HD.pdf" className="cv-footer-link">
+              <Download size={13} /> Save PDF
+            </a>
+            <span className="cv-footer-dot">·</span>
+            <a href={pdfPath} target="_blank" rel="noopener noreferrer" className="cv-footer-link">
+              <ExternalLink size={13} /> Open Tab
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Hero({ onOpenCv }) {
+  const [btnLoading, setBtnLoading] = useState(false);
+
+  const handleOpenCv = () => {
+    setBtnLoading(true);
+    if (onOpenCv) onOpenCv();
+    setTimeout(() => setBtnLoading(false), 1500);
+  };
 
   return (
     <section className="hero section-pad" id="home">
@@ -576,18 +776,22 @@ function Hero() {
         <div className="hero-actions">
           <a className="button primary" href="#contact">Get started <ArrowRight size={16} /></a>
           <a className="button ghost" href="#portfolio">View portfolio <ArrowUpRight size={16} /></a>
-          <a
-            className="button ghost button-cv"
-            href={cvUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => {
-              const freshUrl = getCvUrl();
-              e.currentTarget.href = freshUrl;
-            }}
+          <button
+            type="button"
+            className={`button ghost button-cv ${btnLoading ? 'is-loading' : ''}`}
+            onClick={handleOpenCv}
+            aria-label="View Farman Adil CV"
           >
-            Download CV <Download size={16} />
-          </a>
+            {btnLoading ? (
+              <>
+                Loading CV... <Loader2 size={16} className="button-cv-spin" />
+              </>
+            ) : (
+              <>
+                View CV <Eye size={16} />
+              </>
+            )}
+          </button>
         </div>
       </div>
       <CodeVisual />
@@ -1346,7 +1550,7 @@ function Contact() {
 }
 
 
-function Footer() {
+function Footer({ onOpenCv }) {
   return (
     <footer>
       <div className="footer-inner">
@@ -1381,6 +1585,15 @@ function Footer() {
               {item}
             </a>
           ))}
+          {onOpenCv && (
+            <button
+              type="button"
+              className="footer-cv-btn"
+              onClick={onOpenCv}
+            >
+              CV / Resume
+            </button>
+          )}
         </div>
         <small>© {new Date().getFullYear()} Farman Adil. All rights reserved.</small>
       </div>
@@ -1407,6 +1620,8 @@ function FloatingWhatsApp() {
 }
 
 function App() {
+  const [cvOpen, setCvOpen] = useState(false);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       entries => entries.forEach(entry => {
@@ -1423,9 +1638,9 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar onOpenCv={() => setCvOpen(true)} />
       <main>
-        <Hero />
+        <Hero onOpenCv={() => setCvOpen(true)} />
         <Services />
         <Portfolio />
         <About />
@@ -1435,8 +1650,9 @@ function App() {
         <GlowingBottomLines />
         <Contact />
       </main>
-      <Footer />
+      <Footer onOpenCv={() => setCvOpen(true)} />
       <FloatingWhatsApp />
+      <CvModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />
     </>
   );
 }

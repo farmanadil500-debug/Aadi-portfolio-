@@ -11,7 +11,9 @@
   "dependencies": {
     "@vitejs/plugin-react": "latest",
     "firebase": "^12.17.1",
+    "jpeg-js": "^0.4.4",
     "lucide-react": "latest",
+    "pdfjs-dist": "^3.11.174",
     "react": "latest",
     "react-dom": "latest",
     "typescript": "latest",
