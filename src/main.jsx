@@ -594,16 +594,27 @@ function CvModal({ isOpen, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="cv-modal-header">
-          <div className="cv-modal-title-group">
-            <div className="cv-modal-icon-badge">
-              <FileText size={18} />
-            </div>
-            <div>
-              <div className="cv-modal-title">
-                Farman Adil — CV <span className="cv-modal-badge">Full HD</span>
+          <div className="cv-modal-top-row">
+            <div className="cv-modal-title-group">
+              <div className="cv-modal-icon-badge">
+                <FileText size={18} />
               </div>
-              <div className="cv-modal-subtitle">Direct Preview · React Native &amp; Frontend Developer</div>
+              <div className="cv-modal-title-text">
+                <div className="cv-modal-title">
+                  Farman Adil — CV <span className="cv-modal-badge">Full HD</span>
+                </div>
+                <div className="cv-modal-subtitle">Direct Preview · React Native &amp; Frontend Developer</div>
+              </div>
             </div>
+
+            <button
+              type="button"
+              className="cv-action-btn cv-action-close cv-mobile-close"
+              onClick={onClose}
+              aria-label="Close CV preview"
+            >
+              <X size={18} />
+            </button>
           </div>
 
           <div className="cv-modal-actions">
@@ -642,7 +653,7 @@ function CvModal({ isOpen, onClose }) {
               className="cv-action-btn cv-action-download"
               title="Download CV PDF to your device"
             >
-              <Download size={15} />
+              <Download size={14} />
               <span>Download PDF</span>
             </a>
 
@@ -653,13 +664,13 @@ function CvModal({ isOpen, onClose }) {
               className="cv-action-btn cv-action-tab"
               title="Open full PDF in a new tab"
             >
-              <ExternalLink size={15} />
+              <ExternalLink size={14} />
               <span>Fullscreen Tab</span>
             </a>
 
             <button
               type="button"
-              className="cv-action-btn cv-action-close"
+              className="cv-action-btn cv-action-close cv-desktop-close"
               onClick={onClose}
               aria-label="Close CV preview"
             >

@@ -241,7 +241,7 @@ svg {
 }
 
 .button.button-cv {
-  width: auto;
+  cursor: pointer;
 }
 
 /* ==========================================================================
@@ -798,7 +798,6 @@ svg {
 }
 
 .hero-actions .button.button-cv {
-  width: auto;
   min-width: 162px;
 }
 
@@ -3374,17 +3373,22 @@ footer {
     display: flex;
     flex-direction: column;
     width: 100%;
-    gap: 10px;
+    gap: 12px;
   }
 
-  .hero-actions .button {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .button.button-cv {
-    width: 100%;
-    min-width: 0;
+  .hero-actions .button,
+  .hero-actions .button.button-cv,
+  .hero-actions a.button,
+  .hero-actions button.button-cv {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
   }
 
   .hero-art {
@@ -3962,6 +3966,13 @@ footer {
   flex-shrink: 0;
 }
 
+.cv-modal-top-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
 .cv-modal-title-group {
   display: flex;
   align-items: center;
@@ -3980,6 +3991,12 @@ footer {
   justify-content: center;
   color: var(--cyan);
   flex-shrink: 0;
+}
+
+.cv-modal-title-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .cv-modal-title {
@@ -4017,6 +4034,14 @@ footer {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+}
+
+.cv-mobile-close {
+  display: none !important;
+}
+
+.cv-desktop-close {
+  display: flex !important;
 }
 
 .cv-action-btn {
@@ -4405,37 +4430,261 @@ footer {
 }
 
 @media (max-width: 768px) {
+  /* ========================================================================
+     HERO ACTIONS (MOBILE / TABLET <= 768px)
+     All 3 buttons: Get started, View portfolio, View CV are 100% full width,
+     same 48px height, identical alignment and symmetry.
+     ======================================================================== */
+  .hero-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  .hero-actions .button,
+  .hero-actions a.button,
+  .hero-actions button.button,
+  .hero-actions .button.button-cv,
+  .hero-actions button.button-cv {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 0 20px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+
+  /* ========================================================================
+     CV MODAL (MOBILE / TABLET <= 768px)
+     Two clean, spacious rows:
+     Row 1: Title & Close button
+     Row 2: Zoom controls + Download PDF + Fullscreen Tab
+     No overlap, no collision, pristine legibility.
+     ======================================================================== */
   .cv-modal-backdrop {
-    padding: 10px;
+    padding: 8px;
   }
 
   .cv-modal-container {
-    height: 94vh;
+    height: 96vh;
     max-height: none;
     border-radius: 14px;
+    width: 100%;
   }
 
   .cv-modal-header {
-    padding: 12px 14px;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 10px 14px !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+    background: rgba(6, 14, 34, 0.98) !important;
+  }
+
+  /* Row 1: Title Info & Close */
+  .cv-modal-top-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    gap: 10px !important;
+    min-width: 0 !important;
+  }
+
+  .cv-modal-title-group {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+  }
+
+  .cv-modal-icon-badge {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .cv-modal-title-text {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    overflow: hidden !important;
+  }
+
+  .cv-modal-title {
+    font-size: 13.5px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    gap: 6px !important;
+    line-height: 1.2 !important;
+  }
+
+  .cv-modal-badge {
+    font-size: 9px !important;
+    padding: 1px 6px !important;
+    flex-shrink: 0 !important;
   }
 
   .cv-modal-subtitle {
-    display: none;
+    font-size: 11px !important;
+    color: var(--text-muted) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.3 !important;
+    margin-top: 2px !important;
+    display: block !important;
   }
 
-  .cv-action-btn.cv-action-tab span {
-    display: none;
+  .cv-mobile-close {
+    display: flex !important;
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+    padding: 0 !important;
+  }
+
+  .cv-desktop-close {
+    display: none !important;
+  }
+
+  /* Row 2: Controls & Actions */
+  .cv-modal-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .cv-zoom-controls {
+    display: flex !important;
+    flex-shrink: 0 !important;
+    border-radius: 8px !important;
+  }
+
+  .cv-zoom-btn {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .cv-zoom-reset {
+    min-width: 38px !important;
+    font-size: 11px !important;
+    padding: 6px 4px !important;
   }
 
   .cv-action-btn.cv-action-download {
-    padding: 8px 12px;
-    font-size: 12px;
+    flex: 1 1 auto !important;
+    padding: 7px 10px !important;
+    font-size: 12px !important;
+    gap: 5px !important;
+    white-space: nowrap !important;
+    justify-content: center !important;
+  }
+
+  .cv-action-btn.cv-action-tab {
+    flex: 1 1 auto !important;
+    padding: 7px 10px !important;
+    font-size: 12px !important;
+    gap: 5px !important;
+    white-space: nowrap !important;
+    justify-content: center !important;
+  }
+
+  .cv-image-scroll-wrapper {
+    padding: 10px 6px;
   }
 
   .cv-modal-footer {
     flex-direction: column;
     gap: 8px;
-    padding: 10px 14px;
+    padding: 10px 12px;
     text-align: center;
+  }
+
+  .cv-modal-footer-note {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cv-modal-backdrop {
+    padding: 4px;
+  }
+
+  .cv-modal-container {
+    height: 98vh;
+    border-radius: 12px;
+  }
+
+  .cv-modal-header {
+    padding: 8px 10px !important;
+    gap: 8px !important;
+  }
+
+  .cv-modal-icon-badge {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .cv-modal-title {
+    font-size: 12.5px !important;
+  }
+
+  .cv-modal-subtitle {
+    font-size: 10.5px !important;
+  }
+
+  .cv-mobile-close {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .cv-action-btn.cv-action-download {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+
+  .cv-action-btn.cv-action-tab {
+    padding: 6px 8px !important;
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .cv-modal-badge {
+    display: none !important;
+  }
+
+  .cv-zoom-btn {
+    padding: 5px 6px !important;
+  }
+
+  .cv-zoom-reset {
+    min-width: 32px !important;
+  }
+
+  .cv-action-btn.cv-action-download span {
+    font-size: 10px !important;
+  }
+
+  .cv-action-btn.cv-action-tab span {
+    font-size: 10px !important;
   }
 }
