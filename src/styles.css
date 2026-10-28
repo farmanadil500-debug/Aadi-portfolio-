@@ -591,12 +591,13 @@ svg {
 .nav-indicator {
   position: absolute;
   bottom: -4px;
-  height: 2px;
-  background: var(--blue-light);
-  box-shadow: 0 0 10px var(--blue), 0 0 20px rgba(0, 102, 255, 0.4);
-  border-radius: 1px;
-  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  height: 2.5px;
+  background: linear-gradient(90deg, var(--blue-bright), var(--cyan));
+  box-shadow: 0 0 10px rgba(0, 102, 255, 0.8), 0 0 20px rgba(0, 200, 255, 0.45);
+  border-radius: 2px;
+  transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1), width 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
   pointer-events: none;
+  will-change: left, width;
 }
 
 .nav-cta {

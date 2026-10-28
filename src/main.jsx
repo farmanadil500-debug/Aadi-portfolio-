@@ -242,6 +242,8 @@ function Navbar({ onOpenCv }) {
   const [activeSection, setActiveSection] = useState('home');
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const linkRefs = useRef({});
+  const isClickScrollingRef = useRef(false);
+  const scrollTimeoutRef = useRef(null);
 
   const links = [
     ['Home', 'home'],
@@ -256,28 +258,82 @@ function Navbar({ onOpenCv }) {
     const sectionIds = ['home', 'services', 'portfolio', 'about', 'experience', 'contact'];
 
     const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 80) {
+      // If a nav link was clicked, keep the activeSection locked until smooth scroll finishes
+      if (isClickScrollingRef.current) {
+        return;
+      }
+
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const scrollHeight = document.documentElement.scrollHeight;
+
+      // 1. Top of page: always 'home'
+      if (scrollY < 80) {
+        setActiveSection('home');
+        return;
+      }
+
+      // 2. Bottom of page: always 'contact'
+      if (windowHeight + scrollY >= scrollHeight - 120) {
         setActiveSection('contact');
         return;
       }
 
+      // 3. Scan sections in document order
+      // A section is active if its top has passed into the upper viewport (160px)
+      // Because sectionIds is in DOM order, the last section satisfying rect.top <= 160 is the active section
+      const navOffset = 160;
       let currentSection = 'home';
+
       for (const id of sectionIds) {
         const el = document.getElementById(id);
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= 220 && rect.bottom >= 120) {
+          if (rect.top <= navOffset) {
             currentSection = id;
           }
         }
       }
+
       setActiveSection(currentSection);
     };
 
+    const handleUserInterrupt = () => {
+      if (isClickScrollingRef.current) {
+        isClickScrollingRef.current = false;
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
+      }
+    };
+
+    const handleScrollEnd = () => {
+      if (isClickScrollingRef.current) {
+        isClickScrollingRef.current = false;
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
+        handleScroll();
+      }
+    };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('wheel', handleUserInterrupt, { passive: true });
+    window.addEventListener('touchmove', handleUserInterrupt, { passive: true });
+    window.addEventListener('scrollend', handleScrollEnd, { passive: true });
+
+    // Initial check
     handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('wheel', handleUserInterrupt);
+      window.removeEventListener('touchmove', handleUserInterrupt);
+      window.removeEventListener('scrollend', handleScrollEnd);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
   }, []);
 
   const updateIndicator = useCallback(() => {
@@ -293,8 +349,17 @@ function Navbar({ onOpenCv }) {
 
   useEffect(() => {
     updateIndicator();
+    const rafId = requestAnimationFrame(updateIndicator);
     window.addEventListener('resize', updateIndicator);
-    return () => window.removeEventListener('resize', updateIndicator);
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateIndicator);
+    }
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', updateIndicator);
+    };
   }, [updateIndicator]);
 
   useEffect(() => {
@@ -315,17 +380,32 @@ function Navbar({ onOpenCv }) {
   }, [open, profileOpen]);
 
   const scrollToSection = (e, id) => {
-    if (e) e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
+
+    // Lock programmatic scroll to prevent intermediate jittering
+    isClickScrollingRef.current = true;
     setActiveSection(id);
     setOpen(false);
     setProfileOpen(false);
+
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+    }
+
+    // Safety timeout to release lock once smooth scrolling concludes
+    scrollTimeoutRef.current = setTimeout(() => {
+      isClickScrollingRef.current = false;
+    }, 900);
 
     if (id === 'home') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const navbarHeight = 74;
+        const rect = element.getBoundingClientRect();
+        const targetTop = rect.top + window.scrollY - navbarHeight;
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
       }
     }
   };
