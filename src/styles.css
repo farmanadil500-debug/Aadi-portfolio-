@@ -2660,9 +2660,54 @@ svg {
 }
 
 .tech-card b {
-  font-size: 20px;
-  color: var(--cyan);
-  transition: transform 0.3s ease, filter 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+}
+
+.tech-card:hover b {
+  transform: scale(1.18) translateY(-2px);
+}
+
+.tech-card.react:hover b,
+.tech-card.native:hover b {
+  filter: drop-shadow(0 0 10px rgba(97, 218, 251, 0.7));
+}
+
+.tech-card.firebase:hover b {
+  filter: drop-shadow(0 0 10px rgba(255, 171, 0, 0.7));
+}
+
+.tech-card.js:hover b {
+  filter: drop-shadow(0 0 10px rgba(247, 223, 30, 0.7));
+}
+
+.tech-card.git:hover b {
+  filter: drop-shadow(0 0 10px rgba(240, 80, 50, 0.7));
+}
+
+.tech-card.html:hover b {
+  filter: drop-shadow(0 0 10px rgba(227, 79, 38, 0.7));
+}
+
+.tech-card.css:hover b {
+  filter: drop-shadow(0 0 10px rgba(21, 114, 182, 0.7));
+}
+
+.tech-card.node:hover b,
+.tech-card.mongo:hover b {
+  filter: drop-shadow(0 0 10px rgba(110, 212, 139, 0.7));
+}
+
+.tech-card.github:hover b {
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.7));
+}
+
+.tech-card.api:hover b {
+  filter: drop-shadow(0 0 10px rgba(0, 200, 255, 0.7));
 }
 
 .tech-card span {

@@ -109,9 +109,91 @@ const projects = [
   },
 ];
 
+
+const ReactIcon = (props) => (
+  <svg viewBox="-11.5 -10.23174 23 20.46348" width="26" height="26" fill="none" {...props}>
+    <circle cx="0" cy="0" r="2.05" fill="#61DAFB" />
+    <g stroke="#61DAFB" strokeWidth="1">
+      <ellipse rx="11" ry="4.2" />
+      <ellipse rx="11" ry="4.2" transform="rotate(60)" />
+      <ellipse rx="11" ry="4.2" transform="rotate(120)" />
+    </g>
+  </svg>
+);
+
+const ReactNativeIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" {...props}>
+    <rect x="4" y="2" width="16" height="20" rx="3" stroke="#61DAFB" strokeWidth="1.5" />
+    <circle cx="12" cy="18" r="1.1" fill="#61DAFB" />
+    <ellipse cx="12" cy="10" rx="5" ry="2" stroke="#61DAFB" strokeWidth="1" />
+    <ellipse cx="12" cy="10" rx="5" ry="2" stroke="#61DAFB" strokeWidth="1" transform="rotate(60 12 10)" />
+    <ellipse cx="12" cy="10" rx="5" ry="2" stroke="#61DAFB" strokeWidth="1" transform="rotate(120 12 10)" />
+    <circle cx="12" cy="10" r="1" fill="#61DAFB" />
+  </svg>
+);
+
+const JavaScriptIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="26" height="26" {...props}>
+    <rect width="24" height="24" rx="4" fill="#F7DF1E" />
+    <text x="12" y="17.5" fill="#000000" fontSize="11" fontWeight="900" fontFamily="system-ui, -apple-system, sans-serif" textAnchor="middle" letterSpacing="0.5">JS</text>
+  </svg>
+);
+
+const Html5Icon = (props) => (
+  <img src="/html5.svg" alt="HTML5" width="26" height="26" style={{ objectFit: 'contain', display: 'block' }} {...props} />
+);
+
+const Css3Icon = (props) => (
+  <img src="/css3.svg" alt="CSS3" width="26" height="26" style={{ objectFit: 'contain', display: 'block' }} {...props} />
+);
+
+const FirebaseIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="25" height="25" fill="none" {...props}>
+    <path d="M4.5 18.8L6.8 4.2C6.9 3.5 7.9 3.3 8.3 3.9L11.5 9.7L7.6 17L4.5 18.8Z" fill="#FFA000" />
+    <path d="M4.5 18.8L11.5 22.6C11.8 22.8 12.2 22.8 12.5 22.6L19.5 18.8L17.5 7.1C17.4 6.4 16.5 6.2 16.1 6.8L4.5 18.8Z" fill="#F57C00" />
+    <path d="M12.4 12.8L14.7 8.3C15 7.7 15.9 7.7 16.2 8.3L19.5 18.8L12.4 12.8Z" fill="#FFCA28" />
+  </svg>
+);
+
+const NodeIcon = (props) => (
+  <img src="/nodejs.svg" alt="Node.js" width="26" height="26" style={{ objectFit: 'contain', display: 'block' }} {...props} />
+);
+
+const ExpressIcon = (props) => (
+  <img src="/express.svg" alt="Express.js" width="26" height="26" style={{ objectFit: 'contain', display: 'block' }} {...props} />
+);
+
+const MongoIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="25" height="25" fill="currentColor" color="#47A248" {...props}>
+    <path d="M12 0C11.7 0 11.5.2 11.4.4C10.5 2.5 6.5 10.7 6.5 14.8C6.5 18.7 9 22.3 11.8 23.9C11.9 24 12 24 12 24C12 24 12.1 24 12.2 23.9C15 22.3 17.5 18.7 17.5 14.8C17.5 10.7 13.5 2.5 12.6.4C12.5.2 12.3 0 12 0ZM12 21.6C10.3 20.3 8.3 17.6 8.3 14.8C8.3 11.9 11 5.7 12 3.4V21.6Z" />
+  </svg>
+);
+
+const GitIcon = (props) => (
+  <svg viewBox="0 0 24 24" width="25" height="25" fill="currentColor" color="#F05032" {...props}>
+    <path d="M23.3 10.9L13.1.7C12.2-.2 10.8-.2 9.9.7L8 2.6L10.4 5C11.1 4.7 12 4.9 12.5 5.5C13.1 6.1 13.2 7 12.9 7.7L15.2 10C15.9 9.7 16.8 9.9 17.4 10.5C18.2 11.3 18.2 12.6 17.4 13.4C16.6 14.2 15.3 14.2 14.5 13.4C13.9 12.8 13.7 12 14 11.2L11.8 9C11.6 9.1 11.3 9.1 11.1 9.1C10.5 9.1 10 8.8 9.6 8.4L7.3 10.7C7.6 11.4 7.4 12.3 6.8 12.9C6.1 13.6 4.9 13.6 4.2 12.9C3.5 12.2 3.5 11 4.2 10.3C4.8 9.6 5.8 9.5 6.5 9.9L8.8 7.6C8.7 7.4 8.7 7.1 8.7 6.9C8.7 6.3 9 5.8 9.4 5.4L7.1 3.1.7 9.5C-.2 10.4-.2 11.8.7 12.7L10.9 22.9C11.8 23.8 13.2 23.8 14.1 22.9L23.3 13.7C24.2 12.8 24.2 11.8 23.3 10.9Z" />
+  </svg>
+);
+
+const RestApiIcon = (props) => (
+  <img src="/restapi.svg" alt="REST API" width="26" height="26" style={{ objectFit: 'contain', display: 'block' }} {...props} />
+);
+
 const technologies = [
-  ['React', 'âš›', 'react'], ['JavaScript', 'JS', 'js'], ['HTML5', '5', 'html'], ['CSS3', '#', 'css'], ['Node.js', 'N', 'node'], ['Express.js', 'ex', 'express'], ['MongoDB', 'M', 'mongo'], ['Git', 'âŒ˜', 'git'], ['GitHub', 'â—‰', 'github'], ['REST API', '{}', 'api'], ['React Native', 'RN', 'native'], ['Firebase', 'ðŸ”¥', 'firebase'],
+  ['React', ReactIcon, 'react'],
+  ['React Native', ReactNativeIcon, 'native'],
+  ['JavaScript', JavaScriptIcon, 'js'],
+  ['HTML5', Html5Icon, 'html'],
+  ['CSS3', Css3Icon, 'css'],
+  ['Firebase', FirebaseIcon, 'firebase'],
+  ['Node.js', NodeIcon, 'node'],
+  ['Express.js', ExpressIcon, 'express'],
+  ['MongoDB', MongoIcon, 'mongo'],
+  ['Git', GitIcon, 'git'],
+  ['GitHub', (props) => <GithubIcon width={24} height={24} {...props} />, 'github'],
+  ['REST API', RestApiIcon, 'api'],
 ];
+
 
 function Logo({ onNavigate, interactive = false, onAvatarClick, isProfileOpen = false }) {
   if (interactive) {
@@ -1660,13 +1742,13 @@ function Technologies() {
     <section className="section-pad tech-section" ref={sectionRef}>
       <SectionHeading eyebrow="My toolkit" title={<>TECHNOLOGIES I<br /><span>WORK WITH</span></>} />
       <div className={`tech-grid ${revealed ? 'revealed' : ''}`}>
-        {technologies.map(([name, mark, kind], index) => (
+        {technologies.map(([name, IconComp, kind], index) => (
           <div
             className={`tech-card ${kind}`}
             key={name}
             style={{ '--tech-idx': index }}
           >
-            <b>{mark}</b>
+            <b><IconComp /></b>
             <span>{name}</span>
           </div>
         ))}
