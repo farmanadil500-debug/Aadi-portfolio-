@@ -40,19 +40,73 @@ const projects = [
     number: '01',
     title: 'Darzi App',
     category: 'Mobile App Development',
-    text: 'A modern tailor management and customer booking mobile application.',
+    filterType: 'mobile',
+    text: 'A modern tailor management & customer booking mobile application with real-time measurement tracking.',
     tags: ['React Native', 'Expo', 'Firebase'],
     tone: 'emerald',
     image: '/darzi-app-logo.jpg',
     link: 'https://drive.google.com/uc?export=download&id=1KVcTGQ_HJF63UAN0eZfC2b-U4Z2XIZ4V',
-    linkText: 'Download App',
+    linkText: 'Download APK',
+    github: 'https://github.com/farmanadil500-debug/darzi',
     icon: Smartphone,
   },
-  { number: '02', title: 'Modern Business Website', category: 'Web Development', text: 'A confident digital home for a growing technology company.', tags: ['React', 'UI/UX'], tone: 'cyan', icon: Globe2 },
-  { number: '03', title: 'E-Commerce Platform', category: 'Web Platform', text: 'A streamlined shopping experience made for conversion.', tags: ['React', 'Node.js'], tone: 'blue', icon: Layers3 },
-  { number: '04', title: 'Developer Dashboard', category: 'SaaS Application', text: 'Clear data, sharp decisions and a delightful workflow.', tags: ['React', 'Charts'], tone: 'violet', icon: Monitor },
-  { number: '05', title: 'Portfolio Website', category: 'Personal Brand', text: 'A refined personal brand platform for a creative professional.', tags: ['Design', 'Frontend'], tone: 'navy', icon: Code2 },
-  { number: '06', title: 'Custom Web Application', category: 'Software Development', text: 'Purpose-built tools that turn complex processes into simple ones.', tags: ['Full Stack', 'UX'], tone: 'teal', icon: Rocket },
+  {
+    number: '02',
+    title: 'Weather Forecast App',
+    category: 'Web Application',
+    filterType: 'web',
+    text: 'A real-time weather forecasting web application with dynamic atmospheric data and clean responsive interface.',
+    tags: ['JavaScript', 'Weather API', 'CSS3'],
+    tone: 'cyan',
+    github: 'https://github.com/farmanadil500-debug/weather-app',
+    icon: Globe2,
+  },
+  {
+    number: '03',
+    title: 'Online Market Platform',
+    category: 'E-Commerce Platform',
+    filterType: 'web',
+    text: 'Digital shopping and online marketplace platform built with TypeScript for seamless item browsing.',
+    tags: ['TypeScript', 'React', 'E-Commerce'],
+    tone: 'blue',
+    github: 'https://github.com/farmanadil500-debug/online-market',
+    icon: Layers3,
+  },
+  {
+    number: '04',
+    title: 'Farman Portfolio Website',
+    category: 'Web Platform',
+    filterType: 'web',
+    text: 'High-performance interactive developer portfolio featuring custom animations, HD CV viewer, and responsive UI.',
+    tags: ['React', 'Vite', 'Firebase Hosting'],
+    tone: 'violet',
+    link: 'https://farman-6fdb2.web.app/',
+    linkText: 'Live Site',
+    github: 'https://github.com/farmanadil500-debug/farman-portfolio',
+    icon: Code2,
+  },
+  {
+    number: '05',
+    title: 'Meer Software App',
+    category: 'Software Application',
+    filterType: 'web',
+    text: 'Structured frontend web application built using TypeScript and clean architectural component patterns.',
+    tags: ['TypeScript', 'Frontend', 'Modular UI'],
+    tone: 'teal',
+    github: 'https://github.com/farmanadil500-debug/meer',
+    icon: Rocket,
+  },
+  {
+    number: '06',
+    title: 'Mobile App Prototype',
+    category: 'Mobile Prototype',
+    filterType: 'mobile',
+    text: 'Cross-platform mobile experiment exploring React Native lifecycle states, navigation flows, and fluid gestures.',
+    tags: ['React Native', 'JavaScript', 'Mobile UI'],
+    tone: 'navy',
+    github: 'https://github.com/farmanadil500-debug/my-first-app',
+    icon: Smartphone,
+  },
 ];
 
 const technologies = [
@@ -1390,77 +1444,122 @@ function GlowingBottomLines() {
 }
 
 function Portfolio() {
+  const [filter, setFilter] = useState('all');
+
+  const filteredProjects = filter === 'all'
+    ? projects
+    : projects.filter(p => p.filterType === filter);
+
   return (
     <section className="section-pad portfolio-section" id="portfolio">
       <SectionHeading
         eyebrow="Featured projects"
         title={<>SELECTED <span>WORK</span></>}
-        copy="A selection of digital products, experiments and experiences built with care."
+        copy="A selection of digital products, mobile applications and open-source projects built with care."
       />
+
+      <div className="project-filter-tabs">
+        <button
+          type="button"
+          className={`project-filter-tab ${filter === 'all' ? 'active' : ''}`}
+          onClick={() => setFilter('all')}
+        >
+          All Projects ({projects.length})
+        </button>
+        <button
+          type="button"
+          className={`project-filter-tab ${filter === 'mobile' ? 'active' : ''}`}
+          onClick={() => setFilter('mobile')}
+        >
+          Mobile Apps ({projects.filter(p => p.filterType === 'mobile').length})
+        </button>
+        <button
+          type="button"
+          className={`project-filter-tab ${filter === 'web' ? 'active' : ''}`}
+          onClick={() => setFilter('web')}
+        >
+          Web &amp; APIs ({projects.filter(p => p.filterType === 'web').length})
+        </button>
+      </div>
+
       <div className="project-grid">
-        {projects.map(({ number, title, category, text, tags, tone, icon: Icon, image, link, linkText }) => (
-          <article className={`project-card ${tone}`} key={number}>
-            <div className="project-preview">
-              {!link && (
-                <span className="concept-badge">
-                  <span className="concept-badge-dot" aria-hidden="true" />
-                  Concept Project
-                </span>
-              )}
-              {image ? (
-                <div className="project-preview-image-wrap">
-                  <img src={image} alt={title} className="project-preview-img" loading="lazy" />
-                  <div className="project-preview-glow" />
+        {filteredProjects.map(({ number, title, category, text, tags, tone, icon: Icon, image, link, linkText, github }) => {
+          const primaryLink = link || github;
+
+          return (
+            <article className={`project-card ${tone}`} key={number}>
+              <div className="project-preview">
+                {image ? (
+                  <div className="project-preview-image-wrap">
+                    <img src={image} alt={title} className="project-preview-img" loading="lazy" />
+                    <div className="project-preview-glow" />
+                  </div>
+                ) : (
+                  <>
+                    <div className="preview-lines" />
+                    <div className="preview-window"><div /><div /><div /></div>
+                    <div className="preview-icon"><Icon size={27} /></div>
+                  </>
+                )}
+                <span className="project-index">{number}</span>
+              </div>
+              <div className="project-info">
+                <div>
+                  {category && <span className="project-category">{category}</span>}
+                  <h3>{title}</h3>
+                  <p>{text}</p>
                 </div>
-              ) : (
-                <>
-                  <div className="preview-lines" />
-                  <div className="preview-window"><div /><div /><div /></div>
-                  <div className="preview-icon"><Icon size={27} /></div>
-                </>
-              )}
-              <span className="project-index">{number}</span>
-            </div>
-            <div className="project-info">
-              <div>
-                {category && <span className="project-category">{category}</span>}
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-              {link ? (
-                <a
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${title}`}
-                  className="project-corner-link"
-                >
-                  <ArrowUpRight size={20} />
-                </a>
-              ) : (
-                <a href="#contact" aria-label={`View ${title}`} className="project-corner-link">
-                  <ArrowUpRight size={20} />
-                </a>
-              )}
-              <div className="tags">
-                {tags.map(tag => <span key={tag}>{tag}</span>)}
-              </div>
-              {link && (
-                <div className="project-actions">
+
+                {primaryLink ? (
                   <a
-                    href={link}
+                    href={primaryLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="project-cta-button"
-                    aria-label={`${linkText || 'Download App'} for ${title}`}
+                    aria-label={`Open ${title}`}
+                    className="project-corner-link"
                   >
-                    <Download size={13} /> {linkText || 'Download App'} <ArrowUpRight size={13} />
+                    <ArrowUpRight size={20} />
                   </a>
+                ) : (
+                  <a href="#contact" aria-label={`View ${title}`} className="project-corner-link">
+                    <ArrowUpRight size={20} />
+                  </a>
+                )}
+
+                <div className="tags">
+                  {tags.map(tag => <span key={tag}>{tag}</span>)}
                 </div>
-              )}
-            </div>
-          </article>
-        ))}
+
+                <div className="project-actions">
+                  {link && (
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-cta-button"
+                      aria-label={`${linkText || 'View Project'} for ${title}`}
+                    >
+                      {link.includes('download') ? <Download size={13} /> : <ExternalLink size={13} />}
+                      <span>{linkText || 'Live Demo'}</span>
+                    </a>
+                  )}
+                  {github && (
+                    <a
+                      href={github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-github-btn"
+                      aria-label={`View GitHub source code for ${title}`}
+                    >
+                      <GithubIcon width={13} height={13} />
+                      <span>Code</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
