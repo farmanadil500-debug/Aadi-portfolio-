@@ -56,7 +56,7 @@ const projects = [
 ];
 
 const technologies = [
-  ['React', '⚛', 'react'], ['JavaScript', 'JS', 'js'], ['HTML5', '5', 'html'], ['CSS3', '#', 'css'], ['Node.js', 'N', 'node'], ['Express.js', 'ex', 'express'], ['MongoDB', 'M', 'mongo'], ['Git', '⌘', 'git'], ['GitHub', '◉', 'github'], ['REST API', '{}', 'api'], ['React Native', 'RN', 'native'], ['Firebase', '🔥', 'firebase'],
+  ['React', 'âš›', 'react'], ['JavaScript', 'JS', 'js'], ['HTML5', '5', 'html'], ['CSS3', '#', 'css'], ['Node.js', 'N', 'node'], ['Express.js', 'ex', 'express'], ['MongoDB', 'M', 'mongo'], ['Git', 'âŒ˜', 'git'], ['GitHub', 'â—‰', 'github'], ['REST API', '{}', 'api'], ['React Native', 'RN', 'native'], ['Firebase', 'ðŸ”¥', 'firebase'],
 ];
 
 function Logo({ onNavigate, interactive = false, onAvatarClick, isProfileOpen = false }) {
@@ -681,9 +681,9 @@ function CvModal({ isOpen, onClose }) {
               </div>
               <div className="cv-modal-title-text">
                 <div className="cv-modal-title">
-                  Farman Adil — CV <span className="cv-modal-badge">Full HD</span>
+                  Farman Adil â€” CV <span className="cv-modal-badge">Full HD</span>
                 </div>
-                <div className="cv-modal-subtitle">Direct Preview · React Native &amp; Frontend Developer</div>
+                <div className="cv-modal-subtitle">Direct Preview Â· React Native &amp; Frontend Developer</div>
               </div>
             </div>
 
@@ -768,7 +768,7 @@ function CvModal({ isOpen, onClose }) {
                 <Loader2 size={34} className="cv-loader-spinner" />
               </div>
               <h3 className="cv-loader-title">Loading Curriculum Vitae...</h3>
-              <p className="cv-loader-desc">Preparing High-Definition Document (HD) · Please wait</p>
+              <p className="cv-loader-desc">Preparing High-Definition Document (HD) Â· Please wait</p>
               <div className="cv-loader-progress-track">
                 <div className="cv-loader-progress-bar" />
               </div>
@@ -782,7 +782,7 @@ function CvModal({ isOpen, onClose }) {
             >
               <img
                 src={imgPath}
-                alt="Farman Adil — Curriculum Vitae HD"
+                alt="Farman Adil â€” Curriculum Vitae HD"
                 className="cv-preview-img"
                 onLoad={handleImageLoaded}
                 width="2048"
@@ -792,9 +792,9 @@ function CvModal({ isOpen, onClose }) {
               {/* Interactive clickable link hotspots */}
               <div className="cv-interactive-links">
                 <a
-                  href="tel:+923498506743"
+                  href="tel:+923496506743"
                   className="cv-link-hotspot cv-link-phone"
-                  title="Call Farman Adil (+92 349 8506743)"
+                  title="Call Farman Adil (+92 349 6506743)"
                 />
                 <a
                   href="mailto:farmanadil500@gmail.com"
@@ -835,7 +835,7 @@ function CvModal({ isOpen, onClose }) {
             <a href={pdfPath} download="Farman_Adil_CV_HD.pdf" className="cv-footer-link">
               <Download size={13} /> Save PDF
             </a>
-            <span className="cv-footer-dot">·</span>
+            <span className="cv-footer-dot">Â·</span>
             <a href={pdfPath} target="_blank" rel="noopener noreferrer" className="cv-footer-link">
               <ExternalLink size={13} /> Open Tab
             </a>
@@ -862,7 +862,7 @@ function Hero({ onOpenCv }) {
         <h1>WE BUILD<br /><span>DIGITAL SOLUTIONS</span></h1>
         <p className="hero-lead">Modern websites. Powerful apps.<br />Endless possibilities.</p>
         <p className="hero-trust-line">
-          Based in Pakistan <span className="hero-trust-dot">·</span> Working Worldwide
+          Based in Pakistan <span className="hero-trust-dot">Â·</span> Working Worldwide
         </p>
         <div className="hero-actions">
           <a className="button primary" href="#contact">Get started <ArrowRight size={16} /></a>
@@ -941,7 +941,7 @@ function About() {
       </div>
 
       <div className="about-grid">
-        {/* Left — Profile Photo */}
+        {/* Left â€” Profile Photo */}
         <div className="about-profile-visual reveal">
           <div className="about-profile-bg">
             <div className="about-profile-dots" />
@@ -963,7 +963,7 @@ function About() {
           <div className="about-profile-frame">
             <img
               src={profilePhoto}
-              alt="Farman Adil — Software Developer"
+              alt="Farman Adil â€” Software Developer"
               className="about-profile-img"
               width="1024"
               height="812"
@@ -979,7 +979,7 @@ function About() {
           </div>
         </div>
 
-        {/* Right — About Content */}
+        {/* Right â€” About Content */}
         <div className="about-content">
           <span className="about-label">Who I Am</span>
           <h3
@@ -1065,9 +1065,9 @@ const experiences = [
   {
     role: 'Frontend & Mobile App Developer',
     company: 'Software House',
-    period: '2026 — Present',
+    period: '2026 â€” Present',
     current: true,
-    type: 'Full-time · Team Environment',
+    type: 'Full-time Â· Team Environment',
     description: 'Working in an agile software house engineering cross-platform mobile apps and dynamic web applications with production-grade architecture.',
     highlights: [
       'Architecting and implementing scalable UI components with React Native, Expo, and React.js',
@@ -1079,7 +1079,7 @@ const experiences = [
   {
     role: 'Independent App Developer',
     company: 'Mobile Solutions & Client Projects',
-    period: '2025 — 2026',
+    period: '2025 â€” 2026',
     current: false,
     type: 'Production Apps',
     description: 'Built end-to-end mobile applications, including the Darzi App for tailor shop order automation and client management.',
@@ -1129,7 +1129,7 @@ function Experience() {
                   <h3>{exp.role}</h3>
                   <div className="experience-company-wrap">
                     <span className="experience-company">{exp.company}</span>
-                    <span className="experience-dot">·</span>
+                    <span className="experience-dot">Â·</span>
                     <span className="experience-type">{exp.type}</span>
                   </div>
                 </div>
@@ -1507,7 +1507,7 @@ function Technologies() {
   );
 }
 
-function WhyChooseMe() { const items = [['01', 'Clean & Modern Design', 'Every detail has a reason. Nothing gets in the way of the experience.'], ['02', 'Responsive Development', 'Thoughtful layouts that feel right on every screen and every device.'], ['03', 'Performance Focused', 'Fast, reliable digital products that respect your users’ time.'], ['04', 'User-Centered Experience', 'Technology is only useful when it makes someone’s day easier.']]; return <section className="section-pad why-section"><SectionHeading eyebrow="The difference" title={<>WHY WORK<br /><span>WITH ME?</span></>} /><div className="why-grid">{items.map(([num, title, text]) => <article key={num}><span>{num}</span><Check size={18} /><h3>{title}</h3><p>{text}</p></article>)}</div></section>; }
+function WhyChooseMe() { const items = [['01', 'Clean & Modern Design', 'Every detail has a reason. Nothing gets in the way of the experience.'], ['02', 'Responsive Development', 'Thoughtful layouts that feel right on every screen and every device.'], ['03', 'Performance Focused', 'Fast, reliable digital products that respect your usersâ€™ time.'], ['04', 'User-Centered Experience', 'Technology is only useful when it makes someoneâ€™s day easier.']]; return <section className="section-pad why-section"><SectionHeading eyebrow="The difference" title={<>WHY WORK<br /><span>WITH ME?</span></>} /><div className="why-grid">{items.map(([num, title, text]) => <article key={num}><span>{num}</span><Check size={18} /><h3>{title}</h3><p>{text}</p></article>)}</div></section>; }
 
 function Contact() {
   const [sent, setSent] = useState(false);
@@ -1575,7 +1575,7 @@ function Contact() {
           access_key: 'c0a3c477-bb8a-46a7-ba81-034a303b4c1a',
           name,
           email,
-          subject: `New Portfolio Contact — ${subject}`,
+          subject: `New Portfolio Contact â€” ${subject}`,
           message,
           from_name: name,
         }),
@@ -1686,7 +1686,7 @@ function Footer({ onOpenCv }) {
             </button>
           )}
         </div>
-        <small>© {new Date().getFullYear()} Farman Adil. All rights reserved.</small>
+        <small>Â© {new Date().getFullYear()} Farman Adil. All rights reserved.</small>
       </div>
     </footer>
   );

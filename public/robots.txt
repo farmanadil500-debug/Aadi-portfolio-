@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://farman-6fdb2.web.app/sitemap.xml
+
