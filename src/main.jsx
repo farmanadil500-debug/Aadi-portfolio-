@@ -1443,6 +1443,75 @@ function GlowingBottomLines() {
   );
 }
 
+
+const processSteps = [
+  {
+    number: '01',
+    title: 'Discovery & Strategy',
+    subtitle: 'Requirements & Architecture',
+    text: 'Understanding your business goals, user flows, technical specifications, and planning the optimal architecture for web or mobile.',
+    icon: FolderKanban,
+    highlights: ['Requirement Analysis', 'Tech Stack Selection', 'Milestone Roadmapping'],
+  },
+  {
+    number: '02',
+    title: 'UI/UX & Prototyping',
+    subtitle: 'Design & Visual Flow',
+    text: 'Designing modern, responsive interfaces with clean typography, intuitive user interactions, and pixel-perfect screen layouts.',
+    icon: Palette,
+    highlights: ['Clean Wireframing', 'Responsive UI Design', 'User-Centered Flows'],
+  },
+  {
+    number: '03',
+    title: 'Agile Development',
+    subtitle: 'Clean Code & Cloud APIs',
+    text: 'Building scalable applications using React, React Native, and Expo, seamlessly integrating Firebase Firestore, Auth, and RESTful APIs.',
+    icon: Code2,
+    highlights: ['React / React Native', 'Firebase Cloud Sync', 'Clean Component Architecture'],
+  },
+  {
+    number: '04',
+    title: 'Testing & Deployment',
+    subtitle: 'QA, APK Builds & Launch',
+    text: 'Cross-platform testing on Android & web devices, bundle optimization, building standalone production APKs, and smooth live deployment.',
+    icon: Rocket,
+    highlights: ['Device QA Testing', 'Production APK Build', 'Post-Launch Support'],
+  },
+];
+
+function WorkProcess() {
+  return (
+    <section className="section-pad process-section" id="process">
+      <SectionHeading
+        eyebrow="My Workflow"
+        title={<>HOW I BRING IDEAS<br /><span>TO REALITY</span></>}
+        copy="A structured and transparent 4-step workflow to turn your vision into a scalable, high-performance digital product."
+      />
+
+      <div className="process-grid">
+        {processSteps.map(({ number, title, subtitle, text, icon: Icon, highlights }) => (
+          <article className="process-card reveal" key={number}>
+            <div className="process-card-top">
+              <div className="process-icon-box">
+                <Icon size={22} />
+              </div>
+              <span className="process-step-num">{number}</span>
+            </div>
+            <span className="process-subtitle">{subtitle}</span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+            <ul className="process-highlights">
+              {highlights.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function Portfolio() {
   const [filter, setFilter] = useState('all');
 
@@ -1819,7 +1888,7 @@ function App() {
       }),
       { threshold: 0.12 }
     );
-    document.querySelectorAll('section, .service-card, .project-card, .why-grid article, .about-heading, .about-profile-visual, .about-skill-badge, .experience-card').forEach(element => {
+    document.querySelectorAll('section, .service-card, .process-card, .project-card, .why-grid article, .about-heading, .about-profile-visual, .about-skill-badge, .experience-card').forEach(element => {
       element.classList.add('reveal');
       observer.observe(element);
     });
@@ -1832,6 +1901,7 @@ function App() {
       <main>
         <Hero onOpenCv={() => setCvOpen(true)} />
         <Services />
+        <WorkProcess />
         <Portfolio />
         <About />
         <Experience />
