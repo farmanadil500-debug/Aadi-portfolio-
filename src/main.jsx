@@ -1,7 +1,7 @@
 import { StrictMode, useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
-  ArrowRight, ArrowUpRight, Braces, Check, Code2, Download, ExternalLink, Eye, FileText,
+  ArrowRight, ArrowUpRight, ArrowUp, Copy, ChevronDown, Braces, Check, Code2, Download, ExternalLink, Eye, FileText,
   Flame, Globe2, GitBranch, Layers3, Loader2, Mail, Menu, MessageCircle, Monitor, Palette, Phone,
   Rocket, Send, Server, Smartphone, Sparkles, Users, Briefcase, FolderKanban, X, Zap, ZoomIn, ZoomOut
 } from 'lucide-react';
@@ -1681,6 +1681,15 @@ function Contact() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [copiedField, setCopiedField] = useState(null);
+
+  const handleCopy = (text, field) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 2000);
+    }
+  };
 
   const validateEmail = (emailStr) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr);
@@ -1878,6 +1887,108 @@ function FloatingWhatsApp() {
   );
 }
 
+
+const faqData = [
+  {
+    q: 'Do you build for both Android and iOS?',
+    a: 'Yes! I use <strong>React Native with Expo</strong>, which means your app runs on both Android and iOS from a single codebase — saving you time, cost, and effort.',
+  },
+  {
+    q: 'How do we collaborate if we are in different time zones?',
+    a: 'I work with clients <strong>worldwide</strong> and adapt to your schedule. I provide regular progress updates via WhatsApp, email, or video calls, and share detailed milestone reports throughout the project.',
+  },
+  {
+    q: 'Do you handle backend and database too?',
+    a: 'Absolutely. I integrate <strong>Firebase Firestore</strong> (real-time database), Firebase Auth (user authentication), and RESTful APIs. For most mobile and web projects, this covers the full backend.',
+  },
+  {
+    q: 'What is your pricing and engagement model?',
+    a: 'I offer both <strong>fixed-price project</strong> quotes (for well-defined scope) and <strong>hourly engagements</strong>. After a free discovery call, I will send a transparent breakdown with timeline and deliverables before any work begins.',
+  },
+  {
+    q: 'How long does it take to build a mobile app?',
+    a: 'A standard <strong>React Native MVP app</strong> typically takes 3 to 6 weeks depending on features. Simple utility apps can be faster; complex apps with custom dashboards, payments, or maps may take longer. I will give you a precise estimate after understanding your requirements.',
+  },
+  {
+    q: 'Will I own the source code after delivery?',
+    a: 'Yes, 100%. Once the project is delivered and payment is complete, you receive <strong>full ownership</strong> of the source code, assets, and all project files. No strings attached.',
+  },
+];
+
+function Faq() {
+  const [openIdx, setOpenIdx] = useState(null);
+
+  const toggle = (idx) => setOpenIdx(prev => prev === idx ? null : idx);
+
+  return (
+    <section className="section-pad faq-section">
+      <SectionHeading
+        eyebrow="Got questions?"
+        title={<>FREQUENTLY<br /><span>ASKED QUESTIONS</span></>}
+        copy="Everything you need to know before we start working together."
+      />
+
+      <div className="faq-list">
+        {faqData.map((item, idx) => (
+          <div className={`faq-item ${openIdx === idx ? 'open' : ''}`} key={idx}>
+            <button
+              type="button"
+              className="faq-question"
+              onClick={() => toggle(idx)}
+              aria-expanded={openIdx === idx}
+            >
+              <span className="faq-question-left">
+                <span className="faq-q-badge">Q{idx + 1}</span>
+                {item.q}
+              </span>
+              <ChevronDown size={18} className="faq-chevron" />
+            </button>
+            <div className="faq-answer" aria-hidden={openIdx !== idx}>
+              <p className="faq-answer-inner" dangerouslySetInnerHTML={{ __html: item.a }} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="faq-cta">
+        <span>Still have a question? I am happy to answer it personally.</span>
+        <a href="#contact">
+          Ask me directly <ArrowUpRight size={14} />
+        </a>
+      </div>
+    </section>
+  );
+}
+
+
+function BackToTop() {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setVisible(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  return (
+    <button
+      type="button"
+      className={`back-to-top-btn ${visible ? 'visible' : ''}`}
+      onClick={scrollToTop}
+      aria-label="Back to top of page"
+      title="Back to Top"
+    >
+      <ArrowUp size={18} />
+    </button>
+  );
+}
+
 function App() {
   const [cvOpen, setCvOpen] = useState(false);
 
@@ -1907,11 +2018,13 @@ function App() {
         <Experience />
         <Technologies />
         <WhyChooseMe />
+        <Faq />
         <GlowingBottomLines />
         <Contact />
       </main>
       <Footer onOpenCv={() => setCvOpen(true)} />
       <FloatingWhatsApp />
+      <BackToTop />
       <CvModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />
     </>
   );
