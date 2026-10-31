@@ -381,6 +381,7 @@ function Navbar({ onOpenCv }) {
   const linkRefs = useRef({});
   const moreRef = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownTimerRef = useRef(null);
   const dropdownIds = ['process', 'testimonials', 'pricing', 'faq'];
   const isClickScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef(null);
@@ -395,10 +396,10 @@ function Navbar({ onOpenCv }) {
     ['Contact', 'contact'],
   ];
   const dropdownLinks = [
-    ['Process', 'process'],
-    ['Testimonials', 'testimonials'],
-    ['Pricing', 'pricing'],
-    ['FAQ', 'faq'],
+    { label: 'Process', id: 'process', icon: Sparkles, desc: 'How I work' },
+    { label: 'Testimonials', id: 'testimonials', icon: MessageCircle, desc: 'Client reviews' },
+    { label: 'Pricing', id: 'pricing', icon: Zap, desc: 'Packages & rates' },
+    { label: 'FAQ', id: 'faq', icon: FileText, desc: 'Common questions' },
   ];
 
   useEffect(() => {
@@ -551,10 +552,7 @@ function Navbar({ onOpenCv }) {
     } else {
       const element = document.getElementById(id);
       if (element) {
-        const navbarHeight = 74;
-        const rect = element.getBoundingClientRect();
-        const targetTop = rect.top + window.scrollY - navbarHeight;
-        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   };
@@ -612,28 +610,53 @@ function Navbar({ onOpenCv }) {
           ))}
           <div
             className="nav-dropdown"
-            onMouseEnter={() => setDropdownOpen(true)}
-            onMouseLeave={() => setDropdownOpen(false)}
+            onMouseEnter={() => {
+              if (dropdownTimerRef.current) clearTimeout(dropdownTimerRef.current);
+              setDropdownOpen(true);
+            }}
+            onMouseLeave={() => {
+              dropdownTimerRef.current = setTimeout(() => {
+                setDropdownOpen(false);
+              }, 180);
+            }}
           >
             <button
               type="button"
               ref={moreRef}
-              className={`nav-dropdown-button ${dropdownIds.includes(activeSection) ? 'active' : ''}`}
+              className={`nav-dropdown-button ${dropdownIds.includes(activeSection) ? 'active' : ''} ${dropdownOpen ? 'expanded' : ''}`}
               aria-expanded={dropdownOpen}
               aria-haspopup="true"
               onClick={() => setDropdownOpen((prev) => !prev)}
             >
-              More <ChevronDown size={15} />
+              <span>More</span>
+              <ChevronDown size={14} className={`nav-dropdown-chevron ${dropdownOpen ? 'rotate' : ''}`} />
             </button>
-            <div className={`nav-dropdown-menu ${dropdownOpen ? 'open' : ''}`}>
-              {dropdownLinks.map(([label, id]) => (
+            <div
+              className={`nav-dropdown-menu ${dropdownOpen ? 'open' : ''}`}
+              onMouseEnter={() => {
+                if (dropdownTimerRef.current) clearTimeout(dropdownTimerRef.current);
+                setDropdownOpen(true);
+              }}
+              onMouseLeave={() => {
+                dropdownTimerRef.current = setTimeout(() => {
+                  setDropdownOpen(false);
+                }, 180);
+              }}
+            >
+              {dropdownLinks.map(({ label, id, icon: ItemIcon, desc }) => (
                 <a
                   key={id}
                   href={`#${id}`}
-                  className={activeSection === id ? 'active' : ''}
+                  className={`nav-dropdown-item ${activeSection === id ? 'active' : ''}`}
                   onClick={(e) => scrollToSection(e, id)}
                 >
-                  {label}
+                  <span className="nav-dropdown-item-icon">
+                    <ItemIcon size={15} />
+                  </span>
+                  <div className="nav-dropdown-item-text">
+                    <span className="nav-dropdown-item-title">{label}</span>
+                    <span className="nav-dropdown-item-desc">{desc}</span>
+                  </div>
                 </a>
               ))}
             </div>
@@ -858,9 +881,9 @@ function CvModal({ isOpen, onClose }) {
               </div>
               <div className="cv-modal-title-text">
                 <div className="cv-modal-title">
-                  Farman Adil â€” CV <span className="cv-modal-badge">Full HD</span>
+                  Farman Adil — CV <span className="cv-modal-badge">Full HD</span>
                 </div>
-                <div className="cv-modal-subtitle">Direct Preview Â· React Native &amp; Frontend Developer</div>
+                <div className="cv-modal-subtitle">Direct Preview · React Native &amp; Frontend Developer</div>
               </div>
             </div>
 
@@ -869,6 +892,7 @@ function CvModal({ isOpen, onClose }) {
               className="cv-action-btn cv-action-close cv-mobile-close"
               onClick={onClose}
               aria-label="Close CV preview"
+              title="Close (Esc)"
             >
               <X size={18} />
             </button>
@@ -930,6 +954,7 @@ function CvModal({ isOpen, onClose }) {
               className="cv-action-btn cv-action-close cv-desktop-close"
               onClick={onClose}
               aria-label="Close CV preview"
+              title="Close (Esc)"
             >
               <X size={18} />
             </button>
