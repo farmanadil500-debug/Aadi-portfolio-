@@ -47,6 +47,7 @@ const projects = [
     image: '/darzi-app-logo.jpg',
     link: 'https://drive.google.com/uc?export=download&id=1KVcTGQ_HJF63UAN0eZfC2b-U4Z2XIZ4V',
     linkText: 'Download APK',
+    appStore: 'https://apps.apple.com/pk/app/darzi-tailor-shop-manager/id6809124751',
     github: 'https://github.com/farmanadil500-debug/darzi',
     icon: Smartphone,
   },
@@ -378,6 +379,9 @@ function Navbar({ onOpenCv }) {
   const [activeSection, setActiveSection] = useState('home');
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const linkRefs = useRef({});
+  const moreRef = useRef(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownIds = ['process', 'testimonials', 'pricing', 'faq'];
   const isClickScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef(null);
 
@@ -385,13 +389,20 @@ function Navbar({ onOpenCv }) {
     ['Home', 'home'],
     ['Services', 'services'],
     ['Portfolio', 'portfolio'],
+    ['Case Study', 'case-study'],
     ['About', 'about'],
     ['Experience', 'experience'],
     ['Contact', 'contact'],
   ];
+  const dropdownLinks = [
+    ['Process', 'process'],
+    ['Testimonials', 'testimonials'],
+    ['Pricing', 'pricing'],
+    ['FAQ', 'faq'],
+  ];
 
   useEffect(() => {
-    const sectionIds = ['home', 'services', 'portfolio', 'about', 'experience', 'contact'];
+    const sectionIds = ['home', 'services', 'process', 'portfolio', 'case-study', 'about', 'experience', 'testimonials', 'pricing', 'faq', 'contact'];
 
     const handleScroll = () => {
       // If a nav link was clicked, keep the activeSection locked until smooth scroll finishes
@@ -473,7 +484,7 @@ function Navbar({ onOpenCv }) {
   }, []);
 
   const updateIndicator = useCallback(() => {
-    const activeEl = linkRefs.current[activeSection];
+    const activeEl = dropdownIds.includes(activeSection) ? moreRef.current : linkRefs.current[activeSection];
     if (activeEl) {
       setIndicatorStyle({
         left: activeEl.offsetLeft,
@@ -501,6 +512,7 @@ function Navbar({ onOpenCv }) {
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && open) setOpen(false);
+      if (e.key === 'Escape') setDropdownOpen(false);
       if (e.key === 'Escape' && profileOpen) setProfileOpen(false);
     };
     const handleResize = () => {
@@ -522,6 +534,7 @@ function Navbar({ onOpenCv }) {
     isClickScrollingRef.current = true;
     setActiveSection(id);
     setOpen(false);
+    setDropdownOpen(false);
     setProfileOpen(false);
 
     if (scrollTimeoutRef.current) {
@@ -597,6 +610,34 @@ function Navbar({ onOpenCv }) {
               {label}
             </a>
           ))}
+          <div
+            className="nav-dropdown"
+            onMouseEnter={() => setDropdownOpen(true)}
+            onMouseLeave={() => setDropdownOpen(false)}
+          >
+            <button
+              type="button"
+              ref={moreRef}
+              className={`nav-dropdown-button ${dropdownIds.includes(activeSection) ? 'active' : ''}`}
+              aria-expanded={dropdownOpen}
+              aria-haspopup="true"
+              onClick={() => setDropdownOpen((prev) => !prev)}
+            >
+              More <ChevronDown size={15} />
+            </button>
+            <div className={`nav-dropdown-menu ${dropdownOpen ? 'open' : ''}`}>
+              {dropdownLinks.map(([label, id]) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  className={activeSection === id ? 'active' : ''}
+                  onClick={(e) => scrollToSection(e, id)}
+                >
+                  {label}
+                </a>
+              ))}
+            </div>
+          </div>
           <a
             className="nav-cta"
             href="#contact"
@@ -762,7 +803,7 @@ function CodeVisual() {
 function SectionHeading({ eyebrow, title, copy, align = '' }) { return <div className={`section-heading ${align}`}><span className="eyebrow">{eyebrow}</span><h2>{title}</h2>{copy && <p>{copy}</p>}</div>; }
 
 function CvModal({ isOpen, onClose }) {
-  const pdfPath = '/Farman_Adil_CV_HD.pdf';
+  const cvPath = '/Farman_Adil_CV_HD.jpg';
   const imgPath = '/Farman_Adil_CV_HD.jpg';
   const [isLoading, setIsLoading] = useState(true);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -864,21 +905,21 @@ function CvModal({ isOpen, onClose }) {
             </div>
 
             <a
-              href={pdfPath}
-              download="Farman_Adil_CV_HD.pdf"
+              href={cvPath}
+              download="Farman_Adil_CV_HD.jpg"
               className="cv-action-btn cv-action-download"
-              title="Download CV PDF to your device"
+              title="Download CV to your device"
             >
               <Download size={14} />
-              <span>Download PDF</span>
+              <span>Download CV</span>
             </a>
 
             <a
-              href={pdfPath}
+              href={cvPath}
               target="_blank"
               rel="noopener noreferrer"
               className="cv-action-btn cv-action-tab"
-              title="Open full PDF in a new tab"
+              title="Open full CV in a new tab"
             >
               <ExternalLink size={14} />
               <span>Fullscreen Tab</span>
@@ -965,14 +1006,14 @@ function CvModal({ isOpen, onClose }) {
 
         <div className="cv-modal-footer">
           <span className="cv-modal-footer-note">
-            Viewing CV in Crystal HD. Click <strong>Download PDF</strong> to save a local copy.
+            Viewing CV in Crystal HD. Click <strong>Download CV</strong> to save a local copy.
           </span>
           <div className="cv-modal-footer-links">
-            <a href={pdfPath} download="Farman_Adil_CV_HD.pdf" className="cv-footer-link">
-              <Download size={13} /> Save PDF
+            <a href={cvPath} download="Farman_Adil_CV_HD.jpg" className="cv-footer-link">
+              <Download size={13} /> Save CV
             </a>
             <span className="cv-footer-dot">Â·</span>
-            <a href={pdfPath} target="_blank" rel="noopener noreferrer" className="cv-footer-link">
+            <a href={cvPath} target="_blank" rel="noopener noreferrer" className="cv-footer-link">
               <ExternalLink size={13} /> Open Tab
             </a>
           </div>
@@ -994,11 +1035,11 @@ function Hero({ onOpenCv }) {
   return (
     <section className="hero section-pad" id="home">
       <div className="hero-copy">
-        <div className="availability"><span /> Available for new projects</div>
+        <div className="availability"><span /> Available for freelance</div>
         <h1>WE BUILD<br /><span>DIGITAL SOLUTIONS</span></h1>
         <p className="hero-lead">Modern websites. Powerful apps.<br />Endless possibilities.</p>
         <p className="hero-trust-line">
-          Based in Pakistan <span className="hero-trust-dot">Â·</span> Working Worldwide
+          Based in Khwazakhela, Swat, Pakistan <span className="hero-trust-dot">Â·</span> Working Worldwide
         </p>
         <div className="hero-actions">
           <a className="button primary" href="#contact">Get started <ArrowRight size={16} /></a>
@@ -1147,6 +1188,7 @@ function About() {
             </span>
           </h3>
           <p className="about-role">Frontend & React Native Developer</p>
+          <p className="about-location">Based in Khwazakhela, Swat, Pakistan — working worldwide.</p>
           <p className="about-desc">
             I'm a Frontend & React Native Developer focused on building modern, responsive web and mobile applications. I work with HTML, CSS, JavaScript, React, React Native, Expo, and Firebase to turn ideas into functional and user-friendly digital products.
           </p>
@@ -1200,7 +1242,8 @@ function About() {
 const experiences = [
   {
     role: 'Frontend & Mobile App Developer',
-    company: 'Software House',
+    company: 'TechNext96',
+    companyUrl: 'https://technext96.com/',
     period: '2026 â€” Present',
     current: true,
     type: 'Full-time Â· Team Environment',
@@ -1264,7 +1307,11 @@ function Experience() {
                 <div className="experience-title-group">
                   <h3>{exp.role}</h3>
                   <div className="experience-company-wrap">
-                    <span className="experience-company">{exp.company}</span>
+                    {exp.companyUrl ? (
+                      <a className="experience-company" href={exp.companyUrl} target="_blank" rel="noopener noreferrer">{exp.company}</a>
+                    ) : (
+                      <span className="experience-company">{exp.company}</span>
+                    )}
                     <span className="experience-dot">Â·</span>
                     <span className="experience-type">{exp.type}</span>
                   </div>
@@ -1596,6 +1643,12 @@ function WorkProcess() {
 
 function Portfolio() {
   const [filter, setFilter] = useState('all');
+  const [leaving, setLeaving] = useState(false);
+  const handleFilter = (next) => { if (next === filter || leaving) return; setIndicatorFilter(next); setLeaving(true); setTimeout(() => { setFilter(next); setLeaving(false); }, 350); };
+  const [indicatorFilter, setIndicatorFilter] = useState('all');
+  const filterTabsRef = useRef(null);
+  const [filterIndicatorStyle, setFilterIndicatorStyle] = useState({});
+  useEffect(() => { const update = () => { const container = filterTabsRef.current; if (!container) return; const btn = container.querySelector('[data-filter="' + indicatorFilter + '"]'); if (btn) setFilterIndicatorStyle({ width: btn.offsetWidth, height: btn.offsetHeight, transform: 'translate(' + btn.offsetLeft + 'px, ' + btn.offsetTop + 'px)' }); }; update(); window.addEventListener('resize', update); return () => window.removeEventListener('resize', update); }, [indicatorFilter]);
 
   const filteredProjects = filter === 'all'
     ? projects
@@ -1609,32 +1662,33 @@ function Portfolio() {
         copy="A selection of digital products, mobile applications and open-source projects built with care."
       />
 
-      <div className="project-filter-tabs">
+      <div className="project-filter-tabs" ref={filterTabsRef}>
+        <span className="project-filter-indicator" style={filterIndicatorStyle} aria-hidden="true" />
         <button
           type="button"
-          className={`project-filter-tab ${filter === 'all' ? 'active' : ''}`}
-          onClick={() => setFilter('all')}
+          data-filter="all" className={`project-filter-tab ${indicatorFilter === 'all' ? 'active' : ''}`}
+          onClick={() => handleFilter('all')}
         >
           All Projects ({projects.length})
         </button>
         <button
           type="button"
-          className={`project-filter-tab ${filter === 'mobile' ? 'active' : ''}`}
-          onClick={() => setFilter('mobile')}
+          data-filter="mobile" className={`project-filter-tab ${indicatorFilter === 'mobile' ? 'active' : ''}`}
+          onClick={() => handleFilter('mobile')}
         >
           Mobile Apps ({projects.filter(p => p.filterType === 'mobile').length})
         </button>
         <button
           type="button"
-          className={`project-filter-tab ${filter === 'web' ? 'active' : ''}`}
-          onClick={() => setFilter('web')}
+          data-filter="web" className={`project-filter-tab ${indicatorFilter === 'web' ? 'active' : ''}`}
+          onClick={() => handleFilter('web')}
         >
           Web &amp; APIs ({projects.filter(p => p.filterType === 'web').length})
         </button>
       </div>
 
-      <div className="project-grid">
-        {filteredProjects.map(({ number, title, category, text, tags, tone, icon: Icon, image, link, linkText, github }) => {
+      <div className={`project-grid ${leaving ? 'leaving' : ''}`} key={filter}>
+        {filteredProjects.map(({ number, title, category, text, tags, tone, icon: Icon, image, link, linkText, github, appStore }) => {
           const primaryLink = link || github;
 
           return (
@@ -1694,6 +1748,18 @@ function Portfolio() {
                       <span>{linkText || 'Live Demo'}</span>
                     </a>
                   )}
+                  {appStore && (
+                    <a
+                      href={appStore}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-cta-button"
+                      aria-label={`View ${title} on the App Store`}
+                    >
+                      <ExternalLink size={13} />
+                      <span>App Store</span>
+                    </a>
+                  )}
                   {github && (
                     <a
                       href={github}
@@ -1711,6 +1777,188 @@ function Portfolio() {
             </article>
           );
         })}
+      </div>
+    </section>
+  );
+}
+
+const testimonials = [
+  {
+    quote: 'Darzi App has made measurement tracking and order management much easier for our shop. Everything is organised in one place, and we no longer lose customer details.',
+    role: 'Tailor Shop Owner',
+    project: 'Darzi App',
+  },
+  {
+    quote: 'I downloaded the app from the shared link and started using it straight away. It is simple, fast and easy to understand for daily shop work.',
+    role: 'Android User',
+    project: 'Darzi App',
+  },
+  {
+    quote: 'A clean and practical app for tailor shops. Customer records and bookings are now simple to manage from the phone.',
+    role: 'App Store User',
+    project: 'Darzi App',
+  },
+];
+
+const pricingPlans = {
+  website: [
+    {
+      name: 'Basic',
+      price: 'PKR 25,000',
+      delivery: '1-2 weeks',
+      features: ['Up to 5 pages', 'Mobile responsive design', 'Contact form', 'Basic SEO setup', '1 revision round'],
+      popular: false,
+    },
+    {
+      name: 'Standard',
+      price: 'PKR 50,000',
+      delivery: '2-3 weeks',
+      features: ['Up to 10 pages', 'Blog / CMS setup', 'Custom animations', 'On-page SEO', '3 revision rounds'],
+      popular: true,
+    },
+    {
+      name: 'Premium',
+      price: 'PKR 100,000',
+      delivery: '4-6 weeks',
+      features: ['Custom design & features', 'E-commerce or dashboard', 'API integrations', 'Performance optimisation', '1 month free support'],
+      popular: false,
+    },
+  ],
+  app: [
+    {
+      name: 'Basic',
+      price: 'PKR 50,000',
+      delivery: '2-3 weeks',
+      features: ['Single platform (Android or iOS)', 'Up to 5 screens', 'Core features only', 'Basic UI design', '1 revision round'],
+      popular: false,
+    },
+    {
+      name: 'Standard',
+      price: 'PKR 100,000',
+      delivery: '4-5 weeks',
+      features: ['Android + iOS', 'Up to 12 screens', 'Firebase backend', 'Play Store / App Store submission', '3 revision rounds'],
+      popular: true,
+    },
+    {
+      name: 'Premium',
+      price: 'PKR 200,000',
+      delivery: '6-8 weeks',
+      features: ['Fully custom app', 'Admin dashboard', 'Payment integration', 'Push notifications', '3 months free support'],
+      popular: false,
+    },
+  ],
+};
+
+function Pricing() {
+  const [tab, setTab] = useState('website');
+  const [leaving, setLeaving] = useState(false);
+  const handleTab = (next) => { if (next === tab || leaving) return; setIndicatorTab(next); setLeaving(true); setTimeout(() => { setTab(next); setLeaving(false); }, 350); };
+  const [indicatorTab, setIndicatorTab] = useState('website');
+  const pricingTabsRef = useRef(null);
+  const [pricingIndicatorStyle, setPricingIndicatorStyle] = useState({});
+  useEffect(() => { const update = () => { const container = pricingTabsRef.current; if (!container) return; const btn = container.querySelector('[data-tab="' + indicatorTab + '"]'); if (btn) setPricingIndicatorStyle({ width: btn.offsetWidth, height: btn.offsetHeight, transform: 'translate(' + btn.offsetLeft + 'px, ' + btn.offsetTop + 'px)' }); }; update(); window.addEventListener('resize', update); return () => window.removeEventListener('resize', update); }, [indicatorTab]);
+  const plans = pricingPlans[tab];
+  return (
+    <section className="section-pad pricing-section" id="pricing">
+      <SectionHeading
+        eyebrow="Pricing"
+        title={<>SIMPLE <span>PRICING</span></>}
+        copy="Placeholder prices - the final quote depends on your project scope."
+      />
+      <div className="pricing-toggle" role="tablist" aria-label="Pricing type" ref={pricingTabsRef}>
+        <span className="pricing-toggle-indicator" style={pricingIndicatorStyle} aria-hidden="true" />
+        <button type="button" role="tab" aria-selected={tab === 'website'} data-tab="website" className={indicatorTab === 'website' ? 'active' : ''} onClick={() => handleTab('website')}>Website</button>
+        <button type="button" role="tab" aria-selected={tab === 'app'} data-tab="app" className={indicatorTab === 'app' ? 'active' : ''} onClick={() => handleTab('app')}>Mobile App</button>
+      </div>
+      <div className={`pricing-grid ${leaving ? 'leaving' : ''}`}>
+        {plans.map((plan) => (
+          <article className={`pricing-card ${plan.popular ? 'popular' : ''}`} key={tab + plan.name}>
+            {plan.popular && <span className="pricing-badge">Most Popular</span>}
+            <h3>{plan.name}</h3>
+            <p className="pricing-price">{plan.price}</p>
+            <small className="pricing-starting">Starting from</small>
+            <p className="pricing-delivery">Delivery: {plan.delivery}</p>
+            <ul>
+              {plan.features.map((feature) => (
+                <li key={feature}><Check size={16} />{feature}</li>
+              ))}
+            </ul>
+            <a className="pricing-cta" href="#contact">Start Project</a>
+          </article>
+        ))}
+      </div>
+      <p className="pricing-note">Have a custom project? <a href="#contact">Contact me</a> for a custom quote.</p>
+    </section>
+  );
+}
+
+function CaseStudy() {
+  return (
+    <section className="section-pad case-study-section" id="case-study">
+      <SectionHeading
+        eyebrow="Case study"
+        title={<>DARZI APP <span>CASE STUDY</span></>}
+        copy="How a tailor shop moved from notebooks to one app — built in React Native with Firebase."
+      />
+      <div className="case-study-grid">
+        <article className="case-study-card">
+          <span className="case-study-label">The Problem</span>
+          <h3>Records scattered, measurements lost</h3>
+          <p>Customer details, measurements and orders lived in notebooks and scattered notes. Measurements were lost or had to be retaken, and finding one customer among many took time.</p>
+        </article>
+        <article className="case-study-card">
+          <span className="case-study-label">The Solution</span>
+          <h3>One app for the whole shop</h3>
+          <p>Darzi puts customer records, measurements, bookings and khata in one place. Updates arrive over the air — close and reopen the app and the latest version is there.</p>
+        </article>
+        <article className="case-study-card">
+          <span className="case-study-label">The Result</span>
+          <h3>A shop run from the phone</h3>
+          <p>Measurements update in seconds, customers are found by search, ready clothes trigger an SMS, and the day's business is visible at a glance. Tailors are very impressed with it.</p>
+        </article>
+      </div>
+      <div className="case-study-features">
+        <article className="case-study-feature"><Check size={18} /><div><h4>Easy measurement updates</h4><p>No notebook, no retaking measurements again and again.</p></div></article>
+        <article className="case-study-feature"><Check size={18} /><div><h4>Fast customer search</h4><p>Find any customer among many, instantly.</p></div></article>
+        <article className="case-study-feature"><Check size={18} /><div><h4>Ready-cloth SMS</h4><p>One tap tells the customer their cloth is ready.</p></div></article>
+        <article className="case-study-feature"><Check size={18} /><div><h4>Khata</h4><p>The remaining balance is visible to the tailor at a glance.</p></div></article>
+        <article className="case-study-feature"><Check size={18} /><div><h4>Today's Earning</h4><p>Today's business, visible in the app.</p></div></article>
+        <article className="case-study-feature"><Check size={18} /><div><h4>Delivery-date reminders</h4><p>The tailor is notified on the date a cloth is due.</p></div></article>
+        <article className="case-study-feature"><Check size={18} /><div><h4>Over-the-air updates</h4><p>New updates arrive by closing and reopening the app.</p></div></article>
+      </div>
+      <div className="case-study-tech">
+        <span>React Native</span>
+        <span>Firebase</span>
+        <span>OTA Updates</span>
+        <span>SMS Notifications</span>
+      </div>
+      <div className="case-study-cta">
+        <a href="https://apps.apple.com/pk/app/darzi-tailor-shop-manager/id6809124751" target="_blank" rel="noreferrer">View on App Store</a>
+        <a href="#contact">Discuss a similar app</a>
+      </div>
+    </section>
+  );
+}
+
+function Testimonials() {
+  return (
+    <section className="section-pad testimonial-section" id="testimonials">
+      <SectionHeading
+        eyebrow="Client feedback"
+        title={<>WHAT CLIENTS <span>SAY</span></>}
+        copy="Real feedback from people who use the products I build."
+      />
+      <div className="testimonial-grid">
+        {testimonials.map(({ quote, role, project }) => (
+          <article className="testimonial-card reveal" key={role + project}>
+            <div className="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+            <p>“{quote}”</p>
+            <div className="testimonial-author">
+              <strong>{role}</strong>
+              <small>{project}</small>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
@@ -1930,8 +2178,8 @@ function Footer({ onOpenCv }) {
           </a>
         </div>
         <div className="footer-nav">
-          {['Home', 'Services', 'Portfolio', 'About', 'Experience', 'Contact'].map(item => (
-            <a href={`#${item.toLowerCase()}`} key={item}>
+          {['Home', 'Services', 'Process', 'Portfolio', 'Case Study', 'About', 'Experience', 'Testimonials', 'Pricing', 'FAQ', 'Contact'].map(item => (
+            <a href={`#${item.toLowerCase().replace(' ', '-')}`} key={item}>
               {item}
             </a>
           ))}
@@ -2003,7 +2251,7 @@ function Faq() {
   const toggle = (idx) => setOpenIdx(prev => prev === idx ? null : idx);
 
   return (
-    <section className="section-pad faq-section">
+    <section className="section-pad faq-section" id="faq">
       <SectionHeading
         eyebrow="Got questions?"
         title={<>FREQUENTLY<br /><span>ASKED QUESTIONS</span></>}
@@ -2081,7 +2329,7 @@ function App() {
       }),
       { threshold: 0.12 }
     );
-    document.querySelectorAll('section, .service-card, .process-card, .project-card, .why-grid article, .about-heading, .about-profile-visual, .about-skill-badge, .experience-card').forEach(element => {
+    document.querySelectorAll('section, .service-card, .process-card, .project-card, .why-grid article, .about-heading, .about-profile-visual, .about-skill-badge, .experience-card, .testimonial-card').forEach(element => {
       element.classList.add('reveal');
       observer.observe(element);
     });
@@ -2096,8 +2344,11 @@ function App() {
         <Services />
         <WorkProcess />
         <Portfolio />
+        <CaseStudy />
         <About />
         <Experience />
+        <Testimonials />
+        <Pricing />
         <Technologies />
         <WhyChooseMe />
         <Faq />
