@@ -2024,19 +2024,31 @@ function Portfolio() {
 
 const testimonials = [
   {
-    quote: 'Darzi App has made measurement tracking and order management much easier for our shop. Everything is organised in one place, and we no longer lose customer details.',
+    name: 'Muhammad Bilal',
     role: 'Tailor Shop Owner',
+    initials: 'MB',
+    avatarGradient: 'linear-gradient(135deg, #00d2ff, #0066ff)',
     project: 'Darzi App (Mobile)',
+    verified: 'Verified Client',
+    quote: 'Darzi App has made measurement tracking and order management much easier for our shop. Everything is organised in one place, and we no longer lose customer details.',
   },
   {
-    quote: 'Farman delivered a fast, fully responsive web application with clean architecture. The user interface is polished and communication throughout the project was seamless.',
+    name: 'Sardar Khan',
     role: 'Web Platform Client',
+    initials: 'SK',
+    avatarGradient: 'linear-gradient(135deg, #38ef7d, #11998e)',
     project: 'Online Market & Web Apps',
+    verified: 'Verified Client',
+    quote: 'Farman delivered a fast, fully responsive web application with clean architecture. The user interface is polished and communication throughout the project was seamless.',
   },
   {
-    quote: 'A clean and practical app for tailor shops. Customer records and bookings are now simple to manage directly from the phone with instant updates.',
+    name: 'Rashid Ali',
     role: 'App Store User',
+    initials: 'RA',
+    avatarGradient: 'linear-gradient(135deg, #a855f7, #6366f1)',
     project: 'Darzi App (iOS & Android)',
+    verified: 'Verified Client',
+    quote: 'A clean and practical app for tailor shops. Customer records and bookings are now simple to manage directly from the phone with instant updates.',
   },
 ];
 
@@ -2189,13 +2201,30 @@ function Testimonials() {
         copy="Real feedback from people who use the products I build."
       />
       <div className="testimonial-grid">
-        {testimonials.map(({ quote, role, project }) => (
-          <article className="testimonial-card reveal" key={role + project}>
-            <div className="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-            <p>“{quote}”</p>
-            <div className="testimonial-author">
-              <strong>{role}</strong>
-              <small>{project}</small>
+        {testimonials.map(({ name, quote, role, project, initials, avatarGradient, verified }) => (
+          <article className="testimonial-card" key={name + role}>
+            <div className="testimonial-top-row">
+              <div className="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+              <span className="testimonial-verified-badge">
+                <CheckCircle2 size={12} /> {verified}
+              </span>
+            </div>
+            <p className="testimonial-quote">“{quote}”</p>
+            <div className="testimonial-footer">
+              <div
+                className="testimonial-avatar"
+                style={{ background: avatarGradient }}
+                aria-hidden="true"
+              >
+                {initials}
+              </div>
+              <div className="testimonial-author">
+                <strong className="testimonial-name">{name}</strong>
+                <span className="testimonial-role">{role}</span>
+                <span className="testimonial-project">
+                  <Smartphone size={11} /> {project}
+                </span>
+              </div>
             </div>
           </article>
         ))}
