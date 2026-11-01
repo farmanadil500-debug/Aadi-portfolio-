@@ -3,7 +3,8 @@ import { createRoot } from 'react-dom/client';
 import {
   ArrowRight, ArrowUpRight, ArrowUp, Copy, ChevronDown, Braces, Check, Code2, Download, ExternalLink, Eye, FileText,
   Flame, Globe2, GitBranch, Layers3, Loader2, Mail, Menu, MessageCircle, Monitor, Palette, Phone,
-  Rocket, Send, Server, Smartphone, Sparkles, Users, Briefcase, FolderKanban, X, Zap, ZoomIn, ZoomOut
+  Rocket, Send, Server, Smartphone, Sparkles, Users, Briefcase, FolderKanban, X, Zap, ZoomIn, ZoomOut,
+  GraduationCap, Award, BookOpen, Calendar, MapPin, CheckCircle2
 } from 'lucide-react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
@@ -382,7 +383,7 @@ function Navbar({ onOpenCv }) {
   const moreRef = useRef(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownTimerRef = useRef(null);
-  const dropdownIds = ['process', 'testimonials', 'pricing', 'faq'];
+  const dropdownIds = ['process', 'education', 'testimonials', 'pricing', 'faq'];
   const isClickScrollingRef = useRef(false);
   const scrollTimeoutRef = useRef(null);
 
@@ -397,13 +398,14 @@ function Navbar({ onOpenCv }) {
   ];
   const dropdownLinks = [
     { label: 'Process', id: 'process', icon: Sparkles, desc: 'How I work' },
+    { label: 'Education', id: 'education', icon: GraduationCap, desc: 'Academic & technical background' },
     { label: 'Testimonials', id: 'testimonials', icon: MessageCircle, desc: 'Client reviews' },
     { label: 'Pricing', id: 'pricing', icon: Zap, desc: 'Packages & rates' },
     { label: 'FAQ', id: 'faq', icon: FileText, desc: 'Common questions' },
   ];
 
   useEffect(() => {
-    const sectionIds = ['home', 'services', 'process', 'portfolio', 'case-study', 'about', 'experience', 'testimonials', 'pricing', 'faq', 'contact'];
+    const sectionIds = ['home', 'services', 'process', 'portfolio', 'case-study', 'about', 'experience', 'education', 'testimonials', 'pricing', 'faq', 'contact'];
 
     const handleScroll = () => {
       // If a nav link was clicked, keep the activeSection locked until smooth scroll finishes
@@ -1361,6 +1363,228 @@ function Experience() {
   );
 }
 
+const educationList = [
+  {
+    degree: 'Bachelor of Science in Information Technology (BSIT)',
+    institution: 'University of Swat',
+    institutionUrl: 'https://uswat.edu.pk/',
+    period: '2025 — 2029',
+    status: 'In Progress · 3rd Semester',
+    current: true,
+    location: 'Swat, Khyber Pakhtunkhwa',
+    icon: GraduationCap,
+    description: 'Pursuing a comprehensive four-year BS degree emphasizing modern computing principles, systems architecture, object-oriented design, algorithms, and practical software engineering.',
+    highlights: [
+      'Currently in 3rd Semester with dedicated focus on core software and system engineering',
+      'Studying Object-Oriented Programming (OOP), Data Structures, Algorithms, and Relational Databases',
+      'Directly bridging academic theory with production cross-platform mobile and web applications',
+    ],
+    tags: ['BSIT', 'University of Swat', 'OOP', 'Data Structures', 'Database Systems', 'Software Engineering'],
+  },
+  {
+    degree: 'Diploma in Information Technology (DIT)',
+    institution: 'Khyber Computer & Vocational College (KCVC), Khwazakhela',
+    period: '2023 — 2024',
+    status: 'Completed · 1-Year Diploma',
+    current: false,
+    location: 'Khwazakhela, Khyber Pakhtunkhwa',
+    icon: BookOpen,
+    description: 'Completed an intensive 1-year professional diploma covering computer fundamentals, programming logic, relational databases (DBMS), web development, and hardware architecture.',
+    highlights: [
+      'Hands-on practical training in software fundamentals, databases, and programming logic',
+      'Built practical assignments in web layout design and database record management',
+      'Formed solid technical foundation leading directly into BS Information Technology and software development',
+    ],
+    tags: ['DIT (1 Year)', 'KCVC Khwazakhela', 'Programming Fundamentals', 'DBMS & SQL', 'Web Design'],
+  },
+  {
+    degree: 'Higher Secondary School Certificate (HSSC)',
+    institution: 'Board of Intermediate & Secondary Education',
+    period: 'Completed',
+    status: 'Pre-Medical Science',
+    current: false,
+    location: 'Khyber Pakhtunkhwa, Pakistan',
+    icon: Award,
+    description: 'Completed higher secondary education in Pre-Medical sciences, developing strong disciplined problem-solving methodologies, mathematical logic, and analytical skills.',
+    highlights: [
+      'Cultivated disciplined analytical problem-solving habits and rigorous scientific reasoning',
+      'Leveraged analytical mindset to transition effectively into Information Technology & Software Engineering',
+    ],
+    tags: ['HSSC', 'Pre-Medical', 'Analytical Rigor', 'Problem Solving'],
+  },
+];
+
+const certificationsList = [
+  {
+    title: 'React Native & Mobile App Engineering',
+    issuer: 'Production Applied Track',
+    badge: 'Production Proven',
+    period: '2025 — Present',
+    icon: Smartphone,
+    description: 'Architecture and delivery of production-grade cross-platform iOS and Android applications with offline persistence, real-time sync, and scalable component structure.',
+    highlights: [
+      'Production mobile app deployed to live users (Darzi Tailor Shop Manager on Google Drive & App Store)',
+      'Cross-platform UI/UX, Expo CLI, EAS cloud builds, and mobile performance optimization',
+    ],
+    skills: ['React Native', 'Expo EAS', 'Mobile UI/UX', 'Cross-Platform', 'Mobile Performance'],
+  },
+  {
+    title: 'Modern Frontend & React Ecosystem',
+    issuer: 'Frontend Architecture Track',
+    badge: 'Core Competency',
+    period: '2024 — Present',
+    icon: Braces,
+    description: 'Mastery of modern JavaScript (ES6+), React.js component hierarchies, responsive layout design, state management, and asynchronous REST API integration.',
+    highlights: [
+      'Engineered interactive, responsive, and cross-browser accessible web interfaces',
+      'Applied modular architecture, clean code practices, and fast Vite-powered pipelines',
+    ],
+    skills: ['React.js', 'JavaScript (ES6+)', 'HTML5 / CSS3', 'REST APIs', 'Git'],
+  },
+  {
+    title: 'Cloud Database Architecture & Firebase',
+    issuer: 'Cloud Backend Track',
+    badge: 'Cloud Integration',
+    period: '2025 — Present',
+    icon: Server,
+    description: 'Integration of real-time cloud backends, NoSQL database schema design in Cloud Firestore, granular security rules, and user authentication.',
+    highlights: [
+      'Architected real-time client record syncing and secure multi-client rules',
+      'Implemented seamless offline caching and live snapshot listeners',
+    ],
+    skills: ['Cloud Firestore', 'Firebase Auth', 'NoSQL Modeling', 'Security Rules', 'Cloud Sync'],
+  },
+];
+
+function Education() {
+  return (
+    <section className="section-pad education-section" id="education">
+      <SectionHeading
+        eyebrow="Academic & Technical Background"
+        title={<>EDUCATION & <span>CREDENTIALS</span></>}
+        copy="Academic qualifications in Information Technology paired with specialized technical training and practical engineering."
+      />
+
+      <div className="education-grid">
+        {/* Left Column: Academic Degrees */}
+        <div className="education-column">
+          <div className="education-column-header">
+            <div className="education-column-icon">
+              <GraduationCap size={20} />
+            </div>
+            <div>
+              <h3 className="education-column-title">Academic Qualifications</h3>
+              <p className="education-column-subtitle">University degree & technical diploma</p>
+            </div>
+          </div>
+
+          <div className="education-cards-stack">
+            {educationList.map((item, idx) => (
+              <article className="education-card" key={item.degree + idx}>
+                <div className="education-card-top">
+                  <div className="education-card-badge-row">
+                    <span className={`education-status-badge ${item.current ? 'is-active' : ''}`}>
+                      {item.current && <span className="education-active-pulse" aria-hidden="true" />}
+                      {item.status}
+                    </span>
+                    <span className="education-period-badge">
+                      <Calendar size={12} /> {item.period}
+                    </span>
+                  </div>
+                  <h4 className="education-degree-title">{item.degree}</h4>
+                  <div className="education-inst-row">
+                    {item.institutionUrl ? (
+                      <a href={item.institutionUrl} target="_blank" rel="noopener noreferrer" className="education-inst-link">
+                        {item.institution} <ExternalLink size={12} />
+                      </a>
+                    ) : (
+                      <span className="education-inst-name">{item.institution}</span>
+                    )}
+                    <span className="education-inst-dot">·</span>
+                    <span className="education-inst-location">
+                      <MapPin size={12} /> {item.location}
+                    </span>
+                  </div>
+                </div>
+
+                <p className="education-card-desc">{item.description}</p>
+
+                <ul className="education-highlights">
+                  {item.highlights.map((h, i) => (
+                    <li key={i}>{h}</li>
+                  ))}
+                </ul>
+
+                <div className="education-tags">
+                  {item.tags.map(tag => (
+                    <span key={tag} className="education-tag">{tag}</span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Column: Specializations & Applied Credentials */}
+        <div className="education-column">
+          <div className="education-column-header">
+            <div className="education-column-icon specialization">
+              <Award size={20} />
+            </div>
+            <div>
+              <h3 className="education-column-title">Technical Specializations</h3>
+              <p className="education-column-subtitle">Applied engineering & production tracks</p>
+            </div>
+          </div>
+
+          <div className="education-cards-stack">
+            {certificationsList.map((item, idx) => {
+              const IconComp = item.icon;
+              return (
+                <article className="education-card specialization-card" key={item.title + idx}>
+                  <div className="education-card-top">
+                    <div className="education-card-badge-row">
+                      <span className="education-status-badge cert-badge">
+                        <CheckCircle2 size={12} /> {item.badge}
+                      </span>
+                      <span className="education-period-badge">
+                        <Calendar size={12} /> {item.period}
+                      </span>
+                    </div>
+                    <div className="education-cert-head">
+                      <div className="education-cert-icon">
+                        <IconComp size={18} />
+                      </div>
+                      <div>
+                        <h4 className="education-degree-title">{item.title}</h4>
+                        <span className="education-inst-name">{item.issuer}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="education-card-desc">{item.description}</p>
+
+                  <ul className="education-highlights">
+                    {item.highlights.map((h, i) => (
+                      <li key={i}>{h}</li>
+                    ))}
+                  </ul>
+
+                  <div className="education-tags">
+                    {item.skills.map(skill => (
+                      <span key={skill} className="education-tag">{skill}</span>
+                    ))}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function GlowingBottomLines() {
   const path1Ref = useRef(null);
   const path2Ref = useRef(null);
@@ -2194,7 +2418,7 @@ function Footer({ onOpenCv }) {
           </a>
         </div>
         <div className="footer-nav">
-          {['Home', 'Services', 'Process', 'Portfolio', 'Case Study', 'About', 'Experience', 'Testimonials', 'Pricing', 'FAQ', 'Contact'].map(item => (
+          {['Home', 'Services', 'Process', 'Portfolio', 'Case Study', 'About', 'Experience', 'Education', 'Testimonials', 'Pricing', 'FAQ', 'Contact'].map(item => (
             <a href={`#${item.toLowerCase().replace(' ', '-')}`} key={item}>
               {item}
             </a>
@@ -2363,6 +2587,7 @@ function App() {
         <CaseStudy />
         <About />
         <Experience />
+        <Education />
         <Testimonials />
         <Pricing />
         <Technologies />
