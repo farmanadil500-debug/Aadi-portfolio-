@@ -4023,21 +4023,20 @@ footer {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(1, 5, 14, 0.82);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(1, 5, 14, 0.84);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
-  animation: cvFadeIn 0.22s ease-out;
+  animation: cvBackdropIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes cvFadeIn {
+@keyframes cvBackdropIn {
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
@@ -4052,20 +4051,21 @@ footer {
   background: #04091A;
   border: 1px solid rgba(0, 102, 255, 0.28);
   border-radius: 18px;
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.8), 0 0 50px rgba(0, 102, 255, 0.16);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.85), 0 0 60px rgba(0, 102, 255, 0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: cvSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: cvSmoothModalOpen 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transform-origin: center center;
 }
 
-@keyframes cvSlideUp {
-  from {
+/* Silky smooth, hardware-accelerated float-and-scale opening */
+@keyframes cvSmoothModalOpen {
+  0% {
     opacity: 0;
-    transform: translateY(24px) scale(0.97);
+    transform: translateY(32px) scale(0.94);
   }
-
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
@@ -4261,7 +4261,16 @@ footer {
   justify-content: center;
   padding: 30px 20px;
   gap: 12px;
-  animation: cvFadeIn 0.2s ease-out;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
+  pointer-events: auto;
+}
+
+.cv-modal-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .cv-loader-spinner-wrapper {
@@ -4378,17 +4387,16 @@ footer {
   align-items: flex-start;
   padding: 24px 16px;
   -webkit-overflow-scrolling: touch;
-  transition: opacity 0.25s ease;
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cv-image-scroll-wrapper.is-loading {
   opacity: 0;
-  visibility: hidden;
 }
 
 .cv-image-scroll-wrapper.is-loaded {
   opacity: 1;
-  visibility: visible;
 }
 
 .cv-image-container {

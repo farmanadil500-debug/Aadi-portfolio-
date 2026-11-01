@@ -828,17 +828,25 @@ function SectionHeading({ eyebrow, title, copy, align = '' }) { return <div clas
 function CvModal({ isOpen, onClose }) {
   const cvPath = '/Farman_Adil_CV_HD.jpg';
   const imgPath = '/Farman_Adil_CV_HD.jpg';
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
+  const imgRef = useRef(null);
 
   useEffect(() => {
     if (!isOpen) {
       setZoomLevel(1);
+      setIsLoaded(false);
       return;
     }
 
+    if (imgRef.current && imgRef.current.complete && imgRef.current.naturalWidth > 0) {
+      setIsLoaded(true);
+    }
+
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+      }
     };
 
     const prevOverflow = document.body.style.overflow;
@@ -852,7 +860,7 @@ function CvModal({ isOpen, onClose }) {
   }, [isOpen, onClose]);
 
   const handleImageLoaded = () => {
-    setIsLoading(false);
+    setIsLoaded(true);
   };
 
   const zoomIn = () => setZoomLevel((prev) => Math.min(Number((prev + 0.2).toFixed(1)), 2.2));
@@ -962,27 +970,26 @@ function CvModal({ isOpen, onClose }) {
         </div>
 
         <div className="cv-modal-body">
-          {isLoading && (
-            <div className="cv-modal-loader" aria-live="polite">
-              <div className="cv-loader-spinner-wrapper">
-                <div className="cv-loader-ring" />
-                <div className="cv-loader-glow" />
-                <Loader2 size={34} className="cv-loader-spinner" />
-              </div>
-              <h3 className="cv-loader-title">Loading Curriculum Vitae...</h3>
-              <p className="cv-loader-desc">Preparing High-Definition Document (HD) · Please wait</p>
-              <div className="cv-loader-progress-track">
-                <div className="cv-loader-progress-bar" />
-              </div>
+          <div className={`cv-modal-loader ${isLoaded ? 'is-hidden' : ''}`} aria-live="polite">
+            <div className="cv-loader-spinner-wrapper">
+              <div className="cv-loader-ring" />
+              <div className="cv-loader-glow" />
+              <Loader2 size={34} className="cv-loader-spinner" />
             </div>
-          )}
+            <h3 className="cv-loader-title">Loading Curriculum Vitae...</h3>
+            <p className="cv-loader-desc">Preparing High-Definition Document (HD) · Please wait</p>
+            <div className="cv-loader-progress-track">
+              <div className="cv-loader-progress-bar" />
+            </div>
+          </div>
 
-          <div className={`cv-image-scroll-wrapper ${isLoading ? 'is-loading' : 'is-loaded'}`}>
+          <div className={`cv-image-scroll-wrapper ${isLoaded ? 'is-loaded' : 'is-loading'}`}>
             <div
               className="cv-image-container"
               style={{ transform: `scale(${zoomLevel})` }}
             >
               <img
+                ref={imgRef}
                 src={imgPath}
                 alt="Farman Adil — Curriculum Vitae HD"
                 className="cv-preview-img"
@@ -1049,14 +1056,6 @@ function CvModal({ isOpen, onClose }) {
 }
 
 function Hero({ onOpenCv }) {
-  const [btnLoading, setBtnLoading] = useState(false);
-
-  const handleOpenCv = () => {
-    setBtnLoading(true);
-    if (onOpenCv) onOpenCv();
-    setTimeout(() => setBtnLoading(false), 1500);
-  };
-
   return (
     <section className="hero section-pad" id="home">
       <div className="hero-copy">
@@ -1071,19 +1070,11 @@ function Hero({ onOpenCv }) {
           <a className="button ghost" href="#portfolio">View portfolio <ArrowUpRight size={16} /></a>
           <button
             type="button"
-            className={`button ghost button-cv ${btnLoading ? 'is-loading' : ''}`}
-            onClick={handleOpenCv}
+            className="button ghost button-cv"
+            onClick={onOpenCv}
             aria-label="View Farman Adil CV"
           >
-            {btnLoading ? (
-              <>
-                Loading CV... <Loader2 size={16} className="button-cv-spin" />
-              </>
-            ) : (
-              <>
-                View CV <Eye size={16} />
-              </>
-            )}
+            View CV <Eye size={16} />
           </button>
         </div>
       </div>
@@ -1100,14 +1091,14 @@ function Hero({ onOpenCv }) {
 function Services() { return <section className="section-pad services-section" id="services"><SectionHeading eyebrow="What we do" title={<>BUILDING WHAT<br /><span>MATTERS</span></>} copy="From first idea to final interaction, I create digital products that are useful, beautiful and built to last." /><div className="service-grid">{services.map(({ icon: Icon, title, text }, index) => <article className="service-card" key={title}><div className="card-number">0{index + 1}</div><div className="icon-box"><Icon size={22} /></div><h3>{title}</h3><p>{text}</p><a href="#contact" aria-label={`Learn about ${title}`}><ArrowUpRight size={18} /></a></article>)}</div></section>; }
 
 const aboutSkills = [
+  { name: 'React Native', icon: Smartphone },
   { name: 'React', icon: Sparkles },
   { name: 'JavaScript', icon: Zap },
   { name: 'HTML5', icon: Code2 },
   { name: 'CSS3', icon: Palette },
   { name: 'Firebase', icon: Flame },
   { name: 'Git', icon: GitBranch },
-  { name: 'Responsive Design', icon: Smartphone },
-  { name: 'Tailwind CSS', icon: Layers3 },
+  { name: 'Responsive Design', icon: Layers3 },
 ];
 
 function About() {
@@ -1811,17 +1802,17 @@ const testimonials = [
   {
     quote: 'Darzi App has made measurement tracking and order management much easier for our shop. Everything is organised in one place, and we no longer lose customer details.',
     role: 'Tailor Shop Owner',
-    project: 'Darzi App',
+    project: 'Darzi App (Mobile)',
   },
   {
-    quote: 'I downloaded the app from the shared link and started using it straight away. It is simple, fast and easy to understand for daily shop work.',
-    role: 'Android User',
-    project: 'Darzi App',
+    quote: 'Farman delivered a fast, fully responsive web application with clean architecture. The user interface is polished and communication throughout the project was seamless.',
+    role: 'Web Platform Client',
+    project: 'Online Market & Web Apps',
   },
   {
-    quote: 'A clean and practical app for tailor shops. Customer records and bookings are now simple to manage from the phone.',
+    quote: 'A clean and practical app for tailor shops. Customer records and bookings are now simple to manage directly from the phone with instant updates.',
     role: 'App Store User',
-    project: 'Darzi App',
+    project: 'Darzi App (iOS & Android)',
   },
 ];
 
@@ -2012,7 +2003,7 @@ function Technologies() {
   }, []);
 
   return (
-    <section className="section-pad tech-section" ref={sectionRef}>
+    <section className="section-pad tech-section" id="technologies" ref={sectionRef}>
       <SectionHeading eyebrow="My toolkit" title={<>TECHNOLOGIES I<br /><span>WORK WITH</span></>} />
       <div className={`tech-grid ${revealed ? 'revealed' : ''}`}>
         {technologies.map(([name, IconComp, kind], index) => (
