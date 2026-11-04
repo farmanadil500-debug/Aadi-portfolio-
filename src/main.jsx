@@ -1079,6 +1079,27 @@ function Hero({ onOpenCv }) {
             View CV <Eye size={16} />
           </button>
         </div>
+        <div className="hero-metrics">
+          <div className="hero-metric-item">
+            <span className="hero-metric-number">3+</span>
+            <span className="hero-metric-label">Projects Delivered</span>
+          </div>
+          <div className="hero-metric-divider" aria-hidden="true" />
+          <div className="hero-metric-item">
+            <span className="hero-metric-number">1+</span>
+            <span className="hero-metric-label">Years Experience</span>
+          </div>
+          <div className="hero-metric-divider" aria-hidden="true" />
+          <div className="hero-metric-item">
+            <span className="hero-metric-number">100%</span>
+            <span className="hero-metric-label">On-Time Delivery</span>
+          </div>
+          <div className="hero-metric-divider" aria-hidden="true" />
+          <div className="hero-metric-item">
+            <span className="hero-metric-number">5.0 ★</span>
+            <span className="hero-metric-label">Client Rating</span>
+          </div>
+        </div>
       </div>
       <CodeVisual />
       <div className="hero-trust">
