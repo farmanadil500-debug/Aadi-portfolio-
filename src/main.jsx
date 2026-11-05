@@ -197,6 +197,23 @@ const technologies = [
 ];
 
 
+const BrandTitle = () => (
+  <span>
+    <strong className="brand-name">
+      {'Farman Adil'.split('').map((char, i, arr) => (
+        <span
+          key={i}
+          className="brand-letter"
+          style={{ '--char-idx-rtl': arr.length - 1 - i }}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </strong>
+    <small className="brand-role">DEVELOPER</small>
+  </span>
+);
+
 function Logo({ onNavigate, interactive = false, onAvatarClick, isProfileOpen = false }) {
   if (interactive) {
     return (
@@ -223,7 +240,7 @@ function Logo({ onNavigate, interactive = false, onAvatarClick, isProfileOpen = 
           aria-label="Farman Adil home"
           onClick={(e) => onNavigate && onNavigate(e, 'home')}
         >
-          <span><strong>Farman Adil</strong><small>DEVELOPER</small></span>
+          <BrandTitle />
         </a>
       </div>
     );
@@ -243,13 +260,57 @@ function Logo({ onNavigate, interactive = false, onAvatarClick, isProfileOpen = 
         width="40"
         height="40"
       />
-      <span><strong>Farman Adil</strong><small>DEVELOPER</small></span>
+      <BrandTitle />
     </a>
   );
 }
 
 function ProfilePopup({ isOpen, onClose, onNavigate, onOpenCv }) {
   const popupRef = useRef(null);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [typedRole, setTypedRole] = useState('Frontend & React Native Developer');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setRoleIndex(0);
+      setTypedRole('Frontend & React Native Developer');
+      setIsDeleting(false);
+      return;
+    }
+
+    const roles = [
+      'Frontend & React Native Developer',
+      'Frontend Developer',
+      'React Native Developer',
+    ];
+
+    const currentText = roles[roleIndex % roles.length];
+    let timer;
+
+    if (!isDeleting) {
+      if (typedRole.length < currentText.length) {
+        timer = setTimeout(() => {
+          setTypedRole(currentText.slice(0, typedRole.length + 1));
+        }, 60);
+      } else {
+        timer = setTimeout(() => {
+          setIsDeleting(true);
+        }, 1600);
+      }
+    } else {
+      if (typedRole.length > 0) {
+        timer = setTimeout(() => {
+          setTypedRole(currentText.slice(0, typedRole.length - 1));
+        }, 30);
+      } else {
+        setIsDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % roles.length);
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [isOpen, typedRole, isDeleting, roleIndex]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -317,7 +378,10 @@ function ProfilePopup({ isOpen, onClose, onNavigate, onOpenCv }) {
         </div>
         <div className="profile-popup-info">
           <h4 className="profile-popup-name">Farman Adil</h4>
-          <span className="profile-popup-role">Frontend &amp; React Native Developer</span>
+          <span className="profile-popup-role">
+            <span className="profile-popup-role-text">{typedRole}</span>
+            <span className="profile-popup-role-cursor" aria-hidden="true">|</span>
+          </span>
         </div>
       </div>
 
@@ -560,7 +624,8 @@ function Navbar({ onOpenCv }) {
   };
 
   const handleAvatarClick = (e) => {
-    e.stopPropagation();
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (e && e.preventDefault) e.preventDefault();
     if (!profileOpen && open) {
       setOpen(false);
     }
@@ -1084,17 +1149,14 @@ function Hero({ onOpenCv }) {
             <span className="hero-metric-number">3+</span>
             <span className="hero-metric-label">Projects Delivered</span>
           </div>
-          <div className="hero-metric-divider" aria-hidden="true" />
           <div className="hero-metric-item">
             <span className="hero-metric-number">1+</span>
             <span className="hero-metric-label">Years Experience</span>
           </div>
-          <div className="hero-metric-divider" aria-hidden="true" />
           <div className="hero-metric-item">
             <span className="hero-metric-number">100%</span>
             <span className="hero-metric-label">On-Time Delivery</span>
           </div>
-          <div className="hero-metric-divider" aria-hidden="true" />
           <div className="hero-metric-item">
             <span className="hero-metric-number">5.0 ★</span>
             <span className="hero-metric-label">Client Rating</span>
