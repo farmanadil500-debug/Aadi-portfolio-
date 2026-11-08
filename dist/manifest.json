@@ -1,0 +1,16 @@
+{
+  "name": "Farman Adil Dev",
+  "short_name": "Farman Adil Dev",
+  "description": "Farman Adil is a Frontend & React Native Developer specializing in modern mobile apps and high-performance web solutions.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#01050E",
+  "theme_color": "#01050E",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    }
+  ]
+}
