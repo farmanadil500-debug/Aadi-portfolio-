@@ -1123,11 +1123,43 @@ function CvModal({ isOpen, onClose }) {
 }
 
 function Hero({ onOpenCv }) {
+  const rotatingWords = [
+    'DIGITAL SOLUTIONS',
+    'MOBILE APPS',
+    'WEB PLATFORMS',
+    'REACT NATIVE APPS',
+    'FULL-STACK APPS',
+  ];
+  const [wordIndex, setWordIndex] = useState(0);
+  const [isExiting, setIsExiting] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIsExiting(true);
+      setTimeout(() => {
+        setWordIndex((prev) => (prev + 1) % rotatingWords.length);
+        setIsExiting(false);
+      }, 360);
+    }, 2900);
+
+    return () => clearInterval(timer);
+  }, [rotatingWords.length]);
+
   return (
     <section className="hero section-pad" id="home">
       <div className="hero-copy">
         <div className="availability"><span /> Available for freelance</div>
-        <h1>WE BUILD<br /><span>DIGITAL SOLUTIONS</span></h1>
+        <h1>
+          WE BUILD<br />
+          <span className="hero-rotating-container">
+            <span
+              key={wordIndex}
+              className={`hero-rotating-word ${isExiting ? 'is-exiting' : 'is-entering'}`}
+            >
+              {rotatingWords[wordIndex]}
+            </span>
+          </span>
+        </h1>
         <p className="hero-lead">Modern websites. Powerful apps.<br />Endless possibilities.</p>
         <p className="hero-trust-line">
           Based in Khwazakhela, Swat, Pakistan <span className="hero-trust-dot">·</span> Working Worldwide

@@ -828,6 +828,62 @@ svg {
   filter: drop-shadow(0 0 20px rgba(0, 102, 255, 0.3));
 }
 
+.hero-rotating-container {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  vertical-align: bottom;
+  min-height: 1.15em;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  filter: none !important;
+}
+
+.hero-rotating-word {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--blue-bright), var(--cyan)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  filter: drop-shadow(0 0 20px rgba(0, 102, 255, 0.35)) !important;
+  will-change: transform, opacity, filter;
+}
+
+.hero-rotating-word.is-entering {
+  animation: heroWordEnter 0.48s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-rotating-word.is-exiting {
+  animation: heroWordExit 0.34s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes heroWordEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes heroWordExit {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.97);
+    filter: blur(3px);
+  }
+}
+
 .hero-lead {
   color: var(--text-secondary);
   font-size: clamp(14.5px, 1.8vw, 16.5px);
