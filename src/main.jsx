@@ -1122,6 +1122,71 @@ function CvModal({ isOpen, onClose }) {
   );
 }
 
+function CountUpMetric({ target, suffix = '', prefix = '', decimals = 0, duration = 2800, delay = 400 }) {
+  const [count, setCount] = useState(0);
+  const elementRef = useRef(null);
+  const hasAnimatedRef = useRef(false);
+
+  useEffect(() => {
+    const el = elementRef.current;
+    if (!el) return;
+
+    let timeoutId;
+    let animId;
+
+    const startAnimation = () => {
+      if (hasAnimatedRef.current) return;
+      hasAnimatedRef.current = true;
+
+      timeoutId = setTimeout(() => {
+        const startTime = performance.now();
+        const frame = (now) => {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // Smooth easeOutCubic: gradual, steady, clearly visible roll
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const currentVal = ease * target;
+          setCount(currentVal);
+
+          if (progress < 1) {
+            animId = requestAnimationFrame(frame);
+          } else {
+            setCount(target);
+          }
+        };
+        animId = requestAnimationFrame(frame);
+      }, delay);
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          startAnimation();
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      if (timeoutId) clearTimeout(timeoutId);
+      if (animId) cancelAnimationFrame(animId);
+    };
+  }, [target, duration, delay]);
+
+  const displayValue = decimals > 0 ? count.toFixed(decimals) : Math.floor(count);
+
+  return (
+    <span ref={elementRef} className="hero-metric-number count-up-animated">
+      {prefix}
+      {displayValue}
+      {suffix}
+    </span>
+  );
+}
+
 function Hero({ onOpenCv }) {
   const rotatingWords = [
     'DIGITAL SOLUTIONS',
@@ -1178,19 +1243,19 @@ function Hero({ onOpenCv }) {
         </div>
         <div className="hero-metrics">
           <div className="hero-metric-item">
-            <span className="hero-metric-number">3+</span>
+            <CountUpMetric target={3} suffix="+" duration={2600} delay={350} />
             <span className="hero-metric-label">Projects Delivered</span>
           </div>
           <div className="hero-metric-item">
-            <span className="hero-metric-number">1+</span>
+            <CountUpMetric target={1} suffix="+" duration={2200} delay={450} />
             <span className="hero-metric-label">Years Experience</span>
           </div>
           <div className="hero-metric-item">
-            <span className="hero-metric-number">100%</span>
+            <CountUpMetric target={100} suffix="%" duration={3200} delay={300} />
             <span className="hero-metric-label">On-Time Delivery</span>
           </div>
           <div className="hero-metric-item">
-            <span className="hero-metric-number">5.0 ★</span>
+            <CountUpMetric target={5.0} decimals={1} suffix=" ★" duration={2900} delay={400} />
             <span className="hero-metric-label">Client Rating</span>
           </div>
         </div>
