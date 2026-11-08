@@ -1996,6 +1996,170 @@ function WorkProcess() {
   );
 }
 
+function ProjectMockupVisual({ project }) {
+  const { number, title, image } = project;
+
+  if (number === '01') {
+    return (
+      <div className="mockup-wrap phone-mockup darzi-mockup">
+        <div className="mockup-phone-frame">
+          <div className="mockup-phone-notch" />
+          <div className="mockup-phone-screen">
+            <div className="mockup-darzi-logo-ring">
+              <img src={image} alt={title} className="mockup-darzi-img" loading="lazy" />
+            </div>
+            <div className="mockup-darzi-meta">
+              <span className="mockup-app-title">Darzi Shop Manager</span>
+              <span className="mockup-app-sub">Tailor Customer &amp; Khata App</span>
+              <div className="mockup-darzi-pills">
+                <span className="mockup-pill emerald">✓ Standalone APK</span>
+                <span className="mockup-pill blue">App Store</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (number === '02') {
+    return (
+      <div className="mockup-wrap browser-mockup weather-mockup">
+        <div className="mockup-browser-head">
+          <div className="mockup-dots"><span /><span /><span /></div>
+          <div className="mockup-url-bar">weather-forecast.dev</div>
+        </div>
+        <div className="mockup-browser-body weather-body">
+          <div className="weather-header-row">
+            <div>
+              <span className="weather-big-temp">24°C</span>
+              <span className="weather-condition">Sunny · Clear Sky</span>
+            </div>
+            <div className="weather-sun-glow">
+              <div className="sun-core" />
+              <div className="sun-pulse" />
+            </div>
+          </div>
+          <div className="weather-loc-badge">📍 Swat Valley, Pakistan</div>
+          <div className="weather-metrics-row">
+            <span className="weather-stat-chip">💧 48% Humidity</span>
+            <span className="weather-stat-chip">💨 12 km/h</span>
+            <span className="weather-stat-chip">☀️ UV 4</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (number === '03') {
+    return (
+      <div className="mockup-wrap browser-mockup market-mockup">
+        <div className="mockup-browser-head">
+          <div className="mockup-dots"><span /><span /><span /></div>
+          <div className="mockup-url-bar">market-store.app/shop</div>
+        </div>
+        <div className="mockup-browser-body market-body">
+          <div className="market-top-row">
+            <div className="market-search-pill">🔍 Search items...</div>
+            <span className="market-cart-badge">🛒 Cart (3)</span>
+          </div>
+          <div className="market-items-grid">
+            <div className="market-mini-card">
+              <div className="market-mini-thumb blue-grad" />
+              <div className="market-mini-info">
+                <span className="m-title">Tech Gear Pro</span>
+                <span className="m-price">$49.00</span>
+              </div>
+            </div>
+            <div className="market-mini-card">
+              <div className="market-mini-thumb cyan-grad" />
+              <div className="market-mini-info">
+                <span className="m-title">Smart Pods</span>
+                <span className="m-price">$120.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (number === '04') {
+    return (
+      <div className="mockup-wrap browser-mockup portfolio-mockup">
+        <div className="mockup-browser-head">
+          <div className="mockup-dots"><span /><span /><span /></div>
+          <div className="mockup-url-bar">farman-6fdb2.web.app</div>
+        </div>
+        <div className="mockup-browser-body portfolio-body">
+          <div className="pf-hero-snippet">
+            <span className="pf-status-badge"><span className="pf-dot" /> LIVE PLATFORM</span>
+            <span className="pf-headline">WE BUILD DIGITAL SOLUTIONS</span>
+          </div>
+          <div className="pf-code-box">
+            <span className="code-kw">const</span> <span className="code-id">dev</span> = <span className="code-str">"Farman Adil"</span>;
+            <br />
+            <span className="code-kw">const</span> <span className="code-id">stack</span> = [<span className="code-str">"React"</span>, <span className="code-str">"React Native"</span>];
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (number === '05') {
+    return (
+      <div className="mockup-wrap browser-mockup meer-mockup">
+        <div className="mockup-browser-head">
+          <div className="mockup-dots"><span /><span /><span /></div>
+          <div className="mockup-url-bar">meer-software.io/dashboard</div>
+        </div>
+        <div className="mockup-browser-body meer-body">
+          <div className="meer-metrics-row">
+            <div className="meer-stat-box"><small>Users</small><strong>1,248</strong></div>
+            <div className="meer-stat-box"><small>Uptime</small><strong className="cyan">99.9%</strong></div>
+            <div className="meer-stat-box"><small>Speed</small><strong className="emerald">0.4s</strong></div>
+          </div>
+          <div className="meer-chart-bars">
+            <span style={{ height: '35%' }} />
+            <span style={{ height: '55%' }} />
+            <span style={{ height: '42%' }} />
+            <span style={{ height: '78%' }} className="active" />
+            <span style={{ height: '65%' }} />
+            <span style={{ height: '90%' }} className="peak" />
+            <span style={{ height: '75%' }} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mockup-wrap phone-mockup proto-mockup">
+      <div className="mockup-phone-frame proto-frame">
+        <div className="mockup-phone-notch" />
+        <div className="mockup-phone-screen proto-screen">
+          <div className="proto-head">
+            <span className="proto-title">React Native Shell</span>
+            <span className="proto-badge">60 FPS</span>
+          </div>
+          <div className="proto-body">
+            <div className="proto-interactive-card">
+              <span className="proto-card-glow" />
+              <span className="proto-card-txt">Gesture &amp; Navigation Flow</span>
+              <div className="proto-progress-track"><div className="proto-progress-fill" /></div>
+            </div>
+          </div>
+          <div className="proto-tabs">
+            <span className="proto-tab active" />
+            <span className="proto-tab" />
+            <span className="proto-tab" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Portfolio() {
   const [filter, setFilter] = useState('all');
   const [leaving, setLeaving] = useState(false);
@@ -2049,18 +2213,7 @@ function Portfolio() {
           return (
             <article className={`project-card ${tone}`} key={number}>
               <div className="project-preview">
-                {image ? (
-                  <div className="project-preview-image-wrap">
-                    <img src={image} alt={title} className="project-preview-img" loading="lazy" />
-                    <div className="project-preview-glow" />
-                  </div>
-                ) : (
-                  <>
-                    <div className="preview-lines" />
-                    <div className="preview-window"><div /><div /><div /></div>
-                    <div className="preview-icon"><Icon size={27} /></div>
-                  </>
-                )}
+                <ProjectMockupVisual project={{ number, title, category, image, tone }} />
                 <span className="project-index">{number}</span>
               </div>
               <div className="project-info">
@@ -2511,6 +2664,8 @@ function Contact() {
               <WhatsappIcon width={17} height={17} /> Chat on WhatsApp (+92 3496506743)
             </a>
             <a href="tel:+923496506743"><Phone size={17} /> +92 3496506743</a>
+            <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer"><GithubIcon width={17} height={17} /> github.com/farmanadil500-debug</a>
+            <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer"><LinkedinIcon width={17} height={17} /> linkedin.com/in/farman-adil</a>
             <span><Globe2 size={17} /> Pakistan / Worldwide</span>
           </div>
         </div>
