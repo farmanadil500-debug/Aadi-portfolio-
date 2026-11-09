@@ -2,6 +2,7 @@ import { StrictMode, useCallback, useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   ArrowRight, ArrowUpRight, ArrowUp, Copy, ChevronDown, Braces, Check, Code2, Download, ExternalLink, Eye, FileText,
+  ArrowRight, ArrowUpRight, ArrowUp, Copy, ChevronDown, ChevronLeft, ChevronRight, Braces, Check, Code2, Download, ExternalLink, Eye, FileText,
   Flame, Globe2, GitBranch, Layers3, Loader2, Mail, Menu, MessageCircle, Monitor, Palette, Phone,
   Rocket, Send, Server, Smartphone, Sparkles, Users, Briefcase, FolderKanban, X, Zap, ZoomIn, ZoomOut,
   GraduationCap, Award, BookOpen, Calendar, MapPin, CheckCircle2
@@ -2478,6 +2479,74 @@ function Pricing() {
 }
 
 function CaseStudy() {
+  const [activeScreen, setActiveScreen] = useState(null);
+  const [activeScreenIndex, setActiveScreenIndex] = useState(null);
+  const touchStartX = useRef(0);
+
+  useEffect(() => {
+    if (!activeScreen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setActiveScreen(null);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeScreen]);
+
+  const screens = [
+    {
+      id: '01',
+      tabLabel: 'Orders',
+      title: 'Orders & Production Workflow',
+      tag: 'Screen 01 · Live Queue',
+      desc: 'Real-time order queue with draft, cutting, and stitching stage indicators. Tailors monitor due dates and advance payments in one view.',
+      img: '/darzi-screen-orders.jpg',
+      caption: 'Real-time queue tracking cutting, stitching, and ready items.',
+    },
+    {
+      id: '02',
+      tabLabel: 'Khaata',
+      title: 'Khaata & Payments Ledger',
+      tag: 'Screen 02 · Financial Ledger',
+      desc: 'Automated khata ledger tracking remaining balances with instant 1-tap WhatsApp payment reminders using custom Urdu/English templates.',
+      img: '/darzi-screen-khaata.jpg',
+      caption: 'Automated remaining balance with instant WhatsApp reminders.',
+    },
+    {
+      id: '03',
+      tabLabel: 'Customers',
+      title: 'Customer Directory & Profiles',
+      tag: 'Screen 03 · Customer History',
+      desc: 'Instant search customer database with full saved measurement profiles, order count history, and quick access for new bookings.',
+      img: '/darzi-screen-customers.jpg',
+      caption: 'Quick customer search with complete measurement history.',
+    },
+  ];
+
+  const handlePrev = useCallback(() => {
+    setActiveScreenIndex((prev) => (prev === null ? null : (prev - 1 + screens.length) % screens.length));
+  }, [screens.length]);
+
+  const handleNext = useCallback(() => {
+    setActiveScreenIndex((prev) => (prev === null ? null : (prev + 1) % screens.length));
+  }, [screens.length]);
+
+  useEffect(() => {
+    if (activeScreenIndex === null) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActiveScreenIndex(null);
+      } else if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeScreenIndex, handlePrev, handleNext]);
+
+  const currentScreen = activeScreenIndex !== null ? screens[activeScreenIndex] : null;
+
   return (
     <section className="section-pad case-study-section" id="case-study">
       <SectionHeading
@@ -2502,123 +2571,308 @@ function CaseStudy() {
           <p>Measurements update in seconds, customers are found by search, ready clothes trigger an SMS, and the day's business is visible at a glance. Tailors are very impressed with it.</p>
         </article>
       </div>
-      <div className="case-study-features">
-        <article className="case-study-feature"><Check size={18} /><div><h4>Easy measurement updates</h4><p>No notebook, no retaking measurements again and again.</p></div></article>
-        <article className="case-study-feature"><Check size={18} /><div><h4>Fast customer search</h4><p>Find any customer among many, instantly.</p></div></article>
-        <article className="case-study-feature"><Check size={18} /><div><h4>Ready-cloth SMS</h4><p>One tap tells the customer their cloth is ready.</p></div></article>
-        <article className="case-study-feature"><Check size={18} /><div><h4>Khata</h4><p>The remaining balance is visible to the tailor at a glance.</p></div></article>
-        <article className="case-study-feature"><Check size={18} /><div><h4>Today's Earning</h4><p>Today's business, visible in the app.</p></div></article>
-        <article className="case-study-feature"><Check size={18} /><div><h4>Delivery-date reminders</h4><p>The tailor is notified on the date a cloth is due.</p></div></article>
-        <article className="case-study-feature"><Check size={18} /><div><h4>Over-the-air updates</h4><p>New updates arrive by closing and reopening the app.</p></div></article>
-      </div>
-      <div className="case-study-tech">
-        <span>React Native</span>
-        <span>Firebase</span>
-        <span>OTA Updates</span>
-        <span>SMS Notifications</span>
-      </div>
-      <div className="case-study-cta">
-        <a href="https://apps.apple.com/pk/app/darzi-tailor-shop-manager/id6809124751" target="_blank" rel="noreferrer">View on App Store</a>
-        <a href="#contact">Discuss a similar app</a>
-      </div>
-    </section>
-  );
-}
 
-function Testimonials() {
-  return (
-    <section className="section-pad testimonial-section" id="testimonials">
-      <SectionHeading
-        eyebrow="Client feedback"
-        title={<>WHAT CLIENTS <span>SAY</span></>}
-        copy="Real feedback from people who use the products I build."
-      />
-      <div className="testimonial-grid">
-        {testimonials.map(({ name, quote, role, project, initials, avatarGradient, verified }) => (
-          <article className="testimonial-card" key={name + role}>
-            <div className="testimonial-top-row">
-              <div className="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-              <span className="testimonial-verified-badge">
-                <CheckCircle2 size={12} /> {verified}
-              </span>
-            </div>
-            <p className="testimonial-quote">“{quote}”</p>
-            <div className="testimonial-footer">
+      {/* Production App Screenshots Showcase */}
+      <div className="darzi-showcase-section">
+        <div className="darzi-showcase-header">
+          <div className="darzi-showcase-badge">
+            <Smartphone size={14} /> Production App Interface · React Native &amp; Firebase
+          </div>
+          <h3 className="darzi-showcase-title">Screens from Live Tailor Shop Usage</h3>
+          <p className="darzi-showcase-subtitle">
+            Actual mobile interface used by tailor shops in Swat, Pakistan. Tap any screen to view in full HD.
+          </p>
+        </div>
+
+        <div className="darzi-screens-grid">
+          {screens.map((item) => (
+            {
+              screens.map((item, idx) => (
+                <div
+                  className="darzi-screen-item"
+                  key={item.id}
+                  onClick={() => setActiveScreen(item)}
+                  onClick={() => setActiveScreenIndex(idx)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter') setActiveScreen(item); }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') setActiveScreenIndex(idx); }}
+                  aria-label={'View ' + item.title + ' in HD'}
+                >
+                  <div className="darzi-phone-frame">
+                    <div className="darzi-phone-island" />
+                    <div className="darzi-phone-screen">
+                      <img
+                        src={item.img}
+                        alt={item.title}
+                        className="darzi-screen-img"
+                        loading="lazy"
+                      />
+                      <div className="darzi-screen-overlay">
+                        <span className="darzi-zoom-pill">
+                          <ZoomIn size={14} /> View in HD
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="darzi-screen-meta">
+                    <span className="darzi-screen-num">{item.tag}</span>
+                    <h4 className="darzi-screen-headline">{item.title}</h4>
+                    <p className="darzi-screen-caption">{item.caption}</p>
+                  </div>
+                </div>
+              ))
+            }
+        </div>
+      </div>
+
+      {activeScreen && (
+        { currentScreen && (
+          <div
+            className="darzi-lightbox-backdrop"
+            onClick={() => setActiveScreen(null)}
+            onClick={() => setActiveScreenIndex(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={activeScreen.title}
+            aria-label={currentScreen.title}
+          >
+            <div className="darzi-lightbox-modal" onClick={(e) => e.stopPropagation()}>
+              <div className="darzi-lightbox-header">
+                <div>
+                  <span className="darzi-lightbox-tag">{activeScreen.tag}</span>
+                  <h3 className="darzi-lightbox-title">{activeScreen.title}</h3>
+                  <span className="darzi-lightbox-tag">{currentScreen.tag}</span>
+                  <h3 className="darzi-lightbox-title">{currentScreen.title}</h3>
+                </div>
+                <div className="darzi-lightbox-header-right">
+                  <span className="darzi-screen-counter-badge">
+                    {activeScreenIndex + 1} / {screens.length}
+                  </span>
+                  <button
+                    type="button"
+                    className="darzi-lightbox-close"
+                    onClick={() => setActiveScreenIndex(null)}
+                    aria-label="Close HD Preview"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Interactive Screen Switcher Tabs */}
+              <div className="darzi-lightbox-tabs-bar" role="tablist">
+                {screens.map((item, idx) => {
+                  const isActive = activeScreenIndex === idx;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      className={`darzi-lightbox-tab-btn ${isActive ? 'active' : ''}`}
+                      onClick={() => setActiveScreenIndex(idx)}
+                    >
+                      <span className="darzi-tab-badge">{item.id}</span>
+                      <span className="darzi-tab-name">{item.tabLabel}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Stage with Navigation Arrows and Phone Mockup */}
               <div
-                className="testimonial-avatar"
-                style={{ background: avatarGradient }}
-                aria-hidden="true"
+                className="darzi-lightbox-stage"
+                onTouchStart={(e) => {
+                  touchStartX.current = e.touches[0].clientX;
+                }}
+                onTouchEnd={(e) => {
+                  const diff = touchStartX.current - e.changedTouches[0].clientX;
+                  if (Math.abs(diff) > 40) {
+                    if (diff > 0) handleNext();
+                    else handlePrev();
+                  }
+                }}
               >
-                {initials}
+                <button
+                  type="button"
+                  className="darzi-lightbox-close"
+                  onClick={() => setActiveScreen(null)}
+                  aria-label="Close HD Preview"
+                  className="darzi-nav-arrow darzi-nav-prev"
+                  onClick={handlePrev}
+                  aria-label="Previous screen"
+                >
+                  <X size={18} />
+                  <ChevronLeft size={22} />
+                </button>
               </div>
-              <div className="testimonial-author">
-                <strong className="testimonial-name">{name}</strong>
-                <span className="testimonial-role">{role}</span>
-                <span className="testimonial-project">
-                  <Smartphone size={11} /> {project}
-                </span>
+              <div className="darzi-lightbox-body">
+                <div className="darzi-lightbox-phone-frame">
+
+                  <div className="darzi-lightbox-phone-frame" key={currentScreen.id}>
+                    <div className="darzi-phone-island" />
+                    <img
+                      src={activeScreen.img}
+                      alt={activeScreen.title}
+                      src={currentScreen.img}
+                      alt={currentScreen.title}
+                      className="darzi-lightbox-img"
+                    />
+                  </div>
+                  <div className="darzi-lightbox-footer-info">
+                    <p>{activeScreen.desc}</p>
+
+                    <button
+                      type="button"
+                      className="darzi-nav-arrow darzi-nav-next"
+                      onClick={handleNext}
+                      aria-label="Next screen"
+                    >
+                      <ChevronRight size={22} />
+                    </button>
+                  </div>
+
+                  {/* Indicator Dots & Description */}
+                  <div className="darzi-lightbox-footer-info">
+                    <div className="darzi-screen-indicator-dots">
+                      {screens.map((item, idx) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          className={`darzi-dot ${idx === activeScreenIndex ? 'active' : ''}`}
+                          onClick={() => setActiveScreenIndex(idx)}
+                          aria-label={`Go to ${item.tabLabel}`}
+                        />
+                      ))}
+                    </div>
+                    <p>{currentScreen.desc}</p>
+                    <div className="darzi-lightbox-meta-row">
+                      <span className="darzi-lightbox-note">✓ Captured from live production shop database</span>
+                      <span className="darzi-lightbox-hint">Tap tabs or use ‹ › arrow keys</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
+      )}
+
+              <div className="case-study-features">
+                <article className="case-study-feature"><Check size={18} /><div><h4>Easy measurement updates</h4><p>No notebook, no retaking measurements again and again.</p></div></article>
+                <article className="case-study-feature"><Check size={18} /><div><h4>Fast customer search</h4><p>Find any customer among many, instantly.</p></div></article>
+                <article className="case-study-feature"><Check size={18} /><div><h4>Ready-cloth SMS</h4><p>One tap tells the customer their cloth is ready.</p></div></article>
+                <article className="case-study-feature"><Check size={18} /><div><h4>Khata</h4><p>The remaining balance is visible to the tailor at a glance.</p></div></article>
+                <article className="case-study-feature"><Check size={18} /><div><h4>Today's Earning</h4><p>Today's business, visible in the app.</p></div></article>
+                <article className="case-study-feature"><Check size={18} /><div><h4>Delivery-date reminders</h4><p>The tailor is notified on the date a cloth is due.</p></div></article>
+                <article className="case-study-feature"><Check size={18} /><div><h4>Over-the-air updates</h4><p>New updates arrive by closing and reopening the app.</p></div></article>
+              </div>
+              <div className="case-study-tech">
+                <span>React Native</span>
+                <span>Firebase</span>
+                <span>OTA Updates</span>
+                <span>SMS Notifications</span>
+              </div>
+              <div className="case-study-cta">
+                <a href="https://apps.apple.com/pk/app/darzi-tailor-shop-manager/id6809124751" target="_blank" rel="noreferrer">View on App Store</a>
+                <a href="#contact">Discuss a similar app</a>
+              </div>
+            </section>
+            );
 }
 
-function Technologies() {
+            function Testimonials() {
+  return (
+            <section className="section-pad testimonial-section" id="testimonials">
+              <SectionHeading
+                eyebrow="Client feedback"
+                title={<>WHAT CLIENTS <span>SAY</span></>}
+                copy="Real feedback from people who use the products I build."
+              />
+              <div className="testimonial-grid">
+                {testimonials.map(({ name, quote, role, project, initials, avatarGradient, verified }) => (
+                  <article className="testimonial-card" key={name + role}>
+                    <div className="testimonial-top-row">
+                      <div className="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
+                      <span className="testimonial-verified-badge">
+                        <CheckCircle2 size={12} /> {verified}
+                      </span>
+                    </div>
+                    <p className="testimonial-quote">“{quote}”</p>
+                    <div className="testimonial-footer">
+                      <div
+                        className="testimonial-avatar"
+                        style={{ background: avatarGradient }}
+                        aria-hidden="true"
+                      >
+                        {initials}
+                      </div>
+                      <div className="testimonial-author">
+                        <strong className="testimonial-name">{name}</strong>
+                        <span className="testimonial-role">{role}</span>
+                        <span className="testimonial-project">
+                          <Smartphone size={11} /> {project}
+                        </span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+            );
+}
+
+            function Technologies() {
   const [revealed, setRevealed] = useState(false);
-  const sectionRef = useRef(null);
+            const sectionRef = useRef(null);
 
   useEffect(() => {
     const el = sectionRef.current;
-    if (!el) return;
+            if (!el) return;
 
-    const observer = new IntersectionObserver(
+            const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setRevealed(true);
-          observer.disconnect();
+              setRevealed(true);
+            observer.disconnect();
         }
       },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
+            {threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+            );
 
-    observer.observe(el);
+            observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <section className="section-pad tech-section" id="technologies" ref={sectionRef}>
-      <SectionHeading eyebrow="My toolkit" title={<>TECHNOLOGIES I<br /><span>WORK WITH</span></>} />
-      <div className={`tech-grid ${revealed ? 'revealed' : ''}`}>
-        {technologies.map(([name, IconComp, kind], index) => (
-          <div
-            className={`tech-card ${kind}`}
-            key={name}
-            style={{ '--tech-idx': index }}
-          >
-            <b><IconComp /></b>
-            <span>{name}</span>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+            return (
+            <section className="section-pad tech-section" id="technologies" ref={sectionRef}>
+              <SectionHeading eyebrow="My toolkit" title={<>TECHNOLOGIES I<br /><span>WORK WITH</span></>} />
+              <div className={`tech-grid ${revealed ? 'revealed' : ''}`}>
+                {technologies.map(([name, IconComp, kind], index) => (
+                  <div
+                    className={`tech-card ${kind}`}
+                    key={name}
+                    style={{ '--tech-idx': index }}
+                  >
+                    <b><IconComp /></b>
+                    <span>{name}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+            );
 }
 
-function WhyChooseMe() { const items = [['01', 'Clean & Modern Design', 'Every detail has a reason. Nothing gets in the way of the experience.'], ['02', 'Responsive Development', 'Thoughtful layouts that feel right on every screen and every device.'], ['03', 'Performance Focused', "Fast, reliable digital products that respect your users' time."], ['04', 'User-Centered Experience', "Technology is only useful when it makes someone's day easier."]]; return <section className="section-pad why-section" id="why"><SectionHeading eyebrow="The difference" title={<>WHY WORK<br /><span>WITH ME?</span></>} /><div className="why-grid">{items.map(([num, title, text]) => <article key={num}><span>{num}</span><Check size={18} /><h3>{title}</h3><p>{text}</p></article>)}</div></section>; }
+            function WhyChooseMe() { const items = [['01', 'Clean & Modern Design', 'Every detail has a reason. Nothing gets in the way of the experience.'], ['02', 'Responsive Development', 'Thoughtful layouts that feel right on every screen and every device.'], ['03', 'Performance Focused', "Fast, reliable digital products that respect your users' time."], ['04', 'User-Centered Experience', "Technology is only useful when it makes someone's day easier."]]; return <section className="section-pad why-section" id="why"><SectionHeading eyebrow="The difference" title={<>WHY WORK<br /><span>WITH ME?</span></>} /><div className="why-grid">{items.map(([num, title, text]) => <article key={num}><span>{num}</span><Check size={18} /><h3>{title}</h3><p>{text}</p></article>)}</div></section>; }
 
-function Contact() {
+            function Contact() {
   const [sent, setSent] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [copiedField, setCopiedField] = useState(null);
+            const [submitting, setSubmitting] = useState(false);
+            const [errorMsg, setErrorMsg] = useState('');
+            const [copiedField, setCopiedField] = useState(null);
 
   const handleCopy = (text, field) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text);
-      setCopiedField(field);
+              navigator.clipboard.writeText(text);
+            setCopiedField(field);
       setTimeout(() => setCopiedField(null), 2000);
     }
   };
@@ -2628,302 +2882,302 @@ function Contact() {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (submitting) return;
+              event.preventDefault();
+            if (submitting) return;
 
-    setSent(false);
-    setErrorMsg('');
+            setSent(false);
+            setErrorMsg('');
 
-    const formEl = event.currentTarget;
-    const formData = new FormData(formEl);
-    const name = (formData.get('name')?.toString() || '').trim();
-    const email = (formData.get('email')?.toString() || '').trim();
-    const subject = (formData.get('subject')?.toString() || '').trim();
-    const message = (formData.get('message')?.toString() || '').trim();
+            const formEl = event.currentTarget;
+            const formData = new FormData(formEl);
+            const name = (formData.get('name')?.toString() || '').trim();
+            const email = (formData.get('email')?.toString() || '').trim();
+            const subject = (formData.get('subject')?.toString() || '').trim();
+            const message = (formData.get('message')?.toString() || '').trim();
 
-    // Client-side validation
-    if (!name) {
-      setErrorMsg('Please enter your name.');
-      return;
+            // Client-side validation
+            if (!name) {
+              setErrorMsg('Please enter your name.');
+            return;
     }
-    if (!email || !validateEmail(email)) {
-      setErrorMsg('Please enter a valid email address.');
-      return;
+            if (!email || !validateEmail(email)) {
+              setErrorMsg('Please enter a valid email address.');
+            return;
     }
-    if (!subject) {
-      setErrorMsg('Please enter a subject.');
-      return;
+            if (!subject) {
+              setErrorMsg('Please enter a subject.');
+            return;
     }
-    if (!message) {
-      setErrorMsg('Please enter your message.');
-      return;
+            if (!message) {
+              setErrorMsg('Please enter your message.');
+            return;
     }
 
-    setSubmitting(true);
+            setSubmitting(true);
 
-    try {
+            try {
       // 1. Save to Firebase Firestore
       const firestorePromise = addDoc(collection(db, 'contactMessages'), {
-        name,
-        email,
-        subject,
-        message,
-        createdAt: serverTimestamp(),
+              name,
+              email,
+              subject,
+              message,
+              createdAt: serverTimestamp(),
       }).catch((fsErr) => {
-        console.error('Firestore save notice:', fsErr);
+              console.error('Firestore save notice:', fsErr);
       });
 
-      // 2. Submit to Web3Forms API
-      const web3FormsPromise = fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
+            // 2. Submit to Web3Forms API
+            const web3FormsPromise = fetch('https://api.web3forms.com/submit', {
+              method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            'Accept': 'application/json',
         },
-        body: JSON.stringify({
-          access_key: 'c0a3c477-bb8a-46a7-ba81-034a303b4c1a',
-          name,
-          email,
-          subject: `New Portfolio Contact — ${subject}`,
-          message,
-          from_name: name,
+            body: JSON.stringify({
+              access_key: 'c0a3c477-bb8a-46a7-ba81-034a303b4c1a',
+            name,
+            email,
+            subject: `New Portfolio Contact — ${subject}`,
+            message,
+            from_name: name,
         }),
       }).then((res) => res.json());
 
-      const [, web3Result] = await Promise.all([firestorePromise, web3FormsPromise]);
+            const [, web3Result] = await Promise.all([firestorePromise, web3FormsPromise]);
 
-      if (web3Result && web3Result.success) {
-        setSent(true);
-        formEl.reset();
+            if (web3Result && web3Result.success) {
+              setSent(true);
+            formEl.reset();
       } else {
-        console.error('Web3Forms error response:', web3Result);
-        setErrorMsg(web3Result?.message || 'Failed to send message. Please try again.');
-        setSent(false);
+              console.error('Web3Forms error response:', web3Result);
+            setErrorMsg(web3Result?.message || 'Failed to send message. Please try again.');
+            setSent(false);
       }
     } catch (err) {
-      console.error('Error submitting contact form:', err);
-      setErrorMsg('Failed to send message. Please try again.');
-      setSent(false);
+              console.error('Error submitting contact form:', err);
+            setErrorMsg('Failed to send message. Please try again.');
+            setSent(false);
     } finally {
-      setSubmitting(false);
+              setSubmitting(false);
     }
   };
 
-  return (
-    <section className="contact-section" id="contact">
-      <div className="contact-inner section-pad">
-        <div className="contact-copy">
-          <SectionHeading
-            eyebrow="Have a project in mind?"
-            title={<>LET'S BUILD<br /><span>SOMETHING GREAT</span></>}
-            copy="Have an idea, project or business website in mind? Let's turn your idea into reality."
-          />
-          <div className="contact-details">
-            <a href="mailto:farmanadil500@gmail.com"><Mail size={17} /> farmanadil500@gmail.com</a>
-            <a
-              href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="contact-whatsapp-link"
-            >
-              <WhatsappIcon width={17} height={17} /> Chat on WhatsApp (+92 3496506743)
-            </a>
-            <a href="tel:+923496506743"><Phone size={17} /> +92 3496506743</a>
-            <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer"><GithubIcon width={17} height={17} /> github.com/farmanadil500-debug</a>
-            <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer"><LinkedinIcon width={17} height={17} /> linkedin.com/in/farman-adil</a>
-            <span><Globe2 size={17} /> Pakistan / Worldwide</span>
-          </div>
-        </div>
-        <form className="contact-form" onSubmit={handleSubmit} noValidate>
-          <input type="hidden" name="access_key" value="c0a3c477-bb8a-46a7-ba81-034a303b4c1a" />
-          <label>Name<input name="name" required placeholder="Your name" disabled={submitting} /></label>
-          <label>Email<input name="email" type="email" required placeholder="you@company.com" disabled={submitting} /></label>
-          <label>Subject<input name="subject" required placeholder="How can I help?" disabled={submitting} /></label>
-          <label>Message<textarea name="message" required placeholder="Tell me a little about your project..." rows="4" disabled={submitting} /></label>
-          <button className="button primary" type="submit" disabled={submitting}>
-            {submitting ? 'Sending...' : sent ? <>Message sent <Check size={17} /></> : <>Send message <Send size={16} /></>}
-          </button>
-          {sent && <p className="form-success">Message sent successfully! I'll get back to you soon.</p>}
-          {errorMsg && <p className="form-error">{errorMsg}</p>}
-        </form>
-      </div>
-    </section>
-  );
+            return (
+            <section className="contact-section" id="contact">
+              <div className="contact-inner section-pad">
+                <div className="contact-copy">
+                  <SectionHeading
+                    eyebrow="Have a project in mind?"
+                    title={<>LET'S BUILD<br /><span>SOMETHING GREAT</span></>}
+                    copy="Have an idea, project or business website in mind? Let's turn your idea into reality."
+                  />
+                  <div className="contact-details">
+                    <a href="mailto:farmanadil500@gmail.com"><Mail size={17} /> farmanadil500@gmail.com</a>
+                    <a
+                      href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="contact-whatsapp-link"
+                    >
+                      <WhatsappIcon width={17} height={17} /> Chat on WhatsApp (+92 3496506743)
+                    </a>
+                    <a href="tel:+923496506743"><Phone size={17} /> +92 3496506743</a>
+                    <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer"><GithubIcon width={17} height={17} /> github.com/farmanadil500-debug</a>
+                    <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer"><LinkedinIcon width={17} height={17} /> linkedin.com/in/farman-adil</a>
+                    <span><Globe2 size={17} /> Pakistan / Worldwide</span>
+                  </div>
+                </div>
+                <form className="contact-form" onSubmit={handleSubmit} noValidate>
+                  <input type="hidden" name="access_key" value="c0a3c477-bb8a-46a7-ba81-034a303b4c1a" />
+                  <label>Name<input name="name" required placeholder="Your name" disabled={submitting} /></label>
+                  <label>Email<input name="email" type="email" required placeholder="you@company.com" disabled={submitting} /></label>
+                  <label>Subject<input name="subject" required placeholder="How can I help?" disabled={submitting} /></label>
+                  <label>Message<textarea name="message" required placeholder="Tell me a little about your project..." rows="4" disabled={submitting} /></label>
+                  <button className="button primary" type="submit" disabled={submitting}>
+                    {submitting ? 'Sending...' : sent ? <>Message sent <Check size={17} /></> : <>Send message <Send size={16} /></>}
+                  </button>
+                  {sent && <p className="form-success">Message sent successfully! I'll get back to you soon.</p>}
+                  {errorMsg && <p className="form-error">{errorMsg}</p>}
+                </form>
+              </div>
+            </section>
+            );
 }
 
 
-function Footer({ onOpenCv }) {
+            function Footer({onOpenCv}) {
   return (
-    <footer>
-      <div className="footer-inner">
-        <Logo />
-        <p>
-          Building modern digital experiences<br />
-          and turning ideas into reality.
-        </p>
-        <div className="socials">
-          <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <GithubIcon />
-          </a>
-          <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <LinkedinIcon />
-          </a>
-          <a
-            href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="WhatsApp"
-            className="social-whatsapp"
-          >
-            <WhatsappIcon width={17} height={17} />
-          </a>
-          <a href="mailto:farmanadil500@gmail.com" aria-label="Email">
-            <Mail size={17} />
-          </a>
-        </div>
-        <div className="footer-nav">
-          {['Home', 'Services', 'Process', 'Portfolio', 'Case Study', 'About', 'Experience', 'Education', 'Testimonials', 'Pricing', 'FAQ', 'Contact'].map(item => (
-            <a href={`#${item.toLowerCase().replace(' ', '-')}`} key={item}>
-              {item}
-            </a>
-          ))}
-          {onOpenCv && (
-            <button
-              type="button"
-              className="footer-cv-btn"
-              onClick={onOpenCv}
-            >
-              CV / Resume
-            </button>
-          )}
-        </div>
-        <small>© {new Date().getFullYear()} Farman Adil. All rights reserved.</small>
-      </div>
-    </footer>
-  );
+            <footer>
+              <div className="footer-inner">
+                <Logo />
+                <p>
+                  Building modern digital experiences<br />
+                  and turning ideas into reality.
+                </p>
+                <div className="socials">
+                  <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                    <GithubIcon />
+                  </a>
+                  <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                    <LinkedinIcon />
+                  </a>
+                  <a
+                    href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp"
+                    className="social-whatsapp"
+                  >
+                    <WhatsappIcon width={17} height={17} />
+                  </a>
+                  <a href="mailto:farmanadil500@gmail.com" aria-label="Email">
+                    <Mail size={17} />
+                  </a>
+                </div>
+                <div className="footer-nav">
+                  {['Home', 'Services', 'Process', 'Portfolio', 'Case Study', 'About', 'Experience', 'Education', 'Testimonials', 'Pricing', 'FAQ', 'Contact'].map(item => (
+                    <a href={`#${item.toLowerCase().replace(' ', '-')}`} key={item}>
+                      {item}
+                    </a>
+                  ))}
+                  {onOpenCv && (
+                    <button
+                      type="button"
+                      className="footer-cv-btn"
+                      onClick={onOpenCv}
+                    >
+                      CV / Resume
+                    </button>
+                  )}
+                </div>
+                <small>© {new Date().getFullYear()} Farman Adil. All rights reserved.</small>
+              </div>
+            </footer>
+            );
 }
 
-function FloatingWhatsApp() {
+            function FloatingWhatsApp() {
   return (
-    <aside className="floating-whatsapp-container" aria-label="WhatsApp quick contact">
-      <a
-        href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="floating-whatsapp-btn"
-        aria-label="Chat on WhatsApp (+92 3496506743)"
-      >
-        <span className="floating-whatsapp-pulse" aria-hidden="true" />
-        <WhatsappIcon width={28} height={28} />
-        <span className="floating-whatsapp-tooltip">Chat with Farman</span>
-      </a>
-    </aside>
-  );
+            <aside className="floating-whatsapp-container" aria-label="WhatsApp quick contact">
+              <a
+                href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="floating-whatsapp-btn"
+                aria-label="Chat on WhatsApp (+92 3496506743)"
+              >
+                <span className="floating-whatsapp-pulse" aria-hidden="true" />
+                <WhatsappIcon width={28} height={28} />
+                <span className="floating-whatsapp-tooltip">Chat with Farman</span>
+              </a>
+            </aside>
+            );
 }
 
 
-const faqData = [
-  {
-    q: 'Do you build for both Android and iOS?',
-    a: 'Yes! I use <strong>React Native with Expo</strong>, which means your app runs on both Android and iOS from a single codebase — saving you time, cost, and effort.',
+            const faqData = [
+            {
+              q: 'Do you build for both Android and iOS?',
+            a: 'Yes! I use <strong>React Native with Expo</strong>, which means your app runs on both Android and iOS from a single codebase — saving you time, cost, and effort.',
   },
-  {
-    q: 'How do we collaborate if we are in different time zones?',
-    a: 'I work with clients <strong>worldwide</strong> and adapt to your schedule. I provide regular progress updates via WhatsApp, email, or video calls, and share detailed milestone reports throughout the project.',
+            {
+              q: 'How do we collaborate if we are in different time zones?',
+            a: 'I work with clients <strong>worldwide</strong> and adapt to your schedule. I provide regular progress updates via WhatsApp, email, or video calls, and share detailed milestone reports throughout the project.',
   },
-  {
-    q: 'Do you handle backend and database too?',
-    a: 'Absolutely. I integrate <strong>Firebase Firestore</strong> (real-time database), Firebase Auth (user authentication), and RESTful APIs. For most mobile and web projects, this covers the full backend.',
+            {
+              q: 'Do you handle backend and database too?',
+            a: 'Absolutely. I integrate <strong>Firebase Firestore</strong> (real-time database), Firebase Auth (user authentication), and RESTful APIs. For most mobile and web projects, this covers the full backend.',
   },
-  {
-    q: 'What is your pricing and engagement model?',
-    a: 'I offer both <strong>fixed-price project</strong> quotes (for well-defined scope) and <strong>hourly engagements</strong>. After a free discovery call, I will send a transparent breakdown with timeline and deliverables before any work begins.',
+            {
+              q: 'What is your pricing and engagement model?',
+            a: 'I offer both <strong>fixed-price project</strong> quotes (for well-defined scope) and <strong>hourly engagements</strong>. After a free discovery call, I will send a transparent breakdown with timeline and deliverables before any work begins.',
   },
-  {
-    q: 'How long does it take to build a mobile app?',
-    a: 'A standard <strong>React Native MVP app</strong> typically takes 3 to 6 weeks depending on features. Simple utility apps can be faster; complex apps with custom dashboards, payments, or maps may take longer. I will give you a precise estimate after understanding your requirements.',
+            {
+              q: 'How long does it take to build a mobile app?',
+            a: 'A standard <strong>React Native MVP app</strong> typically takes 3 to 6 weeks depending on features. Simple utility apps can be faster; complex apps with custom dashboards, payments, or maps may take longer. I will give you a precise estimate after understanding your requirements.',
   },
-  {
-    q: 'Will I own the source code after delivery?',
-    a: 'Yes, 100%. Once the project is delivered and payment is complete, you receive <strong>full ownership</strong> of the source code, assets, and all project files. No strings attached.',
+            {
+              q: 'Will I own the source code after delivery?',
+            a: 'Yes, 100%. Once the project is delivered and payment is complete, you receive <strong>full ownership</strong> of the source code, assets, and all project files. No strings attached.',
   },
-];
+            ];
 
-function Faq() {
+            function Faq() {
   const [openIdx, setOpenIdx] = useState(null);
 
   const toggle = (idx) => setOpenIdx(prev => prev === idx ? null : idx);
 
-  return (
-    <section className="section-pad faq-section" id="faq">
-      <SectionHeading
-        eyebrow="Got questions?"
-        title={<>FREQUENTLY<br /><span>ASKED QUESTIONS</span></>}
-        copy="Everything you need to know before we start working together."
-      />
+            return (
+            <section className="section-pad faq-section" id="faq">
+              <SectionHeading
+                eyebrow="Got questions?"
+                title={<>FREQUENTLY<br /><span>ASKED QUESTIONS</span></>}
+                copy="Everything you need to know before we start working together."
+              />
 
-      <div className="faq-list">
-        {faqData.map((item, idx) => (
-          <div className={`faq-item ${openIdx === idx ? 'open' : ''}`} key={idx}>
-            <button
-              type="button"
-              className="faq-question"
-              onClick={() => toggle(idx)}
-              aria-expanded={openIdx === idx}
-            >
-              <span className="faq-question-left">
-                <span className="faq-q-badge">Q{idx + 1}</span>
-                {item.q}
-              </span>
-              <ChevronDown size={18} className="faq-chevron" />
-            </button>
-            <div className="faq-answer" aria-hidden={openIdx !== idx}>
-              <p className="faq-answer-inner" dangerouslySetInnerHTML={{ __html: item.a }} />
-            </div>
-          </div>
-        ))}
-      </div>
+              <div className="faq-list">
+                {faqData.map((item, idx) => (
+                  <div className={`faq-item ${openIdx === idx ? 'open' : ''}`} key={idx}>
+                    <button
+                      type="button"
+                      className="faq-question"
+                      onClick={() => toggle(idx)}
+                      aria-expanded={openIdx === idx}
+                    >
+                      <span className="faq-question-left">
+                        <span className="faq-q-badge">Q{idx + 1}</span>
+                        {item.q}
+                      </span>
+                      <ChevronDown size={18} className="faq-chevron" />
+                    </button>
+                    <div className="faq-answer" aria-hidden={openIdx !== idx}>
+                      <p className="faq-answer-inner" dangerouslySetInnerHTML={{ __html: item.a }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-      <div className="faq-cta">
-        <span>Still have a question? I am happy to answer it personally.</span>
-        <a href="#contact">
-          Ask me directly <ArrowUpRight size={14} />
-        </a>
-      </div>
-    </section>
-  );
+              <div className="faq-cta">
+                <span>Still have a question? I am happy to answer it personally.</span>
+                <a href="#contact">
+                  Ask me directly <ArrowUpRight size={14} />
+                </a>
+              </div>
+            </section>
+            );
 }
 
 
-function BackToTop() {
+            function BackToTop() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setVisible(window.scrollY > 400);
+              setVisible(window.scrollY > 400);
     };
-    window.addEventListener('scroll', handleScroll, { passive: true });
+            window.addEventListener('scroll', handleScroll, {passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  return (
-    <button
-      type="button"
-      className={`back-to-top-btn ${visible ? 'visible' : ''}`}
-      onClick={scrollToTop}
-      aria-label="Back to top of page"
-      title="Back to Top"
-    >
-      <ArrowUp size={18} />
-    </button>
-  );
+            return (
+            <button
+              type="button"
+              className={`back-to-top-btn ${visible ? 'visible' : ''}`}
+              onClick={scrollToTop}
+              aria-label="Back to top of page"
+              title="Back to Top"
+            >
+              <ArrowUp size={18} />
+            </button>
+            );
 }
 
-function App() {
+            function App() {
   const [cvOpen, setCvOpen] = useState(false);
 
   useEffect(() => {
@@ -2931,41 +3185,41 @@ function App() {
       entries => entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
       }),
-      { threshold: 0.12 }
-    );
+            {threshold: 0.12 }
+            );
     document.querySelectorAll('section, .service-card, .process-card, .project-card, .why-grid article, .about-heading, .about-profile-visual, .about-skill-badge, .experience-card, .testimonial-card').forEach(element => {
-      element.classList.add('reveal');
-      observer.observe(element);
+              element.classList.add('reveal');
+            observer.observe(element);
     });
     return () => observer.disconnect();
   }, []);
 
-  return (
-    <>
-      <Navbar onOpenCv={() => setCvOpen(true)} />
-      <main>
-        <Hero onOpenCv={() => setCvOpen(true)} />
-        <Services />
-        <WorkProcess />
-        <Portfolio />
-        <CaseStudy />
-        <About />
-        <Experience />
-        <Education />
-        <Testimonials />
-        <Pricing />
-        <Technologies />
-        <WhyChooseMe />
-        <Faq />
-        <GlowingBottomLines />
-        <Contact />
-      </main>
-      <Footer onOpenCv={() => setCvOpen(true)} />
-      <FloatingWhatsApp />
-      <BackToTop />
-      <CvModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />
-    </>
-  );
+            return (
+            <>
+              <Navbar onOpenCv={() => setCvOpen(true)} />
+              <main>
+                <Hero onOpenCv={() => setCvOpen(true)} />
+                <Services />
+                <WorkProcess />
+                <Portfolio />
+                <CaseStudy />
+                <About />
+                <Experience />
+                <Education />
+                <Testimonials />
+                <Pricing />
+                <Technologies />
+                <WhyChooseMe />
+                <Faq />
+                <GlowingBottomLines />
+                <Contact />
+              </main>
+              <Footer onOpenCv={() => setCvOpen(true)} />
+              <FloatingWhatsApp />
+              <BackToTop />
+              <CvModal isOpen={cvOpen} onClose={() => setCvOpen(false)} />
+            </>
+            );
 }
 
-createRoot(document.getElementById('root')).render(<StrictMode><App /></StrictMode>);
+            createRoot(document.getElementById('root')).render(<StrictMode><App /></StrictMode>);
