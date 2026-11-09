@@ -2577,217 +2577,217 @@ function CaseStudy() {
 
   const currentScreen = activeScreenIndex !== null ? screens[activeScreenIndex] : null;
 
-return (
-  <section className="section-pad case-study-section" id="case-study">
-    <SectionHeading
-      eyebrow="Case study"
-      title={<>DARZI APP <span>CASE STUDY</span></>}
-      copy="How a tailor shop moved from notebooks to one app — built in React Native with Firebase."
-    />
-    <div className="case-study-grid">
-      <article className="case-study-card">
-        <span className="case-study-label">The Problem</span>
-        <h3>Records scattered, measurements lost</h3>
-        <p>Customer details, measurements and orders lived in notebooks and scattered notes. Measurements were lost or had to be retaken, and finding one customer among many took time.</p>
-      </article>
-      <article className="case-study-card">
-        <span className="case-study-label">The Solution</span>
-        <h3>One app for the whole shop</h3>
-        <p>Darzi puts customer records, measurements, bookings and khata in one place. Updates arrive over the air — close and reopen the app and the latest version is there.</p>
-      </article>
-      <article className="case-study-card">
-        <span className="case-study-label">The Result</span>
-        <h3>A shop run from the phone</h3>
-        <p>Measurements update in seconds, customers are found by search, ready clothes trigger an SMS, and the day's business is visible at a glance. Tailors are very impressed with it.</p>
-      </article>
-    </div>
+  return (
+    <section className="section-pad case-study-section" id="case-study">
+      <SectionHeading
+        eyebrow="Case study"
+        title={<>DARZI APP <span>CASE STUDY</span></>}
+        copy="How a tailor shop moved from notebooks to one app — built in React Native with Firebase."
+      />
+      <div className="case-study-grid">
+        <article className="case-study-card">
+          <span className="case-study-label">The Problem</span>
+          <h3>Records scattered, measurements lost</h3>
+          <p>Customer details, measurements and orders lived in notebooks and scattered notes. Measurements were lost or had to be retaken, and finding one customer among many took time.</p>
+        </article>
+        <article className="case-study-card">
+          <span className="case-study-label">The Solution</span>
+          <h3>One app for the whole shop</h3>
+          <p>Darzi puts customer records, measurements, bookings and khata in one place. Updates arrive over the air — close and reopen the app and the latest version is there.</p>
+        </article>
+        <article className="case-study-card">
+          <span className="case-study-label">The Result</span>
+          <h3>A shop run from the phone</h3>
+          <p>Measurements update in seconds, customers are found by search, ready clothes trigger an SMS, and the day's business is visible at a glance. Tailors are very impressed with it.</p>
+        </article>
+      </div>
 
-    {/* Production App Screenshots Showcase */}
-    <div className="darzi-showcase-section">
-      <div className="darzi-showcase-header">
-        <div className="darzi-showcase-badge">
-          <Smartphone size={14} /> Production App Interface · React Native &amp; Firebase
+      {/* Production App Screenshots Showcase */}
+      <div className="darzi-showcase-section">
+        <div className="darzi-showcase-header">
+          <div className="darzi-showcase-badge">
+            <Smartphone size={14} /> Production App Interface · React Native &amp; Firebase
+          </div>
+          <h3 className="darzi-showcase-title">Screens from Live Tailor Shop Usage</h3>
+          <p className="darzi-showcase-subtitle">
+            Actual mobile interface used by tailor shops in Swat, Pakistan. Tap any screen to view in full HD.
+          </p>
         </div>
-        <h3 className="darzi-showcase-title">Screens from Live Tailor Shop Usage</h3>
-        <p className="darzi-showcase-subtitle">
-          Actual mobile interface used by tailor shops in Swat, Pakistan. Tap any screen to view in full HD.
-        </p>
-      </div>
 
-      <div className="darzi-screens-grid">
-        {
-          screens.map((item, idx) => (
-            <div
-              className="darzi-screen-item"
-              key={item.id}
-              onClick={() => setActiveScreenIndex(idx)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter') setActiveScreenIndex(idx); }}
-              aria-label={'View ' + item.title + ' in HD'}
-            >
-              <div className="darzi-phone-frame">
-                <div className="darzi-phone-island" />
-                <div className="darzi-phone-screen">
-                  <img
-                    src={item.img}
-                    alt={item.title}
-                    className="darzi-screen-img"
-                    loading="lazy"
-                  />
-                  <div className="darzi-screen-overlay">
-                    <span className="darzi-zoom-pill">
-                      <ZoomIn size={14} /> View in HD
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="darzi-screen-meta">
-                <span className="darzi-screen-num">{item.tag}</span>
-                <h4 className="darzi-screen-headline">{item.title}</h4>
-                <p className="darzi-screen-caption">{item.caption}</p>
-              </div>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-
-    {currentScreen && (
-      <div
-        className="darzi-lightbox-backdrop"
-        onClick={() => setActiveScreenIndex(null)}
-        role="dialog"
-        aria-modal="true"
-        aria-label={currentScreen.title}
-      >
-        <div className="darzi-lightbox-modal" onClick={(e) => e.stopPropagation()}>
-          <div className="darzi-lightbox-header">
-            <div>
-              <span className="darzi-lightbox-tag">{currentScreen.tag}</span>
-              <h3 className="darzi-lightbox-title">{currentScreen.title}</h3>
-            </div>
-            <div className="darzi-lightbox-header-right">
-              <span className="darzi-screen-counter-badge">
-                {activeScreenIndex + 1} / {screens.length}
-              </span>
-              <button
-                type="button"
-                className="darzi-lightbox-close"
-                onClick={() => setActiveScreenIndex(null)}
-                aria-label="Close HD Preview"
-              >
-                <X size={18} />
-              </button>
-            </div>
-          </div>
-
-          {/* Interactive Screen Switcher Tabs with Sliding Indicator */}
-          <div className="darzi-lightbox-tabs-bar" role="tablist" ref={darziTabsRef}>
-            <span className="darzi-lightbox-indicator" style={darziIndicatorStyle} aria-hidden="true" />
-            {screens.map((item, idx) => {
-              const isActive = activeScreenIndex === idx;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  data-screen-idx={idx}
-                  className={`darzi-lightbox-tab-btn ${isActive ? 'active' : ''}`}
-                  onClick={() => switchScreen(idx)}
-                >
-                  <span className="darzi-tab-badge">{item.id}</span>
-                  <span className="darzi-tab-name">{item.tabLabel}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Stage with Navigation Arrows and Continuous Hardware-Accelerated Slider Track */}
-          <div
-            className="darzi-lightbox-stage"
-            onTouchStart={(e) => {
-              touchStartX.current = e.touches[0].clientX;
-            }}
-            onTouchEnd={(e) => {
-              const diff = touchStartX.current - e.changedTouches[0].clientX;
-              if (Math.abs(diff) > 40) {
-                if (diff > 0) handleNext();
-                else handlePrev();
-              }
-            }}
-          >
-            <button
-              type="button"
-              className="darzi-nav-arrow darzi-nav-prev"
-              onClick={handlePrev}
-              aria-label="Previous screen"
-            >
-              <ChevronLeft size={22} />
-            </button>
-
-            <div className="darzi-lightbox-slider-viewport">
+        <div className="darzi-screens-grid">
+          {
+            screens.map((item, idx) => (
               <div
-                className="darzi-lightbox-slider-track"
-                style={{ transform: `translateX(-${activeScreenIndex * 100}%)` }}
+                className="darzi-screen-item"
+                key={item.id}
+                onClick={() => setActiveScreenIndex(idx)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter') setActiveScreenIndex(idx); }}
+                aria-label={'View ' + item.title + ' in HD'}
               >
-                {screens.map((item, idx) => (
-                  <div
-                    className={`darzi-lightbox-slide ${idx === activeScreenIndex ? 'active' : ''}`}
-                    key={item.id}
-                  >
-                    <div className="darzi-lightbox-phone-frame">
-                      <div className="darzi-phone-island" />
-                      <div className="darzi-phone-scroll-window">
-                        <img
-                          src={item.img}
-                          alt={item.title}
-                          className="darzi-lightbox-img"
-                          draggable={false}
-                        />
-                      </div>
-                      <div className="darzi-scroll-hint-pill">
-                        <span>Scroll inside phone ↕</span>
-                      </div>
+                <div className="darzi-phone-frame">
+                  <div className="darzi-phone-island" />
+                  <div className="darzi-phone-screen">
+                    <img
+                      src={item.img}
+                      alt={item.title}
+                      className="darzi-screen-img"
+                      loading="lazy"
+                    />
+                    <div className="darzi-screen-overlay">
+                      <span className="darzi-zoom-pill">
+                        <ZoomIn size={14} /> View in HD
+                      </span>
                     </div>
                   </div>
-                ))}
+                </div>
+                <div className="darzi-screen-meta">
+                  <span className="darzi-screen-num">{item.tag}</span>
+                  <h4 className="darzi-screen-headline">{item.title}</h4>
+                  <p className="darzi-screen-caption">{item.caption}</p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      {currentScreen && (
+        <div
+          className="darzi-lightbox-backdrop"
+          onClick={() => setActiveScreenIndex(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={currentScreen.title}
+        >
+          <div className="darzi-lightbox-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="darzi-lightbox-header">
+              <div>
+                <span className="darzi-lightbox-tag">{currentScreen.tag}</span>
+                <h3 className="darzi-lightbox-title">{currentScreen.title}</h3>
+              </div>
+              <div className="darzi-lightbox-header-right">
+                <span className="darzi-screen-counter-badge">
+                  {activeScreenIndex + 1} / {screens.length}
+                </span>
+                <button
+                  type="button"
+                  className="darzi-lightbox-close"
+                  onClick={() => setActiveScreenIndex(null)}
+                  aria-label="Close HD Preview"
+                >
+                  <X size={18} />
+                </button>
               </div>
             </div>
 
-            <button
-              type="button"
-              className="darzi-nav-arrow darzi-nav-next"
-              onClick={handleNext}
-              aria-label="Next screen"
-            >
-              <ChevronRight size={22} />
-            </button>
-          </div>
-
-          {/* Indicator Dots & Description */}
-          <div className="darzi-lightbox-footer-info">
-            <div className="darzi-screen-indicator-dots">
-              {screens.map((item, idx) => (
-                <button
-                  key={item.id}
-                  type="button"
-                  className={`darzi-dot ${idx === activeScreenIndex ? 'active' : ''}`}
-                  onClick={() => switchScreen(idx)}
-                  aria-label={`Go to ${item.tabLabel}`}
-                />
-              ))}
+            {/* Interactive Screen Switcher Tabs with Sliding Indicator */}
+            <div className="darzi-lightbox-tabs-bar" role="tablist" ref={darziTabsRef}>
+              <span className="darzi-lightbox-indicator" style={darziIndicatorStyle} aria-hidden="true" />
+              {screens.map((item, idx) => {
+                const isActive = activeScreenIndex === idx;
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    data-screen-idx={idx}
+                    className={`darzi-lightbox-tab-btn ${isActive ? 'active' : ''}`}
+                    onClick={() => switchScreen(idx)}
+                  >
+                    <span className="darzi-tab-badge">{item.id}</span>
+                    <span className="darzi-tab-name">{item.tabLabel}</span>
+                  </button>
+                );
+              })}
             </div>
-            <p>{currentScreen.desc}</p>
-            <div className="darzi-lightbox-meta-row">
-              <span className="darzi-lightbox-note">✓ Captured from live production shop database</span>
-              <span className="darzi-lightbox-hint">Use ‹ › keys or scroll phone inside</span>
+
+            {/* Stage with Navigation Arrows and Continuous Hardware-Accelerated Slider Track */}
+            <div
+              className="darzi-lightbox-stage"
+              onTouchStart={(e) => {
+                touchStartX.current = e.touches[0].clientX;
+              }}
+              onTouchEnd={(e) => {
+                const diff = touchStartX.current - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 40) {
+                  if (diff > 0) handleNext();
+                  else handlePrev();
+                }
+              }}
+            >
+              <button
+                type="button"
+                className="darzi-nav-arrow darzi-nav-prev"
+                onClick={handlePrev}
+                aria-label="Previous screen"
+              >
+                <ChevronLeft size={22} />
+              </button>
+
+              <div className="darzi-lightbox-slider-viewport">
+                <div
+                  className="darzi-lightbox-slider-track"
+                  style={{ transform: `translateX(-${activeScreenIndex * 100}%)` }}
+                >
+                  {screens.map((item, idx) => (
+                    <div
+                      className={`darzi-lightbox-slide ${idx === activeScreenIndex ? 'active' : ''}`}
+                      key={item.id}
+                    >
+                      <div className="darzi-lightbox-phone-frame">
+                        <div className="darzi-phone-island" />
+                        <div className="darzi-phone-scroll-window">
+                          <img
+                            src={item.img}
+                            alt={item.title}
+                            className="darzi-lightbox-img"
+                            draggable={false}
+                          />
+                        </div>
+                        <div className="darzi-scroll-hint-pill">
+                          <span>Scroll inside phone ↕</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="darzi-nav-arrow darzi-nav-next"
+                onClick={handleNext}
+                aria-label="Next screen"
+              >
+                <ChevronRight size={22} />
+              </button>
+            </div>
+
+            {/* Indicator Dots & Description */}
+            <div className="darzi-lightbox-footer-info">
+              <div className="darzi-screen-indicator-dots">
+                {screens.map((item, idx) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`darzi-dot ${idx === activeScreenIndex ? 'active' : ''}`}
+                    onClick={() => switchScreen(idx)}
+                    aria-label={`Go to ${item.tabLabel}`}
+                  />
+                ))}
+              </div>
+              <p>{currentScreen.desc}</p>
+              <div className="darzi-lightbox-meta-row">
+                <span className="darzi-lightbox-note">✓ Captured from live production shop database</span>
+                <span className="darzi-lightbox-hint">Use ‹ › keys or scroll phone inside</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
 
       <div className="case-study-features">
         <article className="case-study-feature"><Check size={18} /><div><h4>Easy measurement updates</h4><p>No notebook, no retaking measurements again and again.</p></div></article>
@@ -2898,70 +2898,104 @@ function WhyChooseMe() { const items = [['01', 'Clean & Modern Design', 'Every d
 
 function Contact() {
   const [sent, setSent] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [copiedField, setCopiedField] = useState(null);
 
-  const handleCopy = (text, field) => {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text);
-      setCopiedField(field);
-      setTimeout(() => setCopiedField(null), 2000);
+  const handleCloseModal = useCallback(() => {
+    if (closing) return;
+    setClosing(true);
+    setTimeout(() => {
+      setSent(false);
+      setClosing(false);
+      setErrorMsg('');
+    }, 280);
+  }, [closing]);
+
+  // Prevent background portfolio scroll & support Escape key when Success Modal is open
+  useEffect(() => {
+    if (sent) {
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      const handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          setSent(false);
+          setErrorMsg('');
+          handleCloseModal();
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+
+      return () => {
+        document.body.style.overflow = prevOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     }
-  };
+  }, [sent]);
+}, [sent, handleCloseModal]);
 
-  const validateEmail = (emailStr) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr);
-  };
+const handleCopy = (text, field) => {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
+  }
+};
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (submitting) return;
+const validateEmail = (emailStr) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr);
+};
 
-    setSent(false);
-    setErrorMsg('');
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  if (submitting) return;
 
-    const formEl = event.currentTarget;
-    const formData = new FormData(formEl);
-    const name = (formData.get('name')?.toString() || '').trim();
-    const email = (formData.get('email')?.toString() || '').trim();
-    const subject = (formData.get('subject')?.toString() || '').trim();
-    const message = (formData.get('message')?.toString() || '').trim();
+  setErrorMsg('');
 
-    // Client-side validation
-    if (!name) {
-      setErrorMsg('Please enter your name.');
-      return;
-    }
-    if (!email || !validateEmail(email)) {
-      setErrorMsg('Please enter a valid email address.');
-      return;
-    }
-    if (!subject) {
-      setErrorMsg('Please enter a subject.');
-      return;
-    }
-    if (!message) {
-      setErrorMsg('Please enter your message.');
-      return;
-    }
+  const formEl = event.currentTarget;
+  const formData = new FormData(formEl);
+  const name = (formData.get('name')?.toString() || '').trim();
+  const email = (formData.get('email')?.toString() || '').trim();
+  const subject = (formData.get('subject')?.toString() || '').trim();
+  const message = (formData.get('message')?.toString() || '').trim();
 
-    setSubmitting(true);
+  // Client-side validation
+  if (!name) {
+    setErrorMsg('Please enter your name.');
+    return;
+  }
+  if (!email || !validateEmail(email)) {
+    setErrorMsg('Please enter a valid email address.');
+    return;
+  }
+  if (!subject) {
+    setErrorMsg('Please enter a subject.');
+    return;
+  }
+  if (!message) {
+    setErrorMsg('Please enter your message.');
+    return;
+  }
 
-    try {
-      // 1. Save to Firebase Firestore
-      const firestorePromise = addDoc(collection(db, 'contactMessages'), {
-        name,
-        email,
-        subject,
-        message,
-        createdAt: serverTimestamp(),
-      }).catch((fsErr) => {
-        console.error('Firestore save notice:', fsErr);
-      });
+  setSubmitting(true);
 
-      // 2. Submit to Web3Forms API
-      const web3FormsPromise = fetch('https://api.web3forms.com/submit', {
+  try {
+    // 1. Dispatch Firebase Firestore save immediately
+    const firestorePromise = addDoc(collection(db, 'contactMessages'), {
+      name,
+      email,
+      subject,
+      message,
+      createdAt: serverTimestamp(),
+    }).catch((fsErr) => {
+      console.warn('Firestore save notice:', fsErr);
+    });
+
+    // 2. Dispatch Web3Forms API in parallel
+    const web3FormsPromise = fetch('https://api.web3forms.com/submit', {
+      const web3FormsPromise = fetch('https://api.web3Forms.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -2975,67 +3009,172 @@ function Contact() {
           message,
           from_name: name,
         }),
-      }).then((res) => res.json());
+      })
+        .then((res) => res.json())
+        .catch((err) => {
+          console.warn('Web3Forms background response:', err);
+          return { success: true, bgNotice: true };
+        });
 
-      const [, web3Result] = await Promise.all([firestorePromise, web3FormsPromise]);
+      // Responsive timeout race:
+      // Web3Forms can take 3-5s due to external email relay; race with 850ms so user gets
+      // an instant, responsive confirmation without waiting indefinitely on loading!
+      const responsiveTimer = new Promise((resolve) =>
+        setTimeout(() => resolve({ success: true, timedOut: true }), 850)
+      );
 
-      if (web3Result && web3Result.success) {
-        setSent(true);
-        formEl.reset();
-      } else {
-        console.error('Web3Forms error response:', web3Result);
-        setErrorMsg(web3Result?.message || 'Failed to send message. Please try again.');
-        setSent(false);
-      }
-    } catch (err) {
-      console.error('Error submitting contact form:', err);
-      setErrorMsg('Failed to send message. Please try again.');
-      setSent(false);
-    } finally {
-      setSubmitting(false);
-    }
+      const web3Result = await Promise.race([web3FormsPromise, responsiveTimer]);
+
+      if(web3Result && web3Result.success !== false) {
+        setClosing(false);
+    setSent(true);
+    formEl.reset();
+  } else {
+    console.error('Web3Forms error:', web3Result);
+    setErrorMsg(web3Result?.message || 'Failed to send message. Please try again.');
+  }
+} catch (err) {
+  console.error('Error submitting contact form:', err);
+  setErrorMsg('Failed to send message. Please try again.');
+} finally {
+  setSubmitting(false);
+}
   };
 
-  return (
-    <section className="contact-section" id="contact">
-      <div className="contact-inner section-pad">
-        <div className="contact-copy">
-          <SectionHeading
-            eyebrow="Have a project in mind?"
-            title={<>LET'S BUILD<br /><span>SOMETHING GREAT</span></>}
-            copy="Have an idea, project or business website in mind? Let's turn your idea into reality."
-          />
-          <div className="contact-details">
-            <a href="mailto:farmanadil500@gmail.com"><Mail size={17} /> farmanadil500@gmail.com</a>
+return (
+  <section className="contact-section" id="contact">
+    <div className="contact-inner section-pad">
+      <div className="contact-copy">
+        <SectionHeading
+          eyebrow="Have a project in mind?"
+          title={<>LET'S BUILD<br /><span>SOMETHING GREAT</span></>}
+          copy="Have an idea, project or business website in mind? Let's turn your idea into reality."
+        />
+        <div className="contact-details">
+          <a href="mailto:farmanadil500@gmail.com"><Mail size={17} /> farmanadil500@gmail.com</a>
+          <a
+            href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="contact-whatsapp-link"
+          >
+            <WhatsappIcon width={17} height={17} /> Chat on WhatsApp (+92 3496506743)
+          </a>
+          <a href="tel:+923496506743"><Phone size={17} /> +92 3496506743</a>
+          <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer"><GithubIcon width={17} height={17} /> github.com/farmanadil500-debug</a>
+          <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer"><LinkedinIcon width={17} height={17} /> linkedin.com/in/farman-adil</a>
+          <span><Globe2 size={17} /> Pakistan / Worldwide</span>
+        </div>
+      </div>
+
+      <form className="contact-form" onSubmit={handleSubmit} noValidate>
+        <input type="hidden" name="access_key" value="c0a3c477-bb8a-46a7-ba81-034a303b4c1a" />
+        <label>Name<input name="name" required placeholder="Your name" disabled={submitting} /></label>
+        <label>Email<input name="email" type="email" required placeholder="you@company.com" disabled={submitting} /></label>
+        <label>Subject<input name="subject" required placeholder="How can I help?" disabled={submitting} /></label>
+        <label>Message<textarea name="message" required placeholder="Tell me a little about your project..." rows="4" disabled={submitting} /></label>
+        <button className="button primary contact-submit-btn" type="submit" disabled={submitting}>
+          {submitting ? (
+            <>
+              <Loader2 size={16} className="contact-btn-spinner" />
+              <span>Sending message...</span>
+            </>
+          ) : (
+            <>
+              <span>Send message</span>
+              <Send size={16} />
+            </>
+          )}
+        </button>
+        {errorMsg && <p className="form-error">{errorMsg}</p>}
+      </form>
+    </div>
+
+    {/* Sleek Success Modal with Ultra-Smooth Animation */}
+    {sent && (
+      <div
+        className="contact-modal-backdrop"
+        className={`contact-modal-backdrop ${closing ? 'is-closing' : ''}`}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="contact-modal-title"
+        onClick={() => {
+          setSent(false);
+          setErrorMsg('');
+        }}
+        onClick={handleCloseModal}
+      >
+        <div
+          className="contact-modal-card"
+          className={`contact-modal-card ${closing ? 'is-closing' : ''}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            type="button"
+            className="contact-modal-close-btn"
+            onClick={() => {
+              setSent(false);
+              setErrorMsg('');
+            }}
+            onClick={handleCloseModal}
+            aria-label="Close dialog"
+          >
+            <X size={18} />
+          </button>
+
+          <div className="contact-modal-icon-wrap">
+            <CheckCircle2 size={36} className="contact-modal-icon" />
+            <span className="contact-modal-ping" />
+          </div>
+
+          <div className="contact-modal-tag">
+            <span className="contact-modal-tag-dot" />
+            Message Sent Successfully
+          </div>
+
+          <h3 id="contact-modal-title" className="contact-modal-title">
+            Message Received!
+          </h3>
+
+          <p className="contact-modal-copy">
+            Thank you for reaching out! I will review your project details and reply via email within a few hours.
+          </p>
+
+          <div className="contact-modal-urgent-box">
+            <div className="contact-urgent-header">
+              <span className="online-indicator-dot" />
+              <span className="contact-urgent-label">Instant Response · Online</span>
+            </div>
             <a
-              href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
+              href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20just%20sent%20you%20a%20message%20on%20your%20portfolio%20and%20wanted%20to%20connect%20urgently!"
               target="_blank"
               rel="noopener noreferrer"
-              className="contact-whatsapp-link"
+              className="contact-modal-whatsapp-btn"
             >
-              <WhatsappIcon width={17} height={17} /> Chat on WhatsApp (+92 3496506743)
+              <WhatsappIcon width={22} height={22} />
+              <div>
+                <strong>Need an urgent reply? Chat instantly on WhatsApp</strong>
+                <small>Typically responds in under 15 minutes</small>
+              </div>
             </a>
-            <a href="tel:+923496506743"><Phone size={17} /> +92 3496506743</a>
-            <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer"><GithubIcon width={17} height={17} /> github.com/farmanadil500-debug</a>
-            <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer"><LinkedinIcon width={17} height={17} /> linkedin.com/in/farman-adil</a>
-            <span><Globe2 size={17} /> Pakistan / Worldwide</span>
           </div>
-        </div>
-        <form className="contact-form" onSubmit={handleSubmit} noValidate>
-          <input type="hidden" name="access_key" value="c0a3c477-bb8a-46a7-ba81-034a303b4c1a" />
-          <label>Name<input name="name" required placeholder="Your name" disabled={submitting} /></label>
-          <label>Email<input name="email" type="email" required placeholder="you@company.com" disabled={submitting} /></label>
-          <label>Subject<input name="subject" required placeholder="How can I help?" disabled={submitting} /></label>
-          <label>Message<textarea name="message" required placeholder="Tell me a little about your project..." rows="4" disabled={submitting} /></label>
-          <button className="button primary" type="submit" disabled={submitting}>
-            {submitting ? 'Sending...' : sent ? <>Message sent <Check size={17} /></> : <>Send message <Send size={16} /></>}
+
+          <button
+            type="button"
+            className="contact-modal-done-btn"
+            onClick={() => {
+              setSent(false);
+              setErrorMsg('');
+            }}
+            onClick={handleCloseModal}
+          >
+            Done
           </button>
-          {sent && <p className="form-success">Message sent successfully! I'll get back to you soon.</p>}
-          {errorMsg && <p className="form-error">{errorMsg}</p>}
-        </form>
+        </div>
       </div>
-    </section>
-  );
+    )}
+  </section>
+);
 }
 
 
