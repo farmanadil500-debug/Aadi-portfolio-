@@ -2479,9 +2479,6 @@ function Pricing() {
 
 function CaseStudy() {
   const [activeScreenIndex, setActiveScreenIndex] = useState(null);
-  const [indicatorIndex, setIndicatorIndex] = useState(null);
-  const [slideDirection, setSlideDirection] = useState('next');
-  const [isLeaving, setIsLeaving] = useState(false);
   const darziTabsRef = useRef(null);
   const [darziIndicatorStyle, setDarziIndicatorStyle] = useState({});
   const touchStartX = useRef(0);
@@ -2516,20 +2513,24 @@ function CaseStudy() {
     },
   ];
 
-  // Sync indicator index when modal opens
+  // Lock background portfolio scroll when modal is open (resolves background scroll confusion)
   useEffect(() => {
     if (activeScreenIndex !== null) {
-      setIndicatorIndex(activeScreenIndex);
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
     }
   }, [activeScreenIndex]);
 
   // Smooth sliding pill geometry calculation (exact match with Pricing section)
   useEffect(() => {
-    if (indicatorIndex === null) return;
+    if (activeScreenIndex === null) return;
     const update = () => {
       const container = darziTabsRef.current;
       if (!container) return;
-      const btn = container.querySelector('[data-screen-idx="' + indicatorIndex + '"]');
+      const btn = container.querySelector('[data-screen-idx="' + activeScreenIndex + '"]');
       if (btn) {
         setDarziIndicatorStyle({
           width: btn.offsetWidth,
@@ -2543,61 +2544,38 @@ function CaseStudy() {
     });
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
-  }, [indicatorIndex]);
+  }, [activeScreenIndex]);
 
-  // Smooth directional transition like Pricing cardIn & slideOut
   const switchScreen = useCallback((targetIndex) => {
-    if (targetIndex === activeScreenIndex || isLeaving) return;
-    const dir = targetIndex > activeScreenIndex ? 'next' : 'prev';
-    setSlideDirection(dir);
-    setIndicatorIndex(targetIndex);
-    setIsLeaving(true);
-    setTimeout(() => {
-      setActiveScreenIndex(targetIndex);
-      setIsLeaving(false);
-    }, 280);
-  }, [activeScreenIndex, isLeaving]);
+    setActiveScreenIndex(targetIndex);
+  }, []);
 
   const handlePrev = useCallback(() => {
-  if (activeScreenIndex === null || isLeaving) return;
-  const prevIdx = (activeScreenIndex - 1 + screens.length) % screens.length;
-  setSlideDirection('prev');
-  setIndicatorIndex(prevIdx);
-  setIsLeaving(true);
-  setTimeout(() => {
-    setActiveScreenIndex(prevIdx);
-    setIsLeaving(false);
-  }, 280);
-}, [activeScreenIndex, isLeaving, screens.length]);
+    if (activeScreenIndex === null) return;
+    setActiveScreenIndex((prev) => (prev - 1 + screens.length) % screens.length);
+  }, [activeScreenIndex, screens.length]);
 
-const handleNext = useCallback(() => {
-if (activeScreenIndex === null || isLeaving) return;
-const nextIdx = (activeScreenIndex + 1) % screens.length;
-setSlideDirection('next');
-setIndicatorIndex(nextIdx);
-setIsLeaving(true);
-setTimeout(() => {
-  setActiveScreenIndex(nextIdx);
-  setIsLeaving(false);
-}, 280);
-  }, [activeScreenIndex, isLeaving, screens.length]);
+  const handleNext = useCallback(() => {
+    if (activeScreenIndex === null) return;
+    setActiveScreenIndex((prev) => (prev + 1) % screens.length);
+  }, [activeScreenIndex, screens.length]);
 
-useEffect(() => {
-  if (activeScreenIndex === null) return;
-  const handleKeyDown = (e) => {
-    if (e.key === 'Escape') {
-      setActiveScreenIndex(null);
-    } else if (e.key === 'ArrowLeft') {
-      handlePrev();
-    } else if (e.key === 'ArrowRight') {
-      handleNext();
-    }
-  };
-  window.addEventListener('keydown', handleKeyDown);
-  return () => window.removeEventListener('keydown', handleKeyDown);
-}, [activeScreenIndex, handlePrev, handleNext]);
+  useEffect(() => {
+    if (activeScreenIndex === null) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActiveScreenIndex(null);
+      } else if (e.key === 'ArrowLeft') {
+        handlePrev();
+      } else if (e.key === 'ArrowRight') {
+        handleNext();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeScreenIndex, handlePrev, handleNext]);
 
-const currentScreen = activeScreenIndex !== null ? screens[activeScreenIndex] : null;
+  const currentScreen = activeScreenIndex !== null ? screens[activeScreenIndex] : null;
 
 return (
   <section className="section-pad case-study-section" id="case-study">
@@ -2708,7 +2686,7 @@ return (
           <div className="darzi-lightbox-tabs-bar" role="tablist" ref={darziTabsRef}>
             <span className="darzi-lightbox-indicator" style={darziIndicatorStyle} aria-hidden="true" />
             {screens.map((item, idx) => {
-              const isActive = indicatorIndex === idx;
+              const isActive = activeScreenIndex === idx;
               return (
                 <button
                   key={item.id}
@@ -2726,7 +2704,7 @@ return (
             })}
           </div>
 
-          {/* Stage with Navigation Arrows and Smooth Sliding Phone Mockup */}
+          {/* Stage with Navigation Arrows and Continuous Hardware-Accelerated Slider Track */}
           <div
             className="darzi-lightbox-stage"
             onTouchStart={(e) => {
@@ -2749,17 +2727,32 @@ return (
               <ChevronLeft size={22} />
             </button>
 
-            <div
-              className={`darzi-lightbox-phone-wrapper ${isLeaving ? (slideDirection === 'next' ? 'leaving-next' : 'leaving-prev') : (slideDirection === 'next' ? 'entering-next' : 'entering-prev')}`}
-              key={currentScreen.id}
-            >
-              <div className="darzi-lightbox-phone-frame">
-                <div className="darzi-phone-island" />
-                <img
-                  src={currentScreen.img}
-                  alt={currentScreen.title}
-                  className="darzi-lightbox-img"
-                />
+            <div className="darzi-lightbox-slider-viewport">
+              <div
+                className="darzi-lightbox-slider-track"
+                style={{ transform: `translateX(-${activeScreenIndex * 100}%)` }}
+              >
+                {screens.map((item, idx) => (
+                  <div
+                    className={`darzi-lightbox-slide ${idx === activeScreenIndex ? 'active' : ''}`}
+                    key={item.id}
+                  >
+                    <div className="darzi-lightbox-phone-frame">
+                      <div className="darzi-phone-island" />
+                      <div className="darzi-phone-scroll-window">
+                        <img
+                          src={item.img}
+                          alt={item.title}
+                          className="darzi-lightbox-img"
+                          draggable={false}
+                        />
+                      </div>
+                      <div className="darzi-scroll-hint-pill">
+                        <span>Scroll inside phone ↕</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -2780,7 +2773,7 @@ return (
                 <button
                   key={item.id}
                   type="button"
-                  className={`darzi-dot ${idx === indicatorIndex ? 'active' : ''}`}
+                  className={`darzi-dot ${idx === activeScreenIndex ? 'active' : ''}`}
                   onClick={() => switchScreen(idx)}
                   aria-label={`Go to ${item.tabLabel}`}
                 />
@@ -2789,7 +2782,7 @@ return (
             <p>{currentScreen.desc}</p>
             <div className="darzi-lightbox-meta-row">
               <span className="darzi-lightbox-note">✓ Captured from live production shop database</span>
-              <span className="darzi-lightbox-hint">Tap tabs or use ‹ › arrow keys</span>
+              <span className="darzi-lightbox-hint">Use ‹ › keys or scroll phone inside</span>
             </div>
           </div>
         </div>
