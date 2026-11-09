@@ -2921,8 +2921,6 @@ function Contact() {
 
       const handleKeyDown = (e) => {
         if (e.key === 'Escape') {
-          setSent(false);
-          setErrorMsg('');
           handleCloseModal();
         }
       };
@@ -2933,8 +2931,7 @@ function Contact() {
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
-  }, [sent]);
-}, [sent, handleCloseModal]);
+  }, [sent, handleCloseModal]);
 
 const handleCopy = (text, field) => {
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -2948,54 +2945,59 @@ const validateEmail = (emailStr) => {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr);
 };
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  if (submitting) return;
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (submitting) return;
 
-  setErrorMsg('');
+    setErrorMsg('');
 
-  const formEl = event.currentTarget;
-  const formData = new FormData(formEl);
-  const name = (formData.get('name')?.toString() || '').trim();
-  const email = (formData.get('email')?.toString() || '').trim();
-  const subject = (formData.get('subject')?.toString() || '').trim();
-  const message = (formData.get('message')?.toString() || '').trim();
+    const formEl = event.currentTarget;
+    const formData = new FormData(formEl);
+    const name = (formData.get('name')?.toString() || '').trim();
+    const email = (formData.get('email')?.toString() || '').trim();
+    const phone = (formData.get('phone')?.toString() || '').trim();
+    const subject = (formData.get('subject')?.toString() || '').trim();
+    const message = (formData.get('message')?.toString() || '').trim();
 
-  // Client-side validation
-  if (!name) {
-    setErrorMsg('Please enter your name.');
-    return;
-  }
-  if (!email || !validateEmail(email)) {
-    setErrorMsg('Please enter a valid email address.');
-    return;
-  }
-  if (!subject) {
-    setErrorMsg('Please enter a subject.');
-    return;
-  }
-  if (!message) {
-    setErrorMsg('Please enter your message.');
-    return;
-  }
+    // Client-side validation
+    if (!name) {
+      setErrorMsg('Please enter your name.');
+      return;
+    }
+    if (!email || !validateEmail(email)) {
+      setErrorMsg('Please enter a valid email address.');
+      return;
+    }
+    if (!subject) {
+      setErrorMsg('Please enter a subject.');
+      return;
+    }
+    if (!message) {
+      setErrorMsg('Please enter your message.');
+      return;
+    }
 
-  setSubmitting(true);
+    setSubmitting(true);
 
-  try {
-    // 1. Dispatch Firebase Firestore save immediately
-    const firestorePromise = addDoc(collection(db, 'contactMessages'), {
-      name,
-      email,
-      subject,
-      message,
-      createdAt: serverTimestamp(),
-    }).catch((fsErr) => {
-      console.warn('Firestore save notice:', fsErr);
-    });
+    try {
+      // 1. Dispatch Firebase Firestore save immediately
+      const firestorePromise = addDoc(collection(db, 'contactMessages'), {
+        name,
+        email,
+        phone: phone || 'Not provided',
+        subject,
+        message,
+        createdAt: serverTimestamp(),
+      }).catch((fsErr) => {
+        console.warn('Firestore save notice:', fsErr);
+      });
 
-    // 2. Dispatch Web3Forms API in parallel
-    const web3FormsPromise = fetch('https://api.web3forms.com/submit', {
-      const web3FormsPromise = fetch('https://api.web3Forms.com/submit', {
+      // 2. Dispatch Web3Forms API in parallel
+      const formattedMessage = phone
+        ? `${message}\n\n━━━━━━━━━━━━━━━━━━━━\n📱 Client Phone / WhatsApp: ${phone}\n✉️ Client Email: ${email}`
+        : `${message}\n\n━━━━━━━━━━━━━━━━━━━━\n✉️ Client Email: ${email}`;
+
+      const web3FormsPromise = fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -3005,8 +3007,9 @@ const handleSubmit = async (event) => {
           access_key: 'c0a3c477-bb8a-46a7-ba81-034a303b4c1a',
           name,
           email,
+          replyto: email, // Directly routes Gmail "Reply" button to client's email address!
           subject: `New Portfolio Contact — ${subject}`,
-          message,
+          message: formattedMessage,
           from_name: name,
         }),
       })
@@ -3025,156 +3028,143 @@ const handleSubmit = async (event) => {
 
       const web3Result = await Promise.race([web3FormsPromise, responsiveTimer]);
 
-      if(web3Result && web3Result.success !== false) {
+      if (web3Result && web3Result.success !== false) {
         setClosing(false);
-    setSent(true);
-    formEl.reset();
-  } else {
-    console.error('Web3Forms error:', web3Result);
-    setErrorMsg(web3Result?.message || 'Failed to send message. Please try again.');
-  }
-} catch (err) {
-  console.error('Error submitting contact form:', err);
-  setErrorMsg('Failed to send message. Please try again.');
-} finally {
-  setSubmitting(false);
-}
+        setSent(true);
+        formEl.reset();
+      } else {
+        console.error('Web3Forms error:', web3Result);
+        setErrorMsg(web3Result?.message || 'Failed to send message. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error submitting contact form:', err);
+      setErrorMsg('Failed to send message. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-return (
-  <section className="contact-section" id="contact">
-    <div className="contact-inner section-pad">
-      <div className="contact-copy">
-        <SectionHeading
-          eyebrow="Have a project in mind?"
-          title={<>LET'S BUILD<br /><span>SOMETHING GREAT</span></>}
-          copy="Have an idea, project or business website in mind? Let's turn your idea into reality."
-        />
-        <div className="contact-details">
-          <a href="mailto:farmanadil500@gmail.com"><Mail size={17} /> farmanadil500@gmail.com</a>
-          <a
-            href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="contact-whatsapp-link"
-          >
-            <WhatsappIcon width={17} height={17} /> Chat on WhatsApp (+92 3496506743)
-          </a>
-          <a href="tel:+923496506743"><Phone size={17} /> +92 3496506743</a>
-          <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer"><GithubIcon width={17} height={17} /> github.com/farmanadil500-debug</a>
-          <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer"><LinkedinIcon width={17} height={17} /> linkedin.com/in/farman-adil</a>
-          <span><Globe2 size={17} /> Pakistan / Worldwide</span>
-        </div>
-      </div>
-
-      <form className="contact-form" onSubmit={handleSubmit} noValidate>
-        <input type="hidden" name="access_key" value="c0a3c477-bb8a-46a7-ba81-034a303b4c1a" />
-        <label>Name<input name="name" required placeholder="Your name" disabled={submitting} /></label>
-        <label>Email<input name="email" type="email" required placeholder="you@company.com" disabled={submitting} /></label>
-        <label>Subject<input name="subject" required placeholder="How can I help?" disabled={submitting} /></label>
-        <label>Message<textarea name="message" required placeholder="Tell me a little about your project..." rows="4" disabled={submitting} /></label>
-        <button className="button primary contact-submit-btn" type="submit" disabled={submitting}>
-          {submitting ? (
-            <>
-              <Loader2 size={16} className="contact-btn-spinner" />
-              <span>Sending message...</span>
-            </>
-          ) : (
-            <>
-              <span>Send message</span>
-              <Send size={16} />
-            </>
-          )}
-        </button>
-        {errorMsg && <p className="form-error">{errorMsg}</p>}
-      </form>
-    </div>
-
-    {/* Sleek Success Modal with Ultra-Smooth Animation */}
-    {sent && (
-      <div
-        className="contact-modal-backdrop"
-        className={`contact-modal-backdrop ${closing ? 'is-closing' : ''}`}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="contact-modal-title"
-        onClick={() => {
-          setSent(false);
-          setErrorMsg('');
-        }}
-        onClick={handleCloseModal}
-      >
-        <div
-          className="contact-modal-card"
-          className={`contact-modal-card ${closing ? 'is-closing' : ''}`}
-          onClick={(e) => e.stopPropagation()}
-        >
-          <button
-            type="button"
-            className="contact-modal-close-btn"
-            onClick={() => {
-              setSent(false);
-              setErrorMsg('');
-            }}
-            onClick={handleCloseModal}
-            aria-label="Close dialog"
-          >
-            <X size={18} />
-          </button>
-
-          <div className="contact-modal-icon-wrap">
-            <CheckCircle2 size={36} className="contact-modal-icon" />
-            <span className="contact-modal-ping" />
-          </div>
-
-          <div className="contact-modal-tag">
-            <span className="contact-modal-tag-dot" />
-            Message Sent Successfully
-          </div>
-
-          <h3 id="contact-modal-title" className="contact-modal-title">
-            Message Received!
-          </h3>
-
-          <p className="contact-modal-copy">
-            Thank you for reaching out! I will review your project details and reply via email within a few hours.
-          </p>
-
-          <div className="contact-modal-urgent-box">
-            <div className="contact-urgent-header">
-              <span className="online-indicator-dot" />
-              <span className="contact-urgent-label">Instant Response · Online</span>
-            </div>
+  return (
+    <section className="contact-section" id="contact">
+      <div className="contact-inner section-pad">
+        <div className="contact-copy">
+          <SectionHeading
+            eyebrow="Have a project in mind?"
+            title={<>LET'S BUILD<br /><span>SOMETHING GREAT</span></>}
+            copy="Have an idea, project or business website in mind? Let's turn your idea into reality."
+          />
+          <div className="contact-details">
+            <a href="mailto:farmanadil500@gmail.com"><Mail size={17} /> farmanadil500@gmail.com</a>
             <a
-              href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20just%20sent%20you%20a%20message%20on%20your%20portfolio%20and%20wanted%20to%20connect%20urgently!"
+              href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect!"
               target="_blank"
               rel="noopener noreferrer"
-              className="contact-modal-whatsapp-btn"
+              className="contact-whatsapp-link"
             >
-              <WhatsappIcon width={22} height={22} />
-              <div>
-                <strong>Need an urgent reply? Chat instantly on WhatsApp</strong>
-                <small>Typically responds in under 15 minutes</small>
-              </div>
+              <WhatsappIcon width={17} height={17} /> Chat on WhatsApp (+92 3496506743)
             </a>
+            <a href="tel:+923496506743"><Phone size={17} /> +92 3496506743</a>
+            <a href="https://github.com/farmanadil500-debug" target="_blank" rel="noopener noreferrer"><GithubIcon width={17} height={17} /> github.com/farmanadil500-debug</a>
+            <a href="https://www.linkedin.com/in/farman-adil-17b0903a4/" target="_blank" rel="noopener noreferrer"><LinkedinIcon width={17} height={17} /> linkedin.com/in/farman-adil</a>
+            <span><Globe2 size={17} /> Pakistan / Worldwide</span>
           </div>
-
-          <button
-            type="button"
-            className="contact-modal-done-btn"
-            onClick={() => {
-              setSent(false);
-              setErrorMsg('');
-            }}
-            onClick={handleCloseModal}
-          >
-            Done
-          </button>
         </div>
+
+        <form className="contact-form" onSubmit={handleSubmit} noValidate>
+          <input type="hidden" name="access_key" value="c0a3c477-bb8a-46a7-ba81-034a303b4c1a" />
+          <label>Name<input name="name" required placeholder="Your name" disabled={submitting} /></label>
+          <label>Email<input name="email" type="email" required placeholder="you@company.com" disabled={submitting} /></label>
+          <label>Phone / WhatsApp <span style={{ fontSize: '11px', color: '#64748b', fontWeight: 'normal' }}>(Optional)</span><input name="phone" type="tel" placeholder="+92 300 1234567 or +1 (555) 000-0000" disabled={submitting} /></label>
+          <label>Subject<input name="subject" required placeholder="How can I help?" disabled={submitting} /></label>
+          <label>Message<textarea name="message" required placeholder="Tell me a little about your project..." rows="4" disabled={submitting} /></label>
+          <button className="button primary contact-submit-btn" type="submit" disabled={submitting}>
+            {submitting ? (
+              <>
+                <Loader2 size={16} className="contact-btn-spinner" />
+                <span>Sending message...</span>
+              </>
+            ) : (
+              <>
+                <span>Send message</span>
+                <Send size={16} />
+              </>
+            )}
+          </button>
+          {errorMsg && <p className="form-error">{errorMsg}</p>}
+        </form>
       </div>
-    )}
-  </section>
-);
+
+      {/* Sleek Success Modal with Ultra-Smooth Animation */}
+      {sent && (
+        <div
+          className={`contact-modal-backdrop ${closing ? 'is-closing' : ''}`}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="contact-modal-title"
+          onClick={handleCloseModal}
+        >
+          <div
+            className={`contact-modal-card ${closing ? 'is-closing' : ''}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="contact-modal-close-btn"
+              onClick={handleCloseModal}
+              aria-label="Close dialog"
+            >
+              <X size={18} />
+            </button>
+
+            <div className="contact-modal-icon-wrap">
+              <CheckCircle2 size={36} className="contact-modal-icon" />
+              <span className="contact-modal-ping" />
+            </div>
+
+            <div className="contact-modal-tag">
+              <span className="contact-modal-tag-dot" />
+              Message Sent Successfully
+            </div>
+
+            <h3 id="contact-modal-title" className="contact-modal-title">
+              Message Received!
+            </h3>
+
+            <p className="contact-modal-copy">
+              Thank you for reaching out! I will review your project details and reply via email within a few hours.
+            </p>
+
+            <div className="contact-modal-urgent-box">
+              <div className="contact-urgent-header">
+                <span className="online-indicator-dot" />
+                <span className="contact-urgent-label">Instant Response · Online</span>
+              </div>
+              <a
+                href="https://wa.me/923496506743?text=Hi%20Farman,%20I%20just%20sent%20you%20a%20message%20on%20your%20portfolio%20and%20wanted%20to%20connect%20urgently!"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-modal-whatsapp-btn"
+              >
+                <WhatsappIcon width={22} height={22} />
+                <div>
+                  <strong>Need an urgent reply? Chat instantly on WhatsApp</strong>
+                  <small>Typically responds in under 15 minutes</small>
+                </div>
+              </a>
+            </div>
+
+            <button
+              type="button"
+              className="contact-modal-done-btn"
+              onClick={handleCloseModal}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  );
 }
 
 

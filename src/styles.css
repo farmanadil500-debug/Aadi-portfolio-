@@ -3289,7 +3289,6 @@ svg {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  animation: contactBackdropIn 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   animation: contactBackdropIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   will-change: opacity;
 }
@@ -3300,337 +3299,311 @@ svg {
 }
 
 @keyframes contactBackdropIn {
-  from {
-    0% {
-      opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 
-    to {
-      100% {
-        opacity: 1;
-      }
-    }
+@keyframes contactBackdropOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 
-    /* Modal Card */
-    @keyframes contactBackdropOut {
-      0% {
-        opacity: 1;
-      }
+/* Modal Card with Apple-Style Depth & Motion Curve */
+.contact-modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(155deg, rgba(8, 26, 56, 0.96) 0%, rgba(2, 12, 28, 0.98) 100%);
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
+  border-radius: 22px;
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(16, 185, 129, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  padding: clamp(28px, 4vw, 36px) clamp(22px, 3.5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  transform-origin: center center;
+  animation: contactModalSmoothIn 0.58s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  will-change: transform, opacity, filter;
+}
 
-      100% {
-        opacity: 0;
-      }
-    }
+.contact-modal-card.is-closing {
+  animation: contactModalSmoothOut 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
+  pointer-events: none;
+}
 
-    /* Modal Card with Apple-Style Depth & Motion Curve */
-    .contact-modal-card {
-      position: relative;
-      width: 100%;
-      max-width: 480px;
-      background: linear-gradient(155deg, rgba(8, 26, 56, 0.96) 0%, rgba(2, 12, 28, 0.98) 100%);
-      border: 1.5px solid rgba(16, 185, 129, 0.45);
-      border-radius: 22px;
-      box-shadow:
-        0 25px 70px rgba(0, 0, 0, 0.85),
-        0 0 50px rgba(16, 185, 129, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
-      padding: clamp(28px, 4vw, 36px) clamp(22px, 3.5vw, 32px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 16px;
-      transform-origin: center center;
-      animation: contactModalIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      will-change: transform, opacity;
-      animation: contactModalSmoothIn 0.58s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-      will-change: transform, opacity, filter;
-    }
+@keyframes contactModalSmoothIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(32px);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+}
 
-    @keyframes contactModalIn {
-      .contact-modal-card.is-closing {
-        animation: contactModalSmoothOut 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
-        pointer-events: none;
-      }
+@keyframes contactModalSmoothOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.92) translateY(18px);
+    filter: blur(6px);
+  }
+}
 
-      @keyframes contactModalSmoothIn {
-        0% {
-          opacity: 0;
-          transform: scale(0.9) translateY(18px);
-          transform: scale(0.85) translateY(32px);
-          filter: blur(8px);
-        }
+.contact-modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: contactItemSlideUp 0.45s 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
 
-        60% {
-          opacity: 1;
-          filter: blur(0px);
-        }
+.contact-modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.06);
+}
 
-        100% {
-          opacity: 1;
-          transform: scale(1) translateY(0);
-          filter: blur(0px);
-        }
-      }
+/* Staggered Animated Elements Inside Modal */
+.contact-modal-icon-wrap {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.08) 70%);
+  border: 1.5px solid rgba(16, 185, 129, 0.6);
+  display: grid;
+  place-items: center;
+  color: #10b981;
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
+  margin-top: 4px;
+  animation: contactIconPop 0.65s 0.12s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
 
-      @keyframes contactModalSmoothOut {
-        0% {
-          opacity: 1;
-          transform: scale(1) translateY(0);
-          filter: blur(0px);
-        }
+@keyframes contactIconPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) rotate(-15deg);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.1) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
 
-        100% {
-          opacity: 0;
-          transform: scale(0.92) translateY(18px);
-          filter: blur(6px);
-        }
-      }
+.contact-modal-icon {
+  color: #34d399;
+}
 
-      .contact-modal-close-btn {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.06);
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        color: #94a3b8;
-        display: grid;
-        place-items: center;
-        cursor: pointer;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        animation: contactItemSlideUp 0.45s 0.2s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-      }
+.contact-modal-ping {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid rgba(16, 185, 129, 0.4);
+  animation: pingSuccess 2s infinite cubic-bezier(0, 0, 0.2, 1);
+}
 
-      .contact-modal-close-btn:hover {
-        background: rgba(255, 255, 255, 0.14);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.3);
-        transform: scale(1.06);
-      }
+@keyframes pingSuccess {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  70%, 100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
 
-      /* Staggered Animated Elements Inside Modal */
-      .contact-modal-icon-wrap {
-        position: relative;
-        width: 68px;
-        height: 68px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.08) 70%);
-        border: 1.5px solid rgba(16, 185, 129, 0.6);
-        display: grid;
-        place-items: center;
-        color: #10b981;
-        box-shadow: 0 0 25px rgba(16, 185, 129, 0.35);
-        margin-top: 4px;
-        animation: contactIconPop 0.65s 0.12s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-      }
+.contact-modal-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 4px 12px;
+  border-radius: 999px;
+  animation: contactItemSlideUp 0.5s 0.18s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
 
-      @keyframes contactIconPop {
-        0% {
-          opacity: 0;
-          transform: scale(0.35) rotate(-15deg);
-        }
+.contact-modal-tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  display: inline-block;
+}
 
-        65% {
-          opacity: 1;
-          transform: scale(1.1) rotate(2deg);
-        }
+.contact-modal-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.02em;
+  animation: contactItemSlideUp 0.52s 0.24s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
 
-        100% {
-          opacity: 1;
-          transform: scale(1) rotate(0deg);
-        }
-      }
+.contact-modal-copy {
+  font-size: 14.5px;
+  color: #cbd5e1;
+  line-height: 1.6;
+  max-width: 380px;
+  margin: 0;
+  animation: contactItemSlideUp 0.54s 0.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
 
-      .contact-modal-icon {
-        color: #34d399;
-      }
+.contact-modal-urgent-box {
+  width: 100%;
+  background: rgba(4, 18, 38, 0.7);
+  border: 1px solid rgba(37, 211, 102, 0.32);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+  animation: contactItemSlideUp 0.56s 0.36s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
 
-      .contact-modal-ping {
-        position: absolute;
-        inset: -6px;
-        border-radius: 50%;
-        border: 2px solid rgba(16, 185, 129, 0.4);
-        animation: pingSuccess 2s infinite cubic-bezier(0, 0, 0.2, 1);
-      }
+.contact-urgent-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
 
-      @keyframes pingSuccess {
-        0% {
-          transform: scale(0.95);
-          opacity: 0.8;
-        }
+.online-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #25d366;
+  box-shadow: 0 0 10px #25d366;
+  display: inline-block;
+  animation: blinkDot 1.6s infinite ease-in-out;
+}
 
-        70%,
-        100% {
-          transform: scale(1.35);
-          opacity: 0;
-        }
-      }
+@keyframes blinkDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
 
-      .contact-modal-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #34d399;
-        background: rgba(16, 185, 129, 0.12);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        padding: 4px 12px;
-        border-radius: 999px;
-        animation: contactItemSlideUp 0.5s 0.18s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-      }
+.contact-urgent-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #86efac;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
 
-      .contact-modal-tag-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #34d399;
-        display: inline-block;
-      }
+.contact-modal-whatsapp-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+  color: #fff !important;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
 
-      .contact-modal-title {
-        font-size: 24px;
-        font-weight: 800;
-        color: #fff;
-        margin: 0;
-        letter-spacing: -0.02em;
-        animation: contactItemSlideUp 0.52s 0.24s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-      }
+.contact-modal-whatsapp-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.48);
+  filter: brightness(1.08);
+}
 
-      .contact-modal-copy {
-        font-size: 14.5px;
-        color: #cbd5e1;
-        line-height: 1.6;
-        max-width: 380px;
-        margin: 0;
-        animation: contactItemSlideUp 0.54s 0.3s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-      }
+.contact-modal-whatsapp-btn strong {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.35;
+}
 
-      .contact-modal-urgent-box {
-        width: 100%;
-        background: rgba(4, 18, 38, 0.7);
-        border: 1px solid rgba(37, 211, 102, 0.32);
-        border-radius: 14px;
-        padding: 14px 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 4px;
-        animation: contactItemSlideUp 0.56s 0.36s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-      }
+.contact-modal-whatsapp-btn small {
+  display: block;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 2px;
+}
 
-      .contact-urgent-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-      }
+.contact-modal-done-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 32px;
+  border-radius: 999px;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: contactItemSlideUp 0.52s 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
 
-      .online-indicator-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: #25d366;
-        box-shadow: 0 0 10px #25d366;
-        display: inline-block;
-        animation: blinkDot 1.6s infinite ease-in-out;
-      }
+.contact-modal-done-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.32);
+  transform: translateY(-1px);
+}
 
-      @keyframes blinkDot {
-
-        0%,
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-
-        50% {
-          opacity: 0.4;
-          transform: scale(0.85);
-        }
-      }
-
-      .contact-urgent-label {
-        font-size: 11px;
-        font-weight: 700;
-        color: #86efac;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-      }
-
-      .contact-modal-whatsapp-btn {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-        color: #fff !important;
-        text-decoration: none;
-        padding: 12px 18px;
-        border-radius: 10px;
-        text-align: left;
-        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        box-shadow: 0 8px 24px rgba(37, 211, 102, 0.32);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-      }
-
-      .contact-modal-whatsapp-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 30px rgba(37, 211, 102, 0.48);
-        filter: brightness(1.08);
-      }
-
-      .contact-modal-whatsapp-btn strong {
-        display: block;
-        font-size: 13.5px;
-        font-weight: 700;
-        color: #fff;
-        line-height: 1.35;
-      }
-
-      .contact-modal-whatsapp-btn small {
-        display: block;
-        font-size: 11.5px;
-        color: rgba(255, 255, 255, 0.9);
-        margin-top: 2px;
-      }
-
-      .contact-modal-done-btn {
-        background: rgba(255, 255, 255, 0.08);
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        color: #e2e8f0;
-        font-size: 13px;
-        font-weight: 600;
-        padding: 9px 32px;
-        border-radius: 999px;
-        cursor: pointer;
-        margin-top: 4px;
-        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        animation: contactItemSlideUp 0.52s 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-      }
-
-      .contact-modal-done-btn:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.32);
-        transform: translateY(-1px);
-      }
-
-      @keyframes contactItemSlideUp {
-        0% {
-          opacity: 0;
-          transform: translateY(16px);
-        }
-
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+@keyframes contactItemSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
       /* ==========================================================================
    13. FOOTER
